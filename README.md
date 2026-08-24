@@ -34,3 +34,4 @@ npm test
 # Build for production
 npm run build
 ```
+# Swasthya-Katha---STI
