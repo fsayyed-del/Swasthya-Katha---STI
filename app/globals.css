@@ -130,6 +130,23 @@ body {
   border-bottom: 1px solid rgba(176, 141, 87, 0.2);
 }
 
+/* Hand Wave Tutorial Animation */
+@keyframes hand-wave-anim {
+  0% {
+    transform: translateX(20px) rotate(12deg);
+  }
+  50% {
+    transform: translateX(-20px) rotate(-12deg);
+  }
+  100% {
+    transform: translateX(20px) rotate(12deg);
+  }
+}
+
+.animate-hand-wave {
+  animation: hand-wave-anim 2.2s ease-in-out infinite;
+}
+
 /* Deckle Edge & Paper Grain Texture */
 .deckle-edge {
   box-shadow: 
@@ -178,7 +195,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .book,
   .page,
-  .flip-card-inner {
+  .flip-card-inner,
+  .animate-hand-wave {
     transition: transform 0.05s ease-out !important;
     animation: none !important;
   }

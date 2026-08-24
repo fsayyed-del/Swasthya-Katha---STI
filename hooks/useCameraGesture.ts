@@ -14,19 +14,24 @@ export interface UseCameraGestureOptions {
 export function useCameraGesture({
   enabled,
   onCommand,
-  cooldownMs = 800,
+  cooldownMs = 550,
 }: UseCameraGestureOptions) {
   const [state, setState] = useState<CameraGestureState>('CAMERA_OFF');
-  const [lastDirection, setLastDirection] = useState<'forward' | 'backward' | null>(null);
+  const [lastDirection, setLastDirection] = useState<'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | null>(null);
+  const [lastSource, setLastSource] = useState<'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const smootherRef = useRef(new LandmarkSmoother(0.65));
-  const classifierRef = useRef(new SwipeClassifier(400, 0.16, 0.0005, 1.3));
+  const smootherRef = useRef(new LandmarkSmoother(0.6));
+  const classifierRef = useRef(new SwipeClassifier(220, 0.06, 0.00025));
   const lastCommitTimeRef = useRef(0);
-  const isNeutralRef = useRef(true);
+  const isNeutralArmedRef = useRef(true);
 
-  // Stop camera tracks cleanly
+  // Deliberate Hand Raise tracking for Audio Palm Hold
+  const hasHandMovedRecentlyRef = useRef(false);
+  const palmHoldStartTimeRef = useRef<number | null>(null);
+  const palmHoldPosRef = useRef<{ x: number; y: number } | null>(null);
+
   const stopCamera = useCallback(() => {
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
@@ -37,6 +42,7 @@ export function useCameraGesture({
     classifierRef.current.clear();
     setState('CAMERA_OFF');
     setLastDirection(null);
+    setLastSource(null);
     onCommand({ type: 'CAMERA_STOP' });
   }, [onCommand]);
 
@@ -58,7 +64,7 @@ export function useCameraGesture({
             facingMode: 'user',
             width: { ideal: 320 },
             height: { ideal: 240 },
-            frameRate: { ideal: 24, max: 30 },
+            frameRate: { ideal: 30 },
           },
           audio: false,
         });
@@ -86,7 +92,6 @@ export function useCameraGesture({
         setState('READY');
         onCommand({ type: 'CAMERA_READY' });
 
-        // Optical Hand Movement Analysis Loop
         const ctx = canvasRef.current.getContext('2d', { willReadFrequently: true });
         let prevImageData: Uint8ClampedArray | null = null;
 
@@ -105,29 +110,47 @@ export function useCameraGesture({
             const frame = ctx.getImageData(0, 0, width, height);
             const data = frame.data;
 
+            let skinSumX = 0;
+            let skinSumY = 0;
+            let skinPixelCount = 0;
+
+            let motionPixelCount = 0;
             let motionSumX = 0;
             let motionSumY = 0;
-            let motionPixelCount = 0;
 
-            if (prevImageData) {
-              // Frame differencing & skin-tone luminance filter for gesture center
-              for (let i = 0; i < data.length; i += 16) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
+            for (let i = 0; i < data.length; i += 16) {
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
 
+              // Skin Color Presence Detection
+              const isSkin =
+                r > 60 &&
+                g > 35 &&
+                b > 20 &&
+                r > g &&
+                g > b &&
+                r - g > 10 &&
+                Math.abs(r - b) > 14;
+
+              const pixelIdx = i / 4;
+              const px = pixelIdx % width;
+              const py = Math.floor(pixelIdx / width);
+
+              if (isSkin) {
+                skinSumX += px;
+                skinSumY += py;
+                skinPixelCount++;
+              }
+
+              // Motion Difference Detection
+              if (prevImageData) {
                 const prevR = prevImageData[i];
                 const prevG = prevImageData[i + 1];
                 const prevB = prevImageData[i + 2];
-
                 const diff = Math.abs(r - prevR) + Math.abs(g - prevG) + Math.abs(b - prevB);
 
-                // Check for intentional movement with skin-like tone
-                if (diff > 45 && r > g && g > b) {
-                  const pixelIdx = i / 4;
-                  const px = pixelIdx % width;
-                  const py = Math.floor(pixelIdx / width);
-
+                if (diff > 35 && isSkin) {
                   motionSumX += px;
                   motionSumY += py;
                   motionPixelCount++;
@@ -135,34 +158,81 @@ export function useCameraGesture({
               }
             }
 
-            // Save previous frame
             prevImageData = new Uint8ClampedArray(data);
-
             const now = performance.now();
 
-            if (motionPixelCount > 40) {
-              const rawX = (motionSumX / motionPixelCount) / width;
-              const rawY = (motionSumY / motionPixelCount) / height;
+            if (motionPixelCount >= 25) {
+              hasHandMovedRecentlyRef.current = true;
+            }
 
-              const smoothed = smootherRef.current.smooth({ x: rawX, y: rawY });
+            // Settle / Re-arm check
+            if (motionPixelCount < 14 && now - lastCommitTimeRef.current > cooldownMs) {
+              isNeutralArmedRef.current = true;
+            }
+
+            // 1. DELIBERATE PALM HOLD AUDIO TOGGLE:
+            // Requires that hand was raised/moved, then held completely still in frame
+            if (skinPixelCount >= 220 && hasHandMovedRecentlyRef.current) {
+              const palmMeanX = skinSumX / skinPixelCount / width;
+              const palmMeanY = skinSumY / skinPixelCount / height;
+
+              if (motionPixelCount < 18) {
+                if (!palmHoldStartTimeRef.current) {
+                  palmHoldStartTimeRef.current = now;
+                  palmHoldPosRef.current = { x: palmMeanX, y: palmMeanY };
+                } else if (palmHoldPosRef.current) {
+                  const holdDrift = Math.hypot(palmMeanX - palmHoldPosRef.current.x, palmMeanY - palmHoldPosRef.current.y);
+                  if (holdDrift < 0.05 && now - palmHoldStartTimeRef.current >= 850 && isNeutralArmedRef.current && now - lastCommitTimeRef.current > cooldownMs) {
+                    lastCommitTimeRef.current = now;
+                    isNeutralArmedRef.current = false;
+                    palmHoldStartTimeRef.current = null;
+                    hasHandMovedRecentlyRef.current = false;
+                    setLastDirection('hold');
+                    setLastSource('hold');
+                    onCommand({ type: 'GESTURE_AUDIO_TOGGLE' });
+                    window.dispatchEvent(new CustomEvent('gesture:audio-toggle'));
+                  }
+                }
+              } else {
+                palmHoldStartTimeRef.current = null;
+              }
+            } else {
+              palmHoldStartTimeRef.current = null;
+            }
+
+            // 2. DYNAMIC INDEX FINGER 4-WAY NAVIGATION (Left, Right, Up, Down)
+            if (motionPixelCount >= 20) {
+              const meanX = motionSumX / motionPixelCount / width;
+              const meanY = motionSumY / motionPixelCount / height;
+
+              const smoothed = smootherRef.current.smooth({
+                x: meanX,
+                y: meanY,
+              });
               classifierRef.current.addPoint(smoothed, now);
 
               const obs = classifierRef.current.classify();
-
-              // Check if neutral state is satisfied after cooldown
               const timeSinceCommit = now - lastCommitTimeRef.current;
-              if (timeSinceCommit > cooldownMs) {
-                isNeutralRef.current = true;
-              }
 
-              if (obs.direction !== 'none' && obs.confidence > 0.6 && isNeutralRef.current && timeSinceCommit > cooldownMs) {
-                // Trigger commit
+              if (obs.direction !== 'none' && obs.confidence >= 0.55 && isNeutralArmedRef.current && timeSinceCommit > cooldownMs) {
                 lastCommitTimeRef.current = now;
-                isNeutralRef.current = false;
+                isNeutralArmedRef.current = false;
+                palmHoldStartTimeRef.current = null;
                 setLastDirection(obs.direction);
-                onCommand({ type: 'GESTURE_COMMIT', direction: obs.direction });
+                setLastSource(obs.source === 'none' ? null : obs.source);
 
-                // Reset classifier
+                if (obs.direction === 'forward' || obs.direction === 'backward') {
+                  onCommand({
+                    type: 'GESTURE_COMMIT',
+                    direction: obs.direction,
+                    source: obs.source === 'none' ? undefined : obs.source,
+                  });
+                } else if (obs.direction === 'up' || obs.direction === 'down') {
+                  const cycleDir = obs.direction === 'up' ? 'next' : 'prev';
+                  onCommand({ type: 'GESTURE_CYCLE_OPTION', direction: cycleDir });
+                  window.dispatchEvent(new CustomEvent('gesture:cycle-option', { detail: { direction: cycleDir } }));
+                }
+
                 classifierRef.current.clear();
                 smootherRef.current.reset();
               }
@@ -194,6 +264,7 @@ export function useCameraGesture({
   return {
     state,
     lastDirection,
+    lastSource,
     stopCamera,
   };
 }

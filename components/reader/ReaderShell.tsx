@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Publication, Locale } from '@/src/domain/content/schema';
 import { DoublePageFlipBook } from '../book/DoublePageFlipBook';
 import { LinearReader } from './LinearReader';
@@ -8,7 +8,8 @@ import { FacilitatorReader } from './FacilitatorReader';
 import { QuickExitButton } from '../ui/QuickExitButton';
 import { ReadingSettingsModal, ReadingSettings } from '../ui/ReadingSettingsModal';
 import { CameraStatusIndicator } from '../camera/CameraStatusIndicator';
-import { CameraPermissionPanel } from '../camera/CameraPermissionPanel';
+import { GestureTutorialOverlay } from '../camera/GestureTutorialOverlay';
+import { MediumAudioPlayerBar } from '../audio/MediumAudioPlayerBar';
 import { useCameraGesture } from '@/hooks/useCameraGesture';
 import { useBookStore } from '@/lib/state/bookStore';
 import { CameraGestureCommand } from '@/lib/gestures/gestureTypes';
@@ -37,9 +38,9 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
   const [enteredPin, setEnteredPin] = useState('');
   const [pinError, setPinError] = useState(false);
 
-  // Optional Camera Gesture State
-  const [isCameraEnabled, setIsCameraEnabled] = useState(false);
-  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  // Camera Gesture State (Default active with tutorial overlay)
+  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(true);
 
   const handleCameraCommand = useCallback((cmd: CameraGestureCommand) => {
     if (cmd.type === 'GESTURE_COMMIT') {
@@ -48,12 +49,14 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
       } else if (cmd.direction === 'backward') {
         prevLeaf();
       }
+      // Auto dismiss tutorial once a gesture is performed
+      setShowTutorial(false);
     } else if (cmd.type === 'CAMERA_STOP' || cmd.type === 'CAMERA_ERROR') {
       setIsCameraEnabled(false);
     }
   }, [nextLeaf, prevLeaf]);
 
-  const { state: cameraState, lastDirection, stopCamera } = useCameraGesture({
+  const { state: cameraState, lastDirection, lastSource, stopCamera } = useCameraGesture({
     enabled: isCameraEnabled,
     onCommand: handleCameraCommand,
   });
@@ -98,16 +101,20 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
 
   return (
     <div className={`${getContainerClasses()} relative overflow-x-hidden select-none`}>
-      {/* Top Left Floating Bar: Optional Camera Gestures Control */}
+      {/* Top Left Floating Bar: Camera Hand Gestures Status & Re-open Tutorial */}
       <nav className="fixed top-3 left-3 z-50 flex items-center gap-2">
         <CameraStatusIndicator
           isActive={isCameraEnabled && cameraState === 'READY'}
           lastDirection={lastDirection}
+          lastSource={lastSource}
           onStop={() => {
             stopCamera();
             setIsCameraEnabled(false);
           }}
-          onOpenModal={() => setIsCameraModalOpen(true)}
+          onOpenModal={() => {
+            setIsCameraEnabled(true);
+            setShowTutorial(true);
+          }}
           locale={locale}
         />
       </nav>
@@ -141,11 +148,13 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
         )}
       </main>
 
-      {/* Camera Permission Modal */}
-      <CameraPermissionPanel
-        isOpen={isCameraModalOpen}
-        onClose={() => setIsCameraModalOpen(false)}
-        onConfirm={() => setIsCameraEnabled(true)}
+      {/* Medium-Style Live Karaoke Audio Player Bar */}
+      <MediumAudioPlayerBar locale={locale} />
+
+      {/* Hand Gesture Swipe & Tilt Animated Tutorial Overlay */}
+      <GestureTutorialOverlay
+        isOpen={showTutorial}
+        onDismiss={() => setShowTutorial(false)}
         locale={locale}
       />
 

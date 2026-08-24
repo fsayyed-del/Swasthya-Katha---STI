@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Camera, CameraOff, Sparkles, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Camera, CameraOff, Sparkles, ArrowLeft, ArrowRight, Volume2, Layers, Hand, Pointer } from 'lucide-react';
 import { Locale } from '@/src/domain/content/schema';
 
 interface CameraStatusIndicatorProps {
   isActive: boolean;
-  lastDirection: 'forward' | 'backward' | null;
+  lastDirection: 'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | null;
+  lastSource?: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | null;
   onStop: () => void;
   onOpenModal: () => void;
   locale: Locale;
@@ -15,6 +16,7 @@ interface CameraStatusIndicatorProps {
 export const CameraStatusIndicator: React.FC<CameraStatusIndicatorProps> = ({
   isActive,
   lastDirection,
+  lastSource,
   onStop,
   onOpenModal,
   locale,
@@ -25,35 +27,50 @@ export const CameraStatusIndicator: React.FC<CameraStatusIndicatorProps> = ({
     return (
       <button
         onClick={onOpenModal}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-paper/90 hover:bg-paper text-ink-teal border border-brass/40 rounded-full shadow-md text-xs font-bold transition-all hover:scale-105 active:scale-95 backdrop-blur-sm"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-paper/90 hover:bg-paper text-ink-teal border border-brass/50 rounded-full shadow-lg text-xs font-bold transition-all hover:scale-105 active:scale-95 backdrop-blur-sm"
         title="Enable Touch-Free Camera Gestures"
       >
         <Camera className="w-3.5 h-3.5 text-mineral-green" />
-        <span className="hidden sm:inline">{isHindi ? 'कैमरा जेस्चर' : 'Camera Control'}</span>
+        <span className="hidden sm:inline">{isHindi ? 'कैमरा जेस्चर' : 'Hand Gestures'}</span>
         <Sparkles className="w-3 h-3 text-coral" />
       </button>
     );
   }
 
   return (
-    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-ink-teal text-paper rounded-full shadow-lg border border-brass text-xs font-bold backdrop-blur-sm animate-pulse-slow">
-      {/* Live Gesture Direction Feedback */}
+    <div className="flex items-center gap-1.5 px-3 py-1 bg-ink-teal text-paper rounded-full shadow-2xl border border-brass text-xs font-bold backdrop-blur-sm animate-pulse-slow">
+      {/* Live Gesture Direction & Action Feedback */}
       {lastDirection === 'forward' ? (
         <span className="flex items-center gap-1 text-amber-300 font-extrabold text-[11px] animate-bounce">
           <ArrowRight className="w-3.5 h-3.5" />
-          <span>Next Spread</span>
+          <span>Next Spread ➡️</span>
         </span>
       ) : lastDirection === 'backward' ? (
         <span className="flex items-center gap-1 text-care-blue-light font-extrabold text-[11px] animate-bounce">
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Prev Spread</span>
+          <span>⬅️ Prev Spread</span>
+        </span>
+      ) : lastDirection === 'point' || lastSource === 'point' ? (
+        <span className="flex items-center gap-1 text-emerald-300 font-extrabold text-[11px] animate-bounce">
+          <Pointer className="w-3.5 h-3.5" />
+          <span>{lastDirection === 'up' ? 'Index Up 🔼' : 'Index Down 🔽'}</span>
+        </span>
+      ) : lastDirection === 'up' || lastDirection === 'down' ? (
+        <span className="flex items-center gap-1 text-emerald-300 font-extrabold text-[11px] animate-bounce">
+          <Layers className="w-3.5 h-3.5" />
+          <span>{lastDirection === 'up' ? 'Next Kit 🔼' : 'Prev Kit 🔽'}</span>
+        </span>
+      ) : lastDirection === 'hold' ? (
+        <span className="flex items-center gap-1 text-amber-200 font-extrabold text-[11px] animate-pulse">
+          <Volume2 className="w-3.5 h-3.5" />
+          <span>Audio Toggled 🔊</span>
         </span>
       ) : (
         <span className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <Camera className="w-3.5 h-3.5 text-brass-light" />
+          <Hand className="w-3.5 h-3.5 text-brass-light" />
           <span className="text-[10px] tracking-wide uppercase font-mono hidden sm:inline">
-            {isHindi ? 'जेस्चर सक्रिय' : 'Gesture Active'}
+            {isHindi ? 'जेस्चर सक्रिय' : 'Gestures Active'}
           </span>
         </span>
       )}

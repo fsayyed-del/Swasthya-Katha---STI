@@ -66,7 +66,7 @@ export const PageSurface: React.FC<PageSurfaceProps> = ({
         </div>
 
         {/* Floating Brass Sound Button */}
-        <SoundButton textToSpeak={audioScriptText} locale={locale} />
+        <SoundButton textToSpeak={audioScriptText} locale={locale} pageNumber={pageNumber} />
       </div>
     </div>
   );

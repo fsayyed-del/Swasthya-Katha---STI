@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Locale } from '@/src/domain/content/schema';
 import { PORTRAIT_BOOK_PAGES } from '@/content/portrait-pages/portrait-manifest';
 import { PageSurface } from '../PageSurface';
@@ -76,11 +76,31 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
     },
   ];
 
+  // Touch-Free Vertical Gesture: Cycle through kits with Up/Down hand wave
+  useEffect(() => {
+    const handleGestureCycle = (e: any) => {
+      const dir = e.detail?.direction;
+      setSelectedKit((curr) => {
+        const idx = kits.findIndex((k) => k.id === curr);
+        if (dir === 'next') {
+          const nextIdx = (idx + 1) % kits.length;
+          return kits[nextIdx].id;
+        } else {
+          const prevIdx = (idx - 1 + kits.length) % kits.length;
+          return kits[prevIdx].id;
+        }
+      });
+    };
+
+    window.addEventListener('gesture:cycle-option', handleGestureCycle);
+    return () => window.removeEventListener('gesture:cycle-option', handleGestureCycle);
+  }, [kits]);
+
   const activeKitObj = kits.find((k) => k.id === selectedKit) || kits[0];
 
   return (
     <PageSurface
-      pageNumber={5}
+      pageNumber={12}
       chapterHue="care-blue"
       audioScriptText={page.audioScript[locale] || page.audioScript.en}
       locale={locale}
