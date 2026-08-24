@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "updatedAt": "2026-08-24T18:15:00Z",
+  "purpose": "Official public health image and visual content search manifest for Swasthya Katha",
+  "collections": [
+    {
+      "id": "clinic-journey",
+      "purpose": "Explain what happens during a confidential Suraksha Clinic visit",
+      "preferredFormats": ["svg", "illustration", "animation"],
+      "searchQueries": [
+        "site:who.int STI testing clinic illustration",
+        "site:naco.mohfw.gov.in STI RTI Suraksha clinic",
+        "public health clinic counselling illustration",
+        "sexual health testing journey illustration"
+      ],
+      "fallback": "commission-custom-svg",
+      "audience": "public-learner",
+      "status": "cleared"
+    },
+    {
+      "id": "transmission-pathways",
+      "purpose": "Demonstrate body fluid transmission and barrier protection without fear or stigma",
+      "preferredFormats": ["svg", "motion-loop"],
+      "searchQueries": [
+        "site:who.int STI prevention condom barrier illustration",
+        "site:cdc.gov STI transmission dynamics diagram"
+      ],
+      "fallback": "custom-abstract-node-animation",
+      "audience": "public-learner",
+      "status": "cleared"
+    },
+    {
+      "id": "naco-syndromic-kits",
+      "purpose": "Explain the 7 color-coded pre-packaged syndromic medicine kits",
+      "preferredFormats": ["svg", "3d-tactile-ui"],
+      "searchQueries": [
+        "site:naco.mohfw.gov.in STI colour coded kits",
+        "site:naco.mohfw.gov.in syndromic case management STI",
+        "NACO 2023 technical specification STI drug kits condoms"
+      ],
+      "fallback": "custom-3d-svg-cabinet",
+      "audience": "public-and-facilitator",
+      "status": "cleared"
+    },
+    {
+      "id": "clinical-syphilis",
+      "purpose": "Educational reference for primary chancre and secondary rashes with dual-perspective visuals",
+      "preferredFormats": ["licensed-photo", "clinical-svg"],
+      "searchQueries": [
+        "site:cdc.gov/phil primary syphilis clinical image",
+        "site:cdc.gov/phil secondary syphilis palms rash",
+        "site:cdc.gov/phil condyloma lata"
+      ],
+      "fallback": "custom-dignified-vector",
+      "audience": "educational-shielded",
+      "status": "rights-and-clinical-review-approved"
+    },
+    {
+      "id": "clinical-gonorrhea",
+      "purpose": "Educational reference for urethral discharge and cervicitis",
+      "preferredFormats": ["licensed-photo", "clinical-svg"],
+      "searchQueries": [
+        "site:cdc.gov/phil gonorrhea urethral discharge",
+        "site:cdc.gov/phil mucopurulent cervicitis"
+      ],
+      "fallback": "custom-dignified-vector",
+      "audience": "educational-shielded",
+      "status": "rights-and-clinical-review-approved"
+    },
+    {
+      "id": "clinical-herpes",
+      "purpose": "Educational reference for genital vesicles and shallow erosions",
+      "preferredFormats": ["licensed-photo", "clinical-svg"],
+      "searchQueries": [
+        "site:cdc.gov/phil genital herpes simplex vesicles",
+        "site:cdc.gov/phil herpetic genital ulcer"
+      ],
+      "fallback": "custom-dignified-vector",
+      "audience": "educational-shielded",
+      "status": "rights-and-clinical-review-approved"
+    },
+    {
+      "id": "clinical-warts",
+      "purpose": "Educational reference for HPV condyloma acuminata",
+      "preferredFormats": ["licensed-photo", "clinical-svg"],
+      "searchQueries": [
+        "site:cdc.gov/phil genital warts condyloma acuminata",
+        "site:cdc.gov/phil HPV genital lesions"
+      ],
+      "fallback": "custom-dignified-vector",
+      "audience": "educational-shielded",
+      "status": "rights-and-clinical-review-approved"
+    }
+  ]
+}

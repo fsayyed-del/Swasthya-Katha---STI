@@ -1,0 +1,146 @@
+[
+  {
+    "assetId": "asset-syphilis-male-chancre",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.8,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.85,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/syphilis_male_chancre.webp"
+  },
+  {
+    "assetId": "asset-syphilis-female-chancre",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.7,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.84,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/syphilis_female_chancre.webp"
+  },
+  {
+    "assetId": "asset-syphilis-palms-rash",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 5,
+      "accessibilityPotential": 5,
+      "resolution": 4.9,
+      "culturalAppropriateness": 5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.99,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/syphilis_palms_rash.webp"
+  },
+  {
+    "assetId": "asset-gonorrhea-male-discharge",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.8,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.85,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/gonorrhea_male_urethritis.webp"
+  },
+  {
+    "assetId": "asset-gonorrhea-cervicitis",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.7,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.84,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/gonorrhea_cervicitis.webp"
+  },
+  {
+    "assetId": "asset-herpes-male-vesicles",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.8,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.85,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/herpes_male_vesicles.webp"
+  },
+  {
+    "assetId": "asset-herpes-female-ulcers",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.6,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.82,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/herpes_female_ulcers.webp"
+  },
+  {
+    "assetId": "asset-warts-male-glans",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.7,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.84,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/warts_male_glans.webp"
+  },
+  {
+    "assetId": "asset-warts-female-fourchette",
+    "scores": {
+      "educationalNecessity": 5,
+      "clinicalIdentityConfidence": 5,
+      "rightsClarity": 5,
+      "audienceSuitability": 4.5,
+      "accessibilityPotential": 5,
+      "resolution": 4.6,
+      "culturalAppropriateness": 4.5,
+      "nonDiagnosticSafety": 5
+    },
+    "compositeScore": 4.82,
+    "verdict": "APPROVED_GREEN",
+    "derivativePath": "/images/clinical/warts_female_fourchette.webp"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "claimId": "claim-syphilis-01",
+    "diseaseId": "syphilis-primary",
+    "syndrome": "Non-Herpetic Genital Ulcer",
+    "primaryLesion": "Single painless indurated sore (Chancre)",
+    "incubationPeriod": "9 to 90 days (average 21 days)",
+    "maleSite": "Glans penis, coronal sulcus, foreskin",
+    "femaleSite": "Labia majora, labia minora, posterior fourchette, cervix",
+    "systemicRisk": "Spreads hematogenously without penicillin therapy",
+    "nacoKit": "NACO Kit 3 (Black)",
+    "clinicalEvidence": "NACO National Guidelines on STI/RTI 2026; CDC Syphilis MMWR"
+  },
+  {
+    "claimId": "claim-gonorrhea-01",
+    "diseaseId": "gonorrhea",
+    "syndrome": "Urethral / Cervical Discharge",
+    "primaryLesion": "Purulent yellowish/green exudate & severe dysuria",
+    "incubationPeriod": "2 to 7 days",
+    "maleSite": "Urethra, prostate, epididymis",
+    "femaleSite": "Endocervix, urethra, Bartholin glands, fallopian tubes",
+    "systemicRisk": "Pelvic Inflammatory Disease (PID), tubal infertility, disseminated arthritis",
+    "nacoKit": "NACO Kit 1 (Grey)",
+    "clinicalEvidence": "NACO National Guidelines 2026; WHO Guidelines for Gonorrhoea 2021"
+  },
+  {
+    "claimId": "claim-herpes-01",
+    "diseaseId": "herpes-genital",
+    "syndrome": "Herpetic Genital Ulcers",
+    "primaryLesion": "Multiple grouped fluid-filled vesicles on erythematous base",
+    "incubationPeriod": "2 to 12 days",
+    "maleSite": "Penile shaft, glans, scrotum, perianal",
+    "femaleSite": "Labia, introitus, cervix, buttocks",
+    "systemicRisk": "Recurrent outbreaks, neonatal HSV transmission",
+    "nacoKit": "NACO Kit 5 (Red)",
+    "clinicalEvidence": "NACO National Guidelines 2026; WHO HSV Guidelines"
+  },
+  {
+    "claimId": "claim-warts-01",
+    "diseaseId": "warts-genital",
+    "syndrome": "Genital Warty Growths",
+    "primaryLesion": "Exophytic fleshy verrucous cauliflower-like condyloma",
+    "incubationPeriod": "3 weeks to 8 months",
+    "maleSite": "Glans penis, coronal sulcus, shaft, perianal",
+    "femaleSite": "Posterior fourchette, labia, introitus, perianal",
+    "systemicRisk": "Persistent warty lesions; oncogenic co-infection risk",
+    "nacoKit": "Suraksha Clinic Cryotherapy / Podophyllin",
+    "clinicalEvidence": "NACO Guidelines 2026; IUSTI European Guideline on HPV"
+  }
+]

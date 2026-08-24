@@ -5,47 +5,51 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./content/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
         paper: {
-          DEFAULT: "#fffaf0",
-          deep: "#f2eadb",
-          pure: "#ffffff",
+          DEFAULT: "#F7F1E4",
+          shadow: "#EAE1CC",
+          deep: "#EAE0CD",
+          pure: "#FFFFFF",
         },
         ink: {
-          DEFAULT: "#182027",
-          muted: "#52616b",
-          light: "#8a9ba8",
+          DEFAULT: "#1B1B18",
+          teal: "#123A3C",
+          muted: "#4A6367",
+          light: "#8A9BA8",
+        },
+        coral: {
+          DEFAULT: "#D97B66",
+          dark: "#B85C47",
+          light: "#F0A695",
+        },
+        'mineral-green': {
+          DEFAULT: "#4F7A6C",
+          dark: "#3B5C51",
+          light: "#7AA697",
+        },
+        'care-blue': {
+          DEFAULT: "#7FA8B3",
+          dark: "#5E8691",
+          light: "#A5C6CF",
+        },
+        brass: {
+          DEFAULT: "#B08D57",
+          dark: "#8F6E3B",
+          light: "#D4B483",
         },
         teal: {
-          DEFAULT: "#0b6b67",
-          dark: "#064946",
-          light: "#14958f",
-        },
-        orange: {
-          DEFAULT: "#f29f58",
-          dark: "#d87f32",
-          light: "#f7b982",
-        },
-        blue: {
-          DEFAULT: "#3b82a0",
-          dark: "#2a627a",
-          light: "#5ba2bf",
+          DEFAULT: "#123A3C",
+          dark: "#0B2628",
+          light: "#1C5457",
         },
         mint: {
-          DEFAULT: "#d8eee6",
-          dark: "#b4ded0",
-        },
-        warning: {
-          DEFAULT: "#b86b27",
-        },
-        danger: {
-          DEFAULT: "#a63d40",
-        },
-        focus: {
-          DEFAULT: "#1d62d1",
+          DEFAULT: "#D8EEE6",
+          dark: "#B4DED0",
         },
         // NACO Kit Colors
         kit: {
@@ -56,23 +60,25 @@ module.exports = {
           red: "#C53030",
           yellow: "#D69E2E",
           black: "#1A202C",
+          brown: "#78350F",
         }
       },
       fontFamily: {
-        display: ['"Fraunces"', 'Georgia', 'serif'],
-        body: ['"Inter"', 'system-ui', 'sans-serif'],
+        display: ['"Fraunces"', '"Noto Serif Devanagari"', 'Georgia', 'serif'],
+        body: ['"Mukta"', '"Inter"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'page': '0 1rem 2.5rem rgba(24, 32, 39, 0.18)',
-        'page-left': '-10px 10px 25px rgba(24, 32, 39, 0.15)',
-        'page-right': '10px 10px 25px rgba(24, 32, 39, 0.15)',
-        'card': '0 0.5rem 1.5rem rgba(24, 32, 39, 0.1)',
-        'spine': 'inset 0 0 30px rgba(0, 0, 0, 0.15)',
+        'page': '0 1rem 2.5rem rgba(18, 58, 60, 0.18)',
+        'contact': '0 4px 14px rgba(18, 58, 60, 0.12)',
+        'spread': '0 20px 50px rgba(18, 58, 60, 0.22)',
+        'gutter': 'inset 0 0 35px rgba(18, 58, 60, 0.25)',
+        'brass': '0 2px 8px rgba(176, 141, 87, 0.35)',
       },
       borderRadius: {
         'sm': '0.35rem',
         'md': '0.75rem',
         'lg': '1.5rem',
+        'deckle': '1.75rem',
       }
     },
   },

@@ -1,0 +1,103 @@
+[
+  {
+    "kitNumber": 1,
+    "color": "Grey",
+    "colorHex": "#4B5563",
+    "syndrome": "Urethral / Cervical / Anorectal Discharge",
+    "indications": [
+      "Purulent or mucopurulent urethral discharge in men",
+      "Endocervical yellow discharge or friability in women",
+      "Pain or burning during urination (dysuria)"
+    ],
+    "partnerManagement": "All sexual partners within the last 60 days must be treated simultaneously.",
+    "followUpSchedule": "Return on Day 7. If symptoms persist, reassess and refer for lab culture.",
+    "staffOnlyRegimen": "Tab Azithromycin 1g orally single dose + Inj Ceftriaxone 250mg/500mg IM single dose (or Tab Cefixime 400mg)",
+    "publicEducationNotes": "Single-visit dual therapy curing both Gonorrhea and Chlamydia. Available free at all Suraksha Clinics."
+  },
+  {
+    "kitNumber": 2,
+    "color": "Green",
+    "colorHex": "#10B981",
+    "syndrome": "Vaginitis / Vaginal Discharge",
+    "indications": [
+      "Curdy white thick cottage-cheese discharge with intense itching (Candidiasis)",
+      "Frothy, malodorous greenish-yellow discharge (Trichomoniasis)",
+      "Homogeneous grayish discharge with fishy odor (Bacterial Vaginosis)"
+    ],
+    "partnerManagement": "Treat partner for Trichomoniasis; partner treatment not required for uncomplicated Candidiasis.",
+    "followUpSchedule": "Check on Day 7 to ensure symptoms have cleared.",
+    "staffOnlyRegimen": "Tab Secnidazole 2g single dose (or Tab Metronidazole 400mg BD x 7 days) + Cap Fluconazole 150mg single dose",
+    "publicEducationNotes": "Provides combined antifungal and antiprotozoal coverage."
+  },
+  {
+    "kitNumber": 3,
+    "color": "Black",
+    "colorHex": "#1F2937",
+    "syndrome": "Non-Herpetic Genital Ulcers",
+    "indications": [
+      "Single painless indurated sore (Primary Syphilis)",
+      "Multiple painful, non-vesicular sores with ragged undermined edges (Chancroid)"
+    ],
+    "partnerManagement": "Treat all partners within the last 90 days with standard syphilis therapy.",
+    "followUpSchedule": "Mandatory follow-up on Day 7. Ulcers should show re-epithelialization.",
+    "staffOnlyRegimen": "Inj Benzathine Penicillin G 2.4 MU IM (after test dose) + Tab Azithromycin 1g orally single dose",
+    "publicEducationNotes": "Curative injectable penicillin and oral antibiotic combination."
+  },
+  {
+    "kitNumber": 4,
+    "color": "Blue",
+    "colorHex": "#2563EB",
+    "syndrome": "Non-Herpetic Genital Ulcers (Penicillin Allergic)",
+    "indications": [
+      "Genital ulcer disease in patients with confirmed penicillin allergy"
+    ],
+    "partnerManagement": "Treat partner with alternative oral regimen.",
+    "followUpSchedule": "Return on Day 7 and Day 14.",
+    "staffOnlyRegimen": "Tab Doxycycline 100mg BD for 14 days + Tab Azithromycin 1g orally single dose",
+    "publicEducationNotes": "Oral alternative regimen for penicillin-allergic individuals."
+  },
+  {
+    "kitNumber": 5,
+    "color": "Red",
+    "colorHex": "#DC2626",
+    "syndrome": "Herpetic Genital Ulcers (Genital Herpes)",
+    "indications": [
+      "Multiple grouped fluid-filled blisters (vesicles)",
+      "Shallow painful erosions with burning sensation",
+      "History of recurrent episodes"
+    ],
+    "partnerManagement": "Counselling on transmission during asymptomatic shedding; treat if partner has active lesions.",
+    "followUpSchedule": "Return on Day 7 if lesions do not heal.",
+    "staffOnlyRegimen": "Tab Acyclovir 400mg TDS for 7 days (or 200mg 5 times daily for 7 days)",
+    "publicEducationNotes": "Antiviral medication that relieves pain and speeds viral ulcer healing."
+  },
+  {
+    "kitNumber": 6,
+    "color": "Yellow",
+    "colorHex": "#D97706",
+    "syndrome": "Lower Abdominal Pain (Pelvic Inflammatory Disease / PID)",
+    "indications": [
+      "Bilateral lower abdominal pain in women",
+      "Pain during intercourse (dyspareunia)",
+      "Cervical motion tenderness"
+    ],
+    "partnerManagement": "Treat male partners for urethral infection.",
+    "followUpSchedule": "Re-evaluate within 72 hours. If no improvement, hospitalize for parenteral therapy.",
+    "staffOnlyRegimen": "Tab Cefixime 400mg single dose + Tab Metronidazole 400mg BD x 14 days + Tab Doxycycline 100mg BD x 14 days",
+    "publicEducationNotes": "Broad-spectrum coverage preventing tubal scarring and infertility."
+  },
+  {
+    "kitNumber": 7,
+    "color": "Black / Brown",
+    "colorHex": "#451A03",
+    "syndrome": "Inguinal Bubo / Lymphadenopathy",
+    "indications": [
+      "Painful fluctuant groin lymph node swelling (Bubo)",
+      "Associated with LGV or Chancroid"
+    ],
+    "partnerManagement": "Treat partner within last 60 days.",
+    "followUpSchedule": "Return on Day 7 and Day 14. Never incise and drain fluctuant bubo (aspirate if tense).",
+    "staffOnlyRegimen": "Tab Doxycycline 100mg BD for 21 days + Tab Azithromycin 1g single dose",
+    "publicEducationNotes": "Extended antibiotic therapy for lymphatic STI infections."
+  }
+]

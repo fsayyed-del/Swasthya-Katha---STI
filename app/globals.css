@@ -1,53 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Mukta:wght@300;400;500;600;700;800&family=Noto+Serif+Devanagari:wght@400;600;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-paper: #fffaf0;
-  --color-paper-deep: #f2eadb;
-  --color-ink: #182027;
-  --color-ink-muted: #52616b;
-  --color-teal: #0b6b67;
-  --color-teal-dark: #064946;
-  --color-orange: #f29f58;
-  --color-blue: #3b82a0;
-  --color-mint: #d8eee6;
-  --color-warning: #b86b27;
-  --color-danger: #a63d40;
-  --color-focus: #1d62d1;
-  --color-border: #d9dedb;
+  /* Swasthya Katha Portrait Ebook Design Tokens */
+  --paper: #F7F1E4;
+  --paper-shadow: #EAE1CC;
+  --ink-teal: #123A3C;
+  --coral: #D97B66;
+  --mineral-green: #4F7A6C;
+  --care-blue: #7FA8B3;
+  --ink-black: #1B1B18;
+  --brass: #B08D57;
+
+  /* Material & Depth Tokens */
+  --shadow-contact: 0 4px 14px rgba(18, 58, 60, 0.12);
+  --shadow-spread: 0 20px 50px rgba(18, 58, 60, 0.22);
+  --shadow-gutter: inset 0 0 35px rgba(18, 58, 60, 0.25);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
+body {
+  background-color: #E8DFCE;
+  color: var(--ink-black);
+  font-family: 'Mukta', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* =========================================================================
+   AUTHENTIC PURE CSS FLIPBOOK ENGINE (Responsive Full-Viewport Spread)
+   ========================================================================= */
+
+.flipbook-container-stage {
+  perspective: 1400px;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.book {
+  position: relative;
+  display: flex;
+  margin: auto;
+  width: min(48vw, 680px);
+  height: min(94vh, 920px);
+  pointer-events: none;
+  transform-style: preserve-3d;
+  transition: translate 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  translate: calc(min(var(--c), 1) * 50%) 0%;
+  will-change: translate;
+}
+
+@media (min-width: 1024px) {
+  .book {
+    width: min(47vw, 670px);
+    height: min(94vh, 900px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+}
+
+@media (max-width: 767px) {
+  .book {
+    width: 96vw;
+    max-width: 480px;
+    height: min(95vh, 850px);
+    translate: 0% 0% !important;
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.page {
+  --thickness: 4;
+  flex: none;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  pointer-events: all;
+  user-select: none;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition:
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    rotate 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 35ms);
+  translate: calc(var(--i) * -100%) 0px 0px;
+  transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px));
+  rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
+  box-shadow: 0 12px 36px rgba(18, 58, 60, 0.2);
+  will-change: transform, rotate;
 }
 
-/* Custom smooth scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.front,
+.back {
+  position: relative;
+  flex: none;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  background-color: var(--paper);
+  translate: 0px;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-paper-deep);
+.back {
+  translate: -100% 0;
+  rotate: 0 1 0 180deg;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+.front {
+  border-radius: 2px 18px 18px 2px;
+  border-right: 2px solid rgba(176, 141, 87, 0.35);
+  border-top: 1px solid rgba(176, 141, 87, 0.2);
+  border-bottom: 1px solid rgba(176, 141, 87, 0.2);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.back {
+  border-radius: 18px 2px 2px 18px;
+  border-left: 2px solid rgba(176, 141, 87, 0.35);
+  border-top: 1px solid rgba(176, 141, 87, 0.2);
+  border-bottom: 1px solid rgba(176, 141, 87, 0.2);
+}
+
+/* Deckle Edge & Paper Grain Texture */
+.deckle-edge {
+  box-shadow: 
+    0 1px 3px rgba(18, 58, 60, 0.08),
+    0 8px 24px rgba(18, 58, 60, 0.12),
+    inset 0 0 0 1px rgba(216, 206, 184, 0.6);
+}
+
+/* Signature Chapter-Colored Edge Stripe (Thumb-Index) */
+.chapter-edge-green {
+  border-right: 6px solid var(--mineral-green);
+}
+
+.chapter-edge-coral {
+  border-right: 6px solid var(--coral);
+}
+
+.chapter-edge-blue {
+  border-right: 6px solid var(--care-blue);
+}
+
+/* Brass-Ringed Sound Button */
+.sound-btn-ring {
+  box-shadow: 0 0 0 2px #B08D57, 0 3px 8px rgba(176, 141, 87, 0.35);
+}
+
+/* 3D Flip Card Styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  .book,
+  .page,
+  .flip-card-inner {
+    transition: transform 0.05s ease-out !important;
+    animation: none !important;
+  }
 }

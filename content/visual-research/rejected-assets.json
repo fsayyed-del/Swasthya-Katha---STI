@@ -1,0 +1,23 @@
+[
+  {
+    "researchId": "rej-001",
+    "query": "generic google image search penile ulcer",
+    "rejectionReason": "Unverified copyright license, missing patient consent, unauthenticated clinical source.",
+    "verdict": "REJECTED_RED",
+    "riskLevel": "high"
+  },
+  {
+    "researchId": "rej-002",
+    "query": "stock photography genital herpes",
+    "rejectionReason": "Stock dramatization does not match true clinical presentation; misleading staging.",
+    "verdict": "REJECTED_RED",
+    "riskLevel": "medium"
+  },
+  {
+    "researchId": "rej-003",
+    "query": "uncredited slideshare download",
+    "rejectionReason": "Third-party rights unclear; missing institutional permission evidence.",
+    "verdict": "REJECTED_AMBER",
+    "riskLevel": "medium"
+  }
+]

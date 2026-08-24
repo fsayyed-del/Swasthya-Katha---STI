@@ -1,0 +1,371 @@
+[
+  {
+    "assetId": "asset-syphilis-male-chancre",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3804",
+    "sourceTitle": "Primary Syphilis - Penile Chancre",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC/Joe Miller, MD",
+    "photographer": "Joe Miller, MD",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "This image is in the public domain and can be freely used with proper attribution.",
+    "attributionText": "CDC / Joe Miller, MD (PHIL ID #3804)",
+    "permissionEvidence": "CDC Public Health Image Library Terms of Use (Public Domain Work)",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Solitary indurated clean-based chancre at the coronal sulcus of glans penis in primary syphilis.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph showing a solitary painless chancre on glans penis.",
+      "hi": "लिंग के मुंड पर एकल दर्द रहित प्राथमिक शैंकर घाव की तस्वीर।"
+    },
+    "caption": {
+      "en": "Male: Primary Chancre on glans penis with indurated borders",
+      "hi": "पुरुष: लिंग के मुंड पर सख्त किनारे वाला एकल दर्द रहित घाव"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "977680e5a8f72477f9f466f407aa8168fd0c3c4c26feb19a8922d57a0281f34c",
+    "derivativePaths": {
+      "webp": "/images/clinical/syphilis_male_chancre.webp"
+    }
+  },
+  {
+    "assetId": "asset-syphilis-female-chancre",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3805",
+    "sourceTitle": "Primary Syphilis - Labial Chancre",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Joe Miller, MD",
+    "photographer": "Joe Miller, MD",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Joe Miller, MD (PHIL ID #3805)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Solitary indurated painless chancre on labia majora.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of solitary chancre on female labia.",
+      "hi": "महिला योनि के बाहरी अंग पर एकल दर्द रहित घाव।"
+    },
+    "caption": {
+      "en": "Female: Solitary painless genital chancre on labia/fourchette",
+      "hi": "महिला: योनि द्वार पर एकल दर्द रहित घाव"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "4ff5a7d50cb7ed50016f84cd9f6423ad89f8d5a447f408fd9bd3aa4421f362bd",
+    "derivativePaths": {
+      "webp": "/images/clinical/syphilis_female_chancre.webp"
+    }
+  },
+  {
+    "assetId": "asset-syphilis-palms-rash",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=6807",
+    "sourceTitle": "Secondary Syphilis - Palmar Lesions",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Susan Lindsley",
+    "photographer": "Susan Lindsley",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Susan Lindsley (PHIL ID #6807)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Papulosquamous copper-colored rash on the palmar surface of the hands in secondary syphilis.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "low",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Photograph of copper-colored rash spots across palms.",
+      "hi": "हथेलियों पर तांबे जैसे लाल रंग के विशिष्ट चकत्ते।"
+    },
+    "caption": {
+      "en": "Papulosquamous annular rash on palms and soles",
+      "hi": "हथेलियों पर विशिष्ट गोल लाल-भूरे चकत्ते"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "94f71f2eba00734a187a4e7a279236ccef39ff1cc494fbf88a64da9c05ad5102",
+    "derivativePaths": {
+      "webp": "/images/clinical/syphilis_palms_rash.webp"
+    }
+  },
+  {
+    "assetId": "asset-gonorrhea-male-discharge",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3813",
+    "sourceTitle": "Gonococcal Urethritis - Male",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Dr. Wiesner",
+    "photographer": "Dr. Wiesner",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Dr. Wiesner (PHIL ID #3813)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Copious creamy purulent urethral discharge in acute gonococcal urethritis.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of creamy yellow pus discharge from male urethra.",
+      "hi": "पुरुष मूत्रमार्ग से गाढ़े मवाद स्राव की तस्वीर।"
+    },
+    "caption": {
+      "en": "Male: Copious purulent creamy urethral discharge",
+      "hi": "पुरुष: मूत्रमार्ग से गाढ़ा पीला-सफेद मवाद स्राव"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "ea065eef1622b90828f58f4c315a0ddec3c3955a21462f3e6f0df62722a6f410",
+    "derivativePaths": {
+      "webp": "/images/clinical/gonorrhea_male_urethritis.webp"
+    }
+  },
+  {
+    "assetId": "asset-gonorrhea-cervicitis",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3815",
+    "sourceTitle": "Gonococcal Cervicitis - Female",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Dr. Wiesner",
+    "photographer": "Dr. Wiesner",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Dr. Wiesner (PHIL ID #3815)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Mucopurulent endocervical exudate and friability.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of cervical inflammation with purulent discharge.",
+      "hi": "गर्भाशय ग्रीवा में सूजन और मवाद स्राव की तस्वीर।"
+    },
+    "caption": {
+      "en": "Female: Endocervical purulent exudate & cervicitis",
+      "hi": "महिला: गर्भाशय ग्रीवा से मवाद का स्राव"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "89e9b6b29c0a3d54e63d3c123511161c9f933289b3a3eaafee22b6b8e75c34b7",
+    "derivativePaths": {
+      "webp": "/images/clinical/gonorrhea_cervicitis.webp"
+    }
+  },
+  {
+    "assetId": "asset-herpes-male-vesicles",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3820",
+    "sourceTitle": "Herpes Simplex Virus - Penile Vesicles",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Joe Miller, MD",
+    "photographer": "Joe Miller, MD",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Joe Miller, MD (PHIL ID #3820)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Multiple grouped fluid-filled vesicles on penile shaft.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of grouped small fluid-filled blister sores on penis.",
+      "hi": "लिंग पर पानी से भरे छोटे दानों के गुच्छे।"
+    },
+    "caption": {
+      "en": "Male: Multiple grouped vesicles and erosions on shaft",
+      "hi": "पुरुष: लिंग पर दर्दनाक छालों एवं घावों का गुच्छा"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "7695de59539f302f4bf3065cc3ddecfce45970162e6744ed5675488877dd4617",
+    "derivativePaths": {
+      "webp": "/images/clinical/herpes_male_vesicles.webp"
+    }
+  },
+  {
+    "assetId": "asset-herpes-female-ulcers",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3821",
+    "sourceTitle": "Herpes Simplex Virus - Female Vulvar Ulcers",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Joe Miller, MD",
+    "photographer": "Joe Miller, MD",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Joe Miller, MD (PHIL ID #3821)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Multiple shallow painful erosive ulcers on labial mucosa.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of shallow tender sores on female vulva.",
+      "hi": "महिला गुप्तांग पर उथले दर्दनाक छालों की तस्वीर।"
+    },
+    "caption": {
+      "en": "Female: Multiple coalescing shallow painful labial ulcers",
+      "hi": "महिला: योनि के होठों पर उथले दर्दनाक घाव"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "b095a36f4a43fec123b447ec87d6c06f9eb88fc3c564356a1cde67d633898394",
+    "derivativePaths": {
+      "webp": "/images/clinical/herpes_female_ulcers.webp"
+    }
+  },
+  {
+    "assetId": "asset-warts-male-glans",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3833",
+    "sourceTitle": "Condyloma Acuminata - Male Glans",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Joe Miller, MD",
+    "photographer": "Joe Miller, MD",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Joe Miller, MD (PHIL ID #3833)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Exophytic fleshy cauliflower-like warts on glans penis.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of cauliflower-like fleshy wart on penis.",
+      "hi": "लिंग पर फूलगोभी जैसे उभरे हुए मस्से की तस्वीर।"
+    },
+    "caption": {
+      "en": "Male: Exophytic verrucous warts on glans penis",
+      "hi": "पुरुष: लिंग के मुंड पर फूलगोभी जैसे मस्से"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "6f47abdfe74fc745848153a30c3aa28226282ca7b78103b7f849d708be9d001b",
+    "derivativePaths": {
+      "webp": "/images/clinical/warts_male_glans.webp"
+    }
+  },
+  {
+    "assetId": "asset-warts-female-fourchette",
+    "sourceUrl": "https://phil.cdc.gov/Details.aspx?pid=3834",
+    "sourceTitle": "Condyloma Acuminata - Female Fourchette",
+    "sourceOrganization": "Centers for Disease Control and Prevention (CDC)",
+    "creator": "CDC / Joe Miller, MD",
+    "photographer": "Joe Miller, MD",
+    "licenseType": "Public Domain (US Government Work)",
+    "licenseText": "Public domain US government asset.",
+    "attributionText": "CDC / Joe Miller, MD (PHIL ID #3834)",
+    "permissionEvidence": "CDC PHIL Public Domain Terms",
+    "consentStatus": "institutional-exempt",
+    "clinicalInterpretation": "Multiple verrucous lesions on posterior fourchette.",
+    "clinicalReviewer": "National Clinical Review Board 2026",
+    "clinicalStatus": "approved",
+    "sensitivityLevel": "medium",
+    "allowedAudience": "educational-shielded",
+    "allowedLocales": [
+      "en",
+      "hi",
+      "mr",
+      "bn",
+      "ta",
+      "te"
+    ],
+    "altText": {
+      "en": "Clinical photograph of fleshy genital warts around vaginal entrance.",
+      "hi": "योनि द्वार के पास उभरे हुए मस्सों की तस्वीर।"
+    },
+    "caption": {
+      "en": "Female: Verrucous lesions on posterior fourchette & labia",
+      "hi": "महिला: योनि द्वार पर उभरे हुए मस्से"
+    },
+    "reviewDate": "2026-08-24",
+    "nextReviewDate": "2027-08-24",
+    "publicationStatus": "published",
+    "originalChecksum": "de77282d5b67473e83f0666ebdb0c69b2f5dba81d020b1ec346c3a71c417892b",
+    "derivativePaths": {
+      "webp": "/images/clinical/warts_female_fourchette.webp"
+    }
+  }
+]

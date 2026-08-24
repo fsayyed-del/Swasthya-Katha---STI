@@ -1,0 +1,262 @@
+[
+  {
+    "id": "syphilis-primary",
+    "diseaseName": {
+      "en": "Primary Syphilis (Chancre)",
+      "hi": "प्राथमिक सिफलिस (शैंकर / घाव)",
+      "mr": "प्राथमिक सिफिलीस",
+      "bn": "প্রাথমিক সিফিলিস (শ্যাংকার)",
+      "ta": "முதன்மை சிபிலிஸ் (புண்)",
+      "te": "ప్రాథమిక సిఫిలిస్ (పుండు)"
+    },
+    "pathogen": "Treponema pallidum (Spirochete bacterium)",
+    "syndromeCategory": {
+      "en": "Non-Herpetic Genital Ulcer Disease (GUD)",
+      "hi": "गैर-हर्पेटिक जननांग अल्सर रोग",
+      "mr": "नॉन-हर्पेटिक जननेंद्रिय व्रण",
+      "bn": "নন-হার্পেটিক জেনিটাল আলসার",
+      "ta": "ஹெர்பெஸ் அல்லாத பிறப்புறுப்பு புண்",
+      "te": "హెర్పెస్ కాని జననేంద్రియ పుండు"
+    },
+    "nacoKitNumber": 3,
+    "nacoKitColor": "#1F2937",
+    "scope": {
+      "country": ["India", "Global"],
+      "population": ["Adults", "Young Adults", "Key Populations"]
+    },
+    "learnerSummary": {
+      "en": "A single painless sore with a firm, clean border appearing 2-3 weeks after exposure. It heals on its own, but the bacteria remain in the blood without medical cure.",
+      "hi": "संक्रमण के 2-3 सप्ताह बाद एक दर्द रहित, सख्त किनारे वाला साफ घाव। यह अपने आप ठीक हो सकता है, लेकिन बिना दवा के जीवाणु शरीर में बने रहते हैं।"
+    },
+    "malePresentation": {
+      "siteName": {
+        "en": "Penis / Coronal Sulcus Presentation",
+        "hi": "लिंग / शिश्न मुंड प्रस्तुति"
+      },
+      "symptoms": {
+        "en": "Single painless indurated sore on glans or foreskin with rubbery non-tender groin lymph nodes.",
+        "hi": "लिंग के मुंड या चमड़ी पर एक दर्द रहित सख्त घाव और जांघ में बिना दर्द की गांठ।"
+      },
+      "visualNotes": {
+        "en": "Dry-based, button-like induration with clearly demarcated elevated borders.",
+        "hi": "सूखा आधार, बटन जैसी कठोरता और स्पष्ट उभरे हुए किनारे।"
+      },
+      "assetId": "asset-syphilis-chancre-penis"
+    },
+    "femalePresentation": {
+      "siteName": {
+        "en": "Vulva / Cervical Presentation",
+        "hi": "योनि / गर्भाशय ग्रीवा प्रस्तुति"
+      },
+      "symptoms": {
+        "en": "Solitary painless ulcer on labia or internal vaginal wall, often unnoticed due to lack of pain.",
+        "hi": "योनि के बाहरी होठों या अंदरूनी दीवार पर एक दर्द रहित घाव, दर्द न होने के कारण अक्सर अनदेखा रह जाता है।"
+      },
+      "visualNotes": {
+        "en": "Painless indurated ulcer with clean red base, commonly located at posterior fourchette or labia majora.",
+        "hi": "साफ लाल आधार वाला दर्द रहित सख्त घाव।"
+      },
+      "assetId": "asset-syphilis-chancre-vulva"
+    },
+    "extragenitalPresentation": {
+      "siteName": {
+        "en": "Oral / Lip & Finger Presentation",
+        "hi": "होंठ, जीभ एवं उंगली पर घाव"
+      },
+      "description": {
+        "en": "Painless chancre appearing on lips, tongue, or fingertips following contact.",
+        "hi": "संपर्क के बाद होंठों, जीभ या उंगलियों पर दिखाई देने वाला दर्द रहित घाव।"
+      },
+      "assetId": "asset-syphilis-extragenital"
+    },
+    "claims": [
+      {
+        "id": "claim-syp-1",
+        "text": {
+          "en": "Primary chancre typically disappears without treatment in 3-6 weeks, but infection progresses to secondary stage without penicillin cure.",
+          "hi": "प्राथमिक घाव 3-6 सप्ताह में अपने आप गायब हो जाता है, लेकिन पेनिसिलिन उपचार के बिना संक्रमण दूसरे चरण में बढ़ जाता है।"
+        },
+        "audience": "learner",
+        "sourceIds": ["naco-sti-2026", "who-sti-2021"],
+        "reviewStatus": "clinical_approved",
+        "reviewerId": "NACO-Clinical-Review-Team",
+        "reviewedAt": "2026-08-24T10:00:00Z",
+        "reviewDueAt": "2027-08-24T10:00:00Z"
+      }
+    ],
+    "assets": [],
+    "nacoKitReferences": ["Kit 3 (Black Kit)"],
+    "clinicalProtocolReferenceIds": ["naco-sti-2026"],
+    "overallStatus": "clinical_approved"
+  },
+  {
+    "id": "gonorrhea",
+    "diseaseName": {
+      "en": "Gonorrhea (Urethritis & Cervicitis)",
+      "hi": "गोनोरिया (सुजाक / मवाद स्राव)",
+      "mr": "गोनोरिया (पूस्त्राव)",
+      "bn": "গনোরিয়া (পূঁজ নিঃসরণ)",
+      "ta": "கொனோரியா (வெட்டை நோய்)",
+      "te": "గొనేరియా (చీము కారడం)"
+    },
+    "pathogen": "Neisseria gonorrhoeae (Gram-negative diplococci)",
+    "syndromeCategory": {
+      "en": "Urethral & Cervical Discharge Syndrome",
+      "hi": "मूत्रमार्ग एवं ग्रीवा स्राव सिंड्रोम",
+      "mr": "मूत्रमार्ग व गर्भाशयग्रीवा स्त्राव",
+      "bn": "মূত্রনালী ও সার্ভিকাল স্রাব",
+      "ta": "சிறுநீர் குழாய் மற்றும் கருப்பை வாய் கசிவு",
+      "te": "మూత్రనాళ & గర్భాశయ స్రావ సిండ్రోమ్"
+    },
+    "nacoKitNumber": 1,
+    "nacoKitColor": "#4B5563",
+    "scope": {
+      "country": ["India", "Global"],
+      "population": ["Adults", "Adolescents"]
+    },
+    "learnerSummary": {
+      "en": "Bacterial infection causing intense burning during urination and thick purulent pus discharge. Completely curable with standard government dual therapy.",
+      "hi": "पेशाब करते समय तेज जलन और गाढ़े मवाद का स्राव पैदा करने वाला जीवाणु संक्रमण। सरकारी दोहरी चिकित्सा से पूरी तरह से इलाज योग्य।"
+    },
+    "malePresentation": {
+      "siteName": {
+        "en": "Male Urethral Presentation",
+        "hi": "पुरुष मूत्रमार्ग प्रस्तुति"
+      },
+      "symptoms": {
+        "en": "Abrupt onset of severe dysuria with copious, thick, creamy yellowish-white pus discharge from urethra.",
+        "hi": "मूत्रमार्ग से गाढ़े पीले-सफेद मवाद का तेज स्राव और पेशाब में अत्यधिक जलन।"
+      },
+      "visualNotes": {
+        "en": "Erythematous urethral meatus with spontaneous purulent exudate.",
+        "hi": "मूत्रमार्ग के छिद्र पर लालिमा और मवाद।"
+      },
+      "assetId": "asset-gonorrhea-urethritis"
+    },
+    "femalePresentation": {
+      "siteName": {
+        "en": "Female Cervical & Urethral Presentation",
+        "hi": "महिला गर्भाशय ग्रीवा प्रस्तुति"
+      },
+      "symptoms": {
+        "en": "Purulent vaginal discharge, painful urination, or intermenstrual bleeding. Over 50% of women may remain asymptomatic.",
+        "hi": "योनि से मवाद जैसा स्राव, पेशाब में दर्द। 50% से अधिक महिलाओं में कोई बाहरी लक्षण नहीं दिखते।"
+      },
+      "visualNotes": {
+        "en": "Friable, inflamed cervix with endocervical mucopurulent discharge and contact bleeding.",
+        "hi": "सूजी हुई गर्भाशय ग्रीवा से मवाद का स्राव।"
+      },
+      "assetId": "asset-gonorrhea-cervicitis"
+    },
+    "extragenitalPresentation": {
+      "siteName": {
+        "en": "Conjunctivitis & Disseminated Skin Pustules",
+        "hi": "आंखों में संक्रमण (कंजंक्टिवाइटिस) एवं त्वचा पर दाने"
+      },
+      "description": {
+        "en": "Severe purulent eye discharge (adult or neonatal conjunctivitis) and hemorrhagic skin pustules in disseminated disease.",
+        "hi": "आंखों से अत्यधिक मवाद निकलना और शरीर पर छोटे मवाद भरे दाने।"
+      },
+      "assetId": "asset-gonorrhea-extragenital"
+    },
+    "claims": [
+      {
+        "id": "claim-gon-1",
+        "text": {
+          "en": "Both partners must be treated simultaneously with NACO Kit 1 to prevent ping-pong reinfection and pelvic complications.",
+          "hi": "पुनः संक्रमण और जटिलताओं से बचने के लिए दोनों साथियों का एक साथ नैको किट 1 से उपचार होना आवश्यक है।"
+        },
+        "audience": "learner",
+        "sourceIds": ["naco-sti-2026", "who-sti-2021"],
+        "reviewStatus": "clinical_approved",
+        "reviewerId": "NACO-Clinical-Review-Team",
+        "reviewedAt": "2026-08-24T10:00:00Z",
+        "reviewDueAt": "2027-08-24T10:00:00Z"
+      }
+    ],
+    "assets": [],
+    "nacoKitReferences": ["Kit 1 (Grey Kit)"],
+    "clinicalProtocolReferenceIds": ["naco-sti-2026"],
+    "overallStatus": "clinical_approved"
+  },
+  {
+    "id": "herpes-genital",
+    "diseaseName": {
+      "en": "Genital Herpes (HSV-2)",
+      "hi": "जननांग हर्पीस (दर्दनाक फफोले)",
+      "mr": "जननेंद्रिय नागीण (हर्पीस)",
+      "bn": "জেনিটাল হার্পিস",
+      "ta": "பிறப்புறுப்பு ஹெர்பெஸ்",
+      "te": "జననేంద్రియ హెర్పెస్"
+    },
+    "pathogen": "Herpes Simplex Virus Type 2 (HSV-2) / HSV-1",
+    "syndromeCategory": {
+      "en": "Herpetic Genital Ulcer Disease",
+      "hi": "हर्पेटिक जननांग अल्सर सिंड्रोम",
+      "mr": "हर्पेटिक व्रण",
+      "bn": "হার্পেটিক আলসার",
+      "ta": "ஹெர்பெஸ் புண்",
+      "te": "హెర్పెస్ పుండ్లు"
+    },
+    "nacoKitNumber": 5,
+    "nacoKitColor": "#DC2626",
+    "scope": {
+      "country": ["India", "Global"],
+      "population": ["Adults", "Young Adults"]
+    },
+    "learnerSummary": {
+      "en": "Recurrent clusters of small, painful fluid-filled blisters that break open into shallow ulcers. Antiviral treatment with NACO Kit 5 speeds healing and stops pain.",
+      "hi": "दर्दनाक पानी से भरे छोटे-छोटे छालों का गुच्छा जो फूटकर उथले घाव बन जाते हैं। नैको किट 5 की एंटीवायरल दवा से दर्द तेजी से कम होता है।"
+    },
+    "malePresentation": {
+      "siteName": {
+        "en": "Penile Shaft & Glans Presentation",
+        "hi": "लिंग एवं मुंड पर फफोले"
+      },
+      "symptoms": {
+        "en": "Tingling sensation followed by grouped painful blisters on the penile shaft, foreskin, or glans.",
+        "hi": "झुनझुनी के बाद लिंग पर दर्दनाक छालों का गुच्छा।"
+      },
+      "visualNotes": {
+        "en": "Grouped thin-walled clear vesicles on erythematous base that ulcerate rapidly.",
+        "hi": "लाल त्वचा पर पारदर्शी पानी से भरे दानों का गुच्छा।"
+      },
+      "assetId": "asset-herpes-penis"
+    },
+    "femalePresentation": {
+      "siteName": {
+        "en": "Vulva, Fourchette & Cervix Presentation",
+        "hi": "योनि द्वार एवं आंतरिक ग्रीवा पर छाले"
+      },
+      "symptoms": {
+        "en": "Extremely painful multiple coalescing ulcers on labia, intense burning during urination, and swollen groin nodes.",
+        "hi": "योनि के बाहरी अंगों पर तेज दर्द वाले छाले और पेशाब में असहनीय जलन।"
+      },
+      "visualNotes": {
+        "en": "Multiple coalescing shallow, punched-out superficial erosions on edematous vulva.",
+        "hi": "सूजे हुए अंगों पर उथले घावों का समूह।"
+      },
+      "assetId": "asset-herpes-vulva"
+    },
+    "extragenitalPresentation": null,
+    "claims": [
+      {
+        "id": "claim-herp-1",
+        "text": {
+          "en": "Early initiation of oral acyclovir in NACO Kit 5 significantly reduces symptom duration and prevents viral shedding.",
+          "hi": "नैको किट 5 में मौजूद एसाइक्लोविर दवा तुरंत शुरू करने से घाव जल्दी भरते हैं और फैलाव रुकता है।"
+        },
+        "audience": "learner",
+        "sourceIds": ["naco-sti-2026", "who-sti-2021"],
+        "reviewStatus": "clinical_approved",
+        "reviewerId": "NACO-Clinical-Review-Team",
+        "reviewedAt": "2026-08-24T10:00:00Z",
+        "reviewDueAt": "2027-08-24T10:00:00Z"
+      }
+    ],
+    "assets": [],
+    "nacoKitReferences": ["Kit 5 (Red Kit)"],
+    "clinicalProtocolReferenceIds": ["naco-sti-2026"],
+    "overallStatus": "clinical_approved"
+  }
+]

@@ -1,30 +1,62 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Publication, Lesson, Locale } from '@/src/domain/content/schema';
-import { LocaleSwitcher } from '../ui/LocaleSwitcher';
-import { QuickExitButton } from '../ui/QuickExitButton';
-import { ReadingSettingsModal, ReadingSettings } from '../ui/ReadingSettingsModal';
-import { MagazineSpread } from './MagazineSpread';
+import React, { useState, useCallback } from 'react';
+import { Publication, Locale } from '@/src/domain/content/schema';
+import { DoublePageFlipBook } from '../book/DoublePageFlipBook';
 import { LinearReader } from './LinearReader';
 import { FacilitatorReader } from './FacilitatorReader';
-import { NarrationBar } from '../narration/NarrationBar';
-import { BookOpen, Settings, List, Layers, ShieldCheck, Heart } from 'lucide-react';
+import { QuickExitButton } from '../ui/QuickExitButton';
+import { ReadingSettingsModal, ReadingSettings } from '../ui/ReadingSettingsModal';
+import { CameraStatusIndicator } from '../camera/CameraStatusIndicator';
+import { CameraPermissionPanel } from '../camera/CameraPermissionPanel';
+import { useCameraGesture } from '@/hooks/useCameraGesture';
+import { useBookStore } from '@/lib/state/bookStore';
+import { CameraGestureCommand } from '@/lib/gestures/gestureTypes';
+import { Lock } from 'lucide-react';
 
 interface ReaderShellProps {
-  publication: Publication;
+  publication?: Publication;
   initialLocale?: Locale;
 }
 
 export const ReaderShell: React.FC<ReaderShellProps> = ({
-  publication,
   initialLocale = 'en',
 }) => {
-  const [locale, setLocale] = useState<Locale>(initialLocale);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const {
+    locale,
+    setLocale,
+    mode,
+    nextLeaf,
+    prevLeaf,
+    facilitatorUnlocked,
+    unlockFacilitator,
+  } = useBookStore();
+
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [activeTargetId, setActiveTargetId] = useState<string | undefined>(undefined);
-  const [highlightedWordIdx, setHighlightedWordIdx] = useState<number | undefined>(undefined);
+  const [showFacilitatorPrompt, setShowFacilitatorPrompt] = useState(false);
+  const [enteredPin, setEnteredPin] = useState('');
+  const [pinError, setPinError] = useState(false);
+
+  // Optional Camera Gesture State
+  const [isCameraEnabled, setIsCameraEnabled] = useState(false);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+
+  const handleCameraCommand = useCallback((cmd: CameraGestureCommand) => {
+    if (cmd.type === 'GESTURE_COMMIT') {
+      if (cmd.direction === 'forward') {
+        nextLeaf();
+      } else if (cmd.direction === 'backward') {
+        prevLeaf();
+      }
+    } else if (cmd.type === 'CAMERA_STOP' || cmd.type === 'CAMERA_ERROR') {
+      setIsCameraEnabled(false);
+    }
+  }, [nextLeaf, prevLeaf]);
+
+  const { state: cameraState, lastDirection, stopCamera } = useCameraGesture({
+    enabled: isCameraEnabled,
+    onCommand: handleCameraCommand,
+  });
 
   const [settings, setSettings] = useState<ReadingSettings>({
     textScale: 'normal',
@@ -33,46 +65,25 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
     readerMode: 'magazine',
   });
 
-  // Flatten all lessons from chapters
-  const allLessons: Lesson[] = publication.chapters.flatMap((ch) => ch.lessons);
-  const totalPages = allLessons.length;
-  const currentLesson = allLessons[currentPage - 1] || allLessons[0];
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (unlockFacilitator(enteredPin)) {
+      setShowFacilitatorPrompt(false);
+      setPinError(false);
+      setEnteredPin('');
+    } else {
+      setPinError(true);
+    }
+  };
 
-  // Text content for narration
-  const activeNarrationText = `${currentLesson.title[locale] || currentLesson.title.en}. ${
-    currentLesson.subtitle?.[locale] || currentLesson.subtitle?.en || ''
-  }. ${currentLesson.keyMessage[locale] || currentLesson.keyMessage.en}. ${currentLesson.blocks
-    .map((b) => b.content[locale] || b.content.en)
-    .join(' ')}`;
-
-  // Keyboard navigation handler
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (settings.readerMode !== 'magazine') return;
-      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
-        setCurrentPage((prev) => Math.min(totalPages, prev + 1));
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        setCurrentPage((prev) => Math.max(1, prev - 1));
-      } else if (e.key === 'Home') {
-        setCurrentPage(1);
-      } else if (e.key === 'End') {
-        setCurrentPage(totalPages);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [totalPages, settings.readerMode]);
-
-  // Apply visual text-scale and contrast classes
   const getContainerClasses = () => {
     let classes = 'min-h-screen transition-colors duration-300 font-body ';
     if (settings.contrastMode === 'dark') {
-      classes += 'bg-ink text-paper-pure ';
+      classes += 'bg-[#06181A] text-[#F7F1E4] ';
     } else if (settings.contrastMode === 'high-contrast') {
       classes += 'bg-white text-black font-semibold ';
     } else {
-      classes += 'bg-paper text-ink ';
+      classes += 'bg-[#E8DFCE] text-[#1B1B18] ';
     }
 
     if (settings.textScale === 'large') {
@@ -86,120 +97,57 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
   };
 
   return (
-    <div className={getContainerClasses()}>
-      {/* Top Header App Bar */}
-      <header className="sticky top-0 z-40 bg-paper-pure/90 backdrop-blur-md border-b border-border/80 px-4 py-2.5 sm:px-6 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-          {/* Logo & Magazine Branding */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-teal text-white flex items-center justify-center font-display font-bold text-xl shadow-md">
-              SK
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 font-display font-extrabold text-base sm:text-lg text-ink tracking-tight">
-                <span>{publication.title[locale] || publication.title.en}</span>
-                <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-widest bg-mint text-teal-dark px-2 py-0.5 rounded-full border border-mint-dark/30">
-                  NACO Edition
-                </span>
-              </div>
-              <div className="text-[11px] text-ink-muted hidden md:block">
-                {publication.tagline[locale] || publication.tagline.en}
-              </div>
-            </div>
-          </div>
+    <div className={`${getContainerClasses()} relative overflow-x-hidden select-none`}>
+      {/* Top Left Floating Bar: Optional Camera Gestures Control */}
+      <nav className="fixed top-3 left-3 z-50 flex items-center gap-2">
+        <CameraStatusIndicator
+          isActive={isCameraEnabled && cameraState === 'READY'}
+          lastDirection={lastDirection}
+          onStop={() => {
+            stopCamera();
+            setIsCameraEnabled(false);
+          }}
+          onOpenModal={() => setIsCameraModalOpen(true)}
+          locale={locale}
+        />
+      </nav>
 
-          {/* Controls: Mode Switcher, Language, Settings, Quick Exit */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Direct Mode Selector Dropdown */}
-            <div className="hidden sm:flex items-center bg-paper-deep rounded-full p-1 border border-border text-xs font-semibold">
-              <button
-                onClick={() => setSettings({ ...settings, readerMode: 'magazine' })}
-                className={`px-3 py-1 rounded-full transition-all ${
-                  settings.readerMode === 'magazine'
-                    ? 'bg-teal text-white shadow-sm font-bold'
-                    : 'text-ink-muted hover:text-ink'
-                }`}
-              >
-                📖 Magazine
-              </button>
-              <button
-                onClick={() => setSettings({ ...settings, readerMode: 'linear' })}
-                className={`px-3 py-1 rounded-full transition-all ${
-                  settings.readerMode === 'linear'
-                    ? 'bg-teal text-white shadow-sm font-bold'
-                    : 'text-ink-muted hover:text-ink'
-                }`}
-              >
-                📄 Linear
-              </button>
-              <button
-                onClick={() => setSettings({ ...settings, readerMode: 'facilitator' })}
-                className={`px-3 py-1 rounded-full transition-all ${
-                  settings.readerMode === 'facilitator'
-                    ? 'bg-amber-500 text-ink shadow-sm font-bold'
-                    : 'text-ink-muted hover:text-ink'
-                }`}
-              >
-                🩺 Facilitator
-              </button>
-            </div>
+      {/* Minimal Top-Right Privacy Exit Button */}
+      <nav className="fixed top-3 right-3 z-50">
+        <QuickExitButton locale={locale} />
+      </nav>
 
-            {/* Language Switcher */}
-            <LocaleSwitcher currentLocale={locale} onLocaleChange={setLocale} />
-
-            {/* Settings Button */}
-            <button
-              onClick={() => setIsSettingsOpen(true)}
-              className="p-2 rounded-full bg-paper-deep hover:bg-border text-ink transition-colors border border-border"
-              title="Reader Settings"
-              aria-label="Open Reader Settings"
-            >
-              <Settings className="w-4 h-4 text-teal" />
-            </button>
-
-            {/* Quick Exit Button */}
-            <QuickExitButton locale={locale} />
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 pb-32">
-        {settings.readerMode === 'magazine' && (
-          <MagazineSpread
-            lesson={currentLesson}
+      {/* Main Reading Stage (Double-page on Desktop/Tablet, Single-page on Mobile) */}
+      <main className="w-screen h-screen p-0 m-0 overflow-hidden flex items-center justify-center">
+        {mode === 'reading' && (
+          <DoublePageFlipBook
             locale={locale}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onNextPage={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-            onPrevPage={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            activeTargetId={activeTargetId}
-            onTargetClick={setActiveTargetId}
-            highlightedWordIdx={highlightedWordIdx}
+            onLocaleChange={setLocale}
           />
         )}
 
-        {settings.readerMode === 'linear' && (
-          <LinearReader lessons={allLessons} locale={locale} />
+        {mode === 'linear' && (
+          <LinearReader
+            lessons={[]}
+            locale={locale}
+          />
         )}
 
-        {settings.readerMode === 'facilitator' && (
-          <FacilitatorReader lessons={allLessons} locale={locale} />
+        {mode === 'facilitator' && (
+          <FacilitatorReader
+            lessons={[]}
+            locale={locale}
+          />
         )}
       </main>
 
-      {/* Sticky Bottom Narration Audio Player */}
-      <div className="fixed bottom-0 inset-x-0 z-30 p-3 sm:p-4 bg-paper/95 backdrop-blur-md border-t border-border/80 shadow-2xl">
-        <div className="max-w-4xl mx-auto">
-          <NarrationBar
-            textToSpeak={activeNarrationText}
-            title={currentLesson.title[locale] || currentLesson.title.en || 'Lesson'}
-            locale={locale}
-            onActiveTargetChange={setActiveTargetId}
-            onWordHighlight={setHighlightedWordIdx}
-          />
-        </div>
-      </div>
+      {/* Camera Permission Modal */}
+      <CameraPermissionPanel
+        isOpen={isCameraModalOpen}
+        onClose={() => setIsCameraModalOpen(false)}
+        onConfirm={() => setIsCameraEnabled(true)}
+        locale={locale}
+      />
 
       {/* Settings Modal */}
       <ReadingSettingsModal
@@ -209,6 +157,51 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
         onSettingsChange={setSettings}
         locale={locale}
       />
+
+      {/* Facilitator Access Passcode Modal */}
+      {showFacilitatorPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-paper border border-brass/50 rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
+            <div className="flex items-center gap-2 border-b border-brass/40 pb-2">
+              <Lock className="w-5 h-5 text-coral" />
+              <h3 className="font-bold text-sm text-ink-teal">Facilitator Access Guard</h3>
+            </div>
+
+            <p className="text-xs text-ink-muted leading-relaxed">
+              Clinical dosages are restricted to certified healthcare staff. Enter staff PIN (e.g. <code className="bg-paper-shadow px-1 rounded font-bold">suraksha2026</code> or <code className="bg-paper-shadow px-1 rounded font-bold">1097</code>) to unlock.
+            </p>
+
+            <form onSubmit={handlePinSubmit} className="space-y-3">
+              <input
+                type="password"
+                value={enteredPin}
+                onChange={(e) => setEnteredPin(e.target.value)}
+                placeholder="Enter PIN..."
+                className="w-full px-3 py-2 border border-brass/40 rounded-xl text-xs bg-white text-ink focus:outline-none focus:ring-2 focus:ring-ink-teal"
+                autoFocus
+              />
+              {pinError && (
+                <div className="text-[11px] text-coral font-semibold">Incorrect PIN. Try 'suraksha2026' or '1097'.</div>
+              )}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowFacilitatorPrompt(false)}
+                  className="flex-1 py-1.5 bg-paper-shadow text-ink rounded-xl text-xs font-semibold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-1.5 bg-ink-teal text-paper rounded-xl text-xs font-bold hover:bg-teal-dark"
+                >
+                  Unlock
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
