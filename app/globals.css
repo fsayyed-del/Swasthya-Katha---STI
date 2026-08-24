@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper: #fffaf0;
+  --color-paper-deep: #f2eadb;
+  --color-ink: #182027;
+  --color-ink-muted: #52616b;
+  --color-teal: #0b6b67;
+  --color-teal-dark: #064946;
+  --color-orange: #f29f58;
+  --color-blue: #3b82a0;
+  --color-mint: #d8eee6;
+  --color-warning: #b86b27;
+  --color-danger: #a63d40;
+  --color-focus: #1d62d1;
+  --color-border: #d9dedb;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-paper-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
