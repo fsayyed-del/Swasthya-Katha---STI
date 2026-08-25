@@ -1,0 +1,31 @@
+{
+  "name": "Swasthya Katha | STI & Syphilis Handbook",
+  "short_name": "Swasthya Katha",
+  "description": "Practical STI & Syphilis Clinical Ready Reckoner for Prison & Closed-Setting Project Coordinators & Field Teams",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#FAF6ED",
+  "theme_color": "#123A3C",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
