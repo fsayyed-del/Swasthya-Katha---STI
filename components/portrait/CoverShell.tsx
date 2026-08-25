@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Locale } from '@/src/domain/content/schema';
-import { Sparkles, MoveRight, BookOpen, ShieldCheck, Stethoscope, FileText, Download, CheckCircle2, Share, PlusSquare, X } from 'lucide-react';
+import { Sparkles, MoveRight, BookOpen, ShieldCheck, Stethoscope, FileText, Download, PlusSquare, X } from 'lucide-react';
 import { LocaleSwitcher } from '../ui/LocaleSwitcher';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 
@@ -25,7 +25,6 @@ export const CoverShell: React.FC<CoverShellProps> = ({
 
   const handleDownloadClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (isInstalled) return;
 
     if (isIOS) {
       setShowIOSModal(true);
@@ -34,7 +33,6 @@ export const CoverShell: React.FC<CoverShellProps> = ({
 
     const success = await installPWA();
     if (!success) {
-      // Fallback instructions for browsers without beforeinstallprompt
       setShowIOSModal(true);
     }
   };
@@ -125,7 +123,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
         </div>
       </div>
 
-      {/* Bottom Dual Action Buttons: Open & Download Offline Ebook */}
+      {/* Bottom Dual Action Buttons: Open & Download Ebook */}
       <div className="relative z-10 space-y-1.5 shrink-0 pt-0.5">
         {/* Open Handbook Button */}
         <div className="flex items-center justify-center">
@@ -136,28 +134,15 @@ export const CoverShell: React.FC<CoverShellProps> = ({
           </div>
         </div>
 
-        {/* Download / Install Offline Ebook Button */}
+        {/* Download Ebook Button */}
         <div className="flex items-center justify-center">
           <button
             onClick={handleDownloadClick}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] font-bold border transition-all shadow-xs ${
-              isInstalled
-                ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
-                : 'bg-paper hover:bg-amber-100 text-ink-teal border-brass/60 hover:scale-105'
-            }`}
-            title="Download full ebook as offline app for any device"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] font-bold border transition-all shadow-xs bg-paper hover:bg-amber-100 text-ink-teal border-brass/60 hover:scale-105"
+            title="Download ebook for offline reading"
           >
-            {isInstalled ? (
-              <>
-                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                <span>{isHindi ? 'ऑफलाइन पुस्तिका इंस्टॉल है' : 'Offline Ebook Ready'}</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-3 h-3 text-coral animate-bounce" />
-                <span>{isHindi ? 'ऑफलाइन ई-बुक डाउनलोड करें (PWA)' : 'Download Offline Ebook (App)'}</span>
-              </>
-            )}
+            <Download className="w-3 h-3 text-coral" />
+            <span>{isHindi ? 'ई-बुक डाउनलोड करें' : 'Download Ebook'}</span>
           </button>
         </div>
       </div>
@@ -172,7 +157,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
             <div className="flex items-center justify-between border-b border-brass/40 pb-1.5">
               <div className="flex items-center gap-1.5 font-bold text-xs text-ink-teal">
                 <Download className="w-4 h-4 text-coral" />
-                <span>{isHindi ? 'ऑफलाइन ई-बुक डाउनलोड करें' : 'Install Offline Handbook'}</span>
+                <span>{isHindi ? 'ई-बुक डाउनलोड करें' : 'Download Handbook'}</span>
               </div>
               <button
                 onClick={() => setShowIOSModal(false)}
