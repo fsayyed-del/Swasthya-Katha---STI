@@ -37,7 +37,7 @@ export const PageSurface: React.FC<PageSurfaceProps> = ({
 
   return (
     <div
-      className={`page-surface deckle-edge relative w-full h-full p-3 sm:p-4 md:p-5 flex flex-col justify-between select-none overflow-hidden ${getChapterEdgeClass()} ${className}`}
+      className={`page-surface deckle-edge relative w-full h-full p-2.5 sm:p-3.5 md:p-4 flex flex-col justify-between select-none overflow-hidden ${getChapterEdgeClass()} ${className}`}
       style={{
         backgroundColor: 'var(--paper)',
       }}
@@ -54,14 +54,14 @@ export const PageSurface: React.FC<PageSurfaceProps> = ({
       </div>
 
       {/* Main Page Content Body - Compact Flex Container */}
-      <div className="relative z-10 w-full flex-1 flex flex-col justify-between overflow-hidden my-auto py-1 space-y-2">
+      <div className="relative z-10 w-full flex-1 flex flex-col justify-between overflow-hidden my-auto py-0.5 space-y-1.5">
         {children}
       </div>
 
       {/* Bottom Folio & Sound Button Bar */}
-      <div className="relative z-20 pt-1.5 border-t border-brass/30 flex items-center justify-between mt-auto shrink-0">
+      <div className="relative z-20 pt-1 border-t border-brass/30 flex items-center justify-between mt-auto shrink-0">
         {/* Folio Numeral in Brass (Fraunces) */}
-        <div className="font-display font-black text-xs sm:text-sm text-brass tracking-wider">
+        <div className="font-display font-black text-[11px] sm:text-xs text-brass tracking-wider">
           {pageNumber > 0 ? `Page 0${pageNumber}` : ''}
         </div>
 

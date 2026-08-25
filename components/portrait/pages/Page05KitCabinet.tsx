@@ -106,12 +106,12 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       locale={locale}
     >
       {/* Top Header & Mode Toggle */}
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-2 shrink-0">
         <div>
-          <div className="text-xs font-bold text-care-blue-dark uppercase tracking-widest border-b border-brass/30 pb-0.5">
+          <div className="text-[10px] font-bold text-care-blue-dark uppercase tracking-widest border-b border-brass/30 pb-0.5">
             {page.eyebrow?.[locale] || page.eyebrow?.en}
           </div>
-          <h2 className="text-xl sm:text-2xl font-black font-display text-ink-teal mt-0.5">
+          <h2 className="text-lg sm:text-xl font-black font-display text-ink-teal mt-0.5">
             {page.title[locale] || page.title.en}
           </h2>
         </div>
@@ -124,38 +124,38 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       </div>
 
       {/* 3D Tactile Medicine Cabinet Grid */}
-      <div className="bg-gradient-to-br from-[#123A3C] to-[#0A2226] p-3 sm:p-4 rounded-2xl border-2 border-brass shadow-lg text-paper">
-        <div className="flex items-center justify-between pb-2 border-b border-brass/40 text-xs">
+      <div className="bg-gradient-to-br from-[#123A3C] to-[#0A2226] p-2.5 sm:p-3 rounded-xl border border-brass shadow-md text-paper shrink-0">
+        <div className="flex items-center justify-between pb-1.5 border-b border-brass/40 text-[10.5px]">
           <span className="font-bold text-brass-light uppercase tracking-wider">
-            NACO Syndromic Cabinet (7 Sealed Kits)
+            NACO Syndromic Cabinet (7 Kits)
           </span>
-          <span className="text-[10px] bg-paper/20 px-2 py-0.5 rounded text-paper font-semibold">
-            {isFacilitator ? 'Facilitator Detail Active' : 'Learner View'}
+          <span className="text-[9px] bg-paper/20 px-1.5 py-0.5 rounded text-paper font-semibold">
+            {isFacilitator ? 'Facilitator Mode' : 'Learner View'}
           </span>
         </div>
 
         {/* 7 Compartments Grid */}
-        <div className="grid grid-cols-4 sm:grid-cols-7 gap-1.5 pt-2.5">
+        <div className="grid grid-cols-4 sm:grid-cols-7 gap-1 pt-2">
           {kits.map((k) => {
             const isSelected = selectedKit === k.id;
             return (
               <button
                 key={k.id}
                 onClick={() => setSelectedKit(k.id)}
-                className={`flex flex-col items-center justify-between p-2 rounded-xl border-2 transition-all ${
+                className={`flex flex-col items-center justify-between p-1 sm:p-1.5 rounded-lg border transition-all ${
                   isSelected
-                    ? 'border-brass bg-white/20 scale-105 shadow-md ring-2 ring-amber-400'
+                    ? 'border-brass bg-white/20 scale-105 shadow ring-1 ring-amber-400'
                     : 'border-white/20 bg-black/20 hover:bg-white/10'
                 }`}
                 style={{ backgroundColor: isSelected ? k.color : undefined }}
               >
                 <div
-                  className="w-5 h-5 rounded-full border border-white/60 flex items-center justify-center text-[10px] font-black text-white"
+                  className="w-4 h-4 rounded-full border border-white/60 flex items-center justify-center text-[9px] font-black text-white"
                   style={{ backgroundColor: k.color }}
                 >
                   {k.num}
                 </div>
-                <span className="text-[10px] font-bold text-white mt-1 text-center line-clamp-1">
+                <span className="text-[8.5px] sm:text-[9px] font-bold text-white mt-0.5 text-center line-clamp-1">
                   Kit {k.num}
                 </span>
               </button>
@@ -164,28 +164,28 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
         </div>
 
         {/* Selected Kit Drawer Detail */}
-        <div className="mt-3 p-3 bg-paper text-ink rounded-xl border border-brass/50 space-y-1">
+        <div className="mt-2 p-2 bg-paper text-ink rounded-lg border border-brass/40 space-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-xs sm:text-sm text-ink-teal">
+            <span className="font-bold text-[11px] sm:text-xs text-ink-teal">
               {activeKitObj.name}
             </span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-care-blue/20 text-care-blue-dark">
-              Standardized NACO Kit
+            <span className="text-[8.5px] font-bold px-1.5 py-0.5 rounded bg-care-blue/20 text-care-blue-dark">
+              NACO SCM
             </span>
           </div>
 
-          <p className="text-xs sm:text-sm font-semibold text-ink leading-snug">
-            {isHindi ? 'लक्षण संकेत: ' : 'Target Indication: '}
+          <p className="text-[10px] sm:text-[11px] font-semibold text-ink leading-tight">
+            {isHindi ? 'लक्षण संकेत: ' : 'Indication: '}
             <span className="text-mineral-green-dark">{activeKitObj.learnerIndication}</span>
           </p>
 
           {/* FACILITATOR ONLY PANEL: Revealed only when isFacilitator is true */}
           {isFacilitator && (
-            <div className="pt-2 mt-2 border-t border-brass/40 bg-coral/10 p-2.5 rounded-lg border border-coral/30 space-y-1 animate-fade-in">
-              <div className="font-bold text-xs text-coral-dark uppercase tracking-wider">
-                Certified Staff Clinical Protocol:
+            <div className="pt-1 mt-1 border-t border-brass/30 bg-coral/10 p-1.5 rounded border border-coral/30 space-y-0.5 animate-fade-in">
+              <div className="font-bold text-[9px] text-coral-dark uppercase tracking-wider">
+                Staff Clinical Protocol:
               </div>
-              <p className="text-xs text-ink font-mono font-medium leading-tight">
+              <p className="text-[9.5px] text-ink font-mono font-medium leading-tight">
                 {activeKitObj.facilitatorRegimen}
               </p>
             </div>
@@ -200,13 +200,13 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
           locale={locale}
         />
       ) : (
-        <div className="bg-care-blue/15 p-2.5 rounded-xl border border-care-blue/30 text-xs text-ink font-medium flex items-center justify-between">
+        <div className="bg-care-blue/15 p-2 rounded-xl border border-care-blue/30 text-[10.5px] text-ink font-medium flex items-center justify-between shrink-0">
           <span>
             {isHindi
-              ? 'प्रत्येक किट डॉक्टर द्वारा मुफ्त दी जाती है। कभी खुद से दवा न लें।'
+              ? 'प्रत्येक किट सुरक्षा क्लीनिक में मुफ्त मिलती है। कभी खुद से दवा न लें।'
               : 'Each kit is provided free at Suraksha Clinics. Never self-medicate.'}
           </span>
-          <span className="text-[10px] font-bold text-care-blue-dark bg-paper px-2 py-0.5 rounded shadow-sm">
+          <span className="text-[9px] font-bold text-care-blue-dark bg-paper px-1.5 py-0.5 rounded shadow-sm">
             Free Care
           </span>
         </div>
