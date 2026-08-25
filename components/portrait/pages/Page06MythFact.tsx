@@ -6,6 +6,7 @@ import { PORTRAIT_BOOK_PAGES } from '@/content/portrait-pages/portrait-manifest'
 import { PageSurface } from '../PageSurface';
 import { MythFactFlipCard } from '../MythFactFlipCard';
 import { Sparkles, ShieldAlert } from 'lucide-react';
+import { useBookStore } from '@/lib/state/bookStore';
 
 interface Page06MythFactProps {
   locale: Locale;
@@ -14,6 +15,13 @@ interface Page06MythFactProps {
 export const Page06MythFact: React.FC<Page06MythFactProps> = ({ locale }) => {
   const page = PORTRAIT_BOOK_PAGES[6];
   const isHindi = locale === 'hi';
+
+  const isAudioPlaying = useBookStore((s) => s.isAudioPlaying);
+  const activeAudioSentenceIndex = useBookStore((s) => s.activeAudioSentenceIndex);
+  const currentLeafIndex = useBookStore((s) => s.currentLeafIndex);
+
+  // Page 13 is on leaf 7
+  const isThisPageNarrating = isAudioPlaying && (currentLeafIndex === 7 || currentLeafIndex === 6);
 
   const cards = [
     {
@@ -83,7 +91,7 @@ export const Page06MythFact: React.FC<Page06MythFactProps> = ({ locale }) => {
         </p>
       </div>
 
-      {/* 4 Interactive Hover-Flip Comparison Cards */}
+      {/* 4 Interactive Hover-Flip Comparison Cards with Real-time Speech Sync */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 flex-1 overflow-hidden my-auto py-0.5">
         {cards.map((c) => (
           <MythFactFlipCard
@@ -92,6 +100,7 @@ export const Page06MythFact: React.FC<Page06MythFactProps> = ({ locale }) => {
             mythText={c.myth}
             factText={c.fact}
             locale={locale}
+            isHighlighted={isThisPageNarrating && activeAudioSentenceIndex === (c.idx - 1)}
           />
         ))}
       </div>

@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Locale } from '@/src/domain/content/schema';
 import { useBookStore } from '@/lib/state/bookStore';
 import { PAGE_SPEECH_SCRIPTS } from '@/lib/audio/pageSpeechManifest';
-import { Volume2, VolumeX, Play, Pause, SkipForward, SkipBack, X, Sparkles, Activity } from 'lucide-react';
+import { Volume2, VolumeX, Play, Pause, SkipForward, SkipBack, X, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface MediumAudioPlayerBarProps {
   locale: Locale;
@@ -12,9 +12,13 @@ interface MediumAudioPlayerBarProps {
 
 export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ locale }) => {
   const currentLeafIndex = useBookStore((s) => s.currentLeafIndex);
+  const isAudioPlaying = useBookStore((s) => s.isAudioPlaying);
+  const setAudioPlaying = useBookStore((s) => s.setAudioPlaying);
+  const activeAudioSentenceIndex = useBookStore((s) => s.activeAudioSentenceIndex);
+  const setActiveAudioSentenceIndex = useBookStore((s) => s.setActiveAudioSentenceIndex);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [rate, setRate] = useState<number>(0.95);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -38,12 +42,12 @@ export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ loca
       window.speechSynthesis.cancel();
 
       if (index >= sentences.length) {
-        setIsPlaying(false);
-        setCurrentSentenceIndex(0);
+        setAudioPlaying(false);
+        setActiveAudioSentenceIndex(0);
         return;
       }
 
-      setCurrentSentenceIndex(index);
+      setActiveAudioSentenceIndex(index);
       const text = sentences[index];
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = locale === 'hi' ? 'hi-IN' : 'en-US';
@@ -53,45 +57,45 @@ export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ loca
         if (index + 1 < sentences.length) {
           speakSentence(index + 1);
         } else {
-          setIsPlaying(false);
-          setCurrentSentenceIndex(0);
+          setAudioPlaying(false);
+          setActiveAudioSentenceIndex(0);
         }
       };
 
       utterance.onerror = (e) => {
         console.warn('Speech error:', e);
-        setIsPlaying(false);
+        setAudioPlaying(false);
       };
 
       utteranceRef.current = utterance;
       window.speechSynthesis.speak(utterance);
-      setIsPlaying(true);
+      setAudioPlaying(true);
       setIsOpen(true);
     },
-    [sentences, locale, rate]
+    [sentences, locale, rate, setAudioPlaying, setActiveAudioSentenceIndex]
   );
 
   // Toggle Play / Pause
   const togglePlay = useCallback(() => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
 
-    if (isPlaying) {
+    if (isAudioPlaying) {
       window.speechSynthesis.cancel();
-      setIsPlaying(false);
+      setAudioPlaying(false);
     } else {
       setIsOpen(true);
-      speakSentence(currentSentenceIndex);
+      speakSentence(activeAudioSentenceIndex);
     }
-  }, [isPlaying, speakSentence, currentSentenceIndex]);
+  }, [isAudioPlaying, speakSentence, activeAudioSentenceIndex, setAudioPlaying]);
 
   // Stop when page changes
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      setCurrentSentenceIndex(0);
+      setAudioPlaying(false);
+      setActiveAudioSentenceIndex(0);
     }
-  }, [currentLeafIndex]);
+  }, [currentLeafIndex, setAudioPlaying, setActiveAudioSentenceIndex]);
 
   // Listen to global palm hold gesture or sound button clicks
   useEffect(() => {
@@ -102,7 +106,7 @@ export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ loca
     return () => window.removeEventListener('gesture:audio-toggle', handleAudioToggle);
   }, [togglePlay]);
 
-  if (!isOpen && !isPlaying) {
+  if (!isOpen && !isAudioPlaying) {
     return (
       <button
         onClick={() => {
@@ -121,17 +125,16 @@ export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ loca
   }
 
   return (
-    <div className="fixed bottom-2.5 inset-x-2.5 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:max-w-xl w-full z-50 animate-slide-up select-none">
-      <div className="bg-ink-teal/92 text-paper border border-brass/50 rounded-3xl p-3 sm:p-4 shadow-2xl backdrop-blur-xl flex flex-col gap-2 ring-1 ring-white/10">
-        {/* Header: Title, Live Equalizer Waveform, and Close */}
-        <div className="flex items-center justify-between border-b border-brass/30 pb-1.5 text-xs">
-          <div className="flex items-center gap-2.5 truncate pr-2">
-            {/* Live Equalizer Waveform Animation */}
-            {isPlaying ? (
-              <div className="flex items-end gap-0.5 h-4 w-4 shrink-0">
-                <span className="w-1 bg-amber-400 rounded-full animate-eq-1" />
-                <span className="w-1 bg-amber-300 rounded-full animate-eq-2" />
-                <span className="w-1 bg-amber-400 rounded-full animate-eq-3" />
+    <div className="fixed bottom-2.5 inset-x-2.5 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:max-w-lg w-full z-50 animate-slide-up select-none">
+      <div className="bg-ink-teal/95 text-paper border border-brass/50 rounded-2xl p-2.5 sm:p-3 shadow-2xl backdrop-blur-xl flex flex-col gap-1.5 ring-1 ring-white/10">
+        {/* Header: Title, Live Equalizer Waveform, and Controls */}
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2 truncate pr-2">
+            {isAudioPlaying ? (
+              <div className="flex items-end gap-0.5 h-3.5 w-3.5 shrink-0">
+                <span className="w-0.5 bg-amber-400 rounded-full animate-eq-1" />
+                <span className="w-0.5 bg-amber-300 rounded-full animate-eq-2" />
+                <span className="w-0.5 bg-amber-400 rounded-full animate-eq-3" />
               </div>
             ) : (
               <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
@@ -141,17 +144,17 @@ export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ loca
             </span>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             {/* Speed Rate Toggle */}
             <button
               onClick={() => {
                 const nextRate = rate === 0.95 ? 1.15 : rate === 1.15 ? 0.85 : 0.95;
                 setRate(nextRate);
-                if (isPlaying) {
-                  speakSentence(currentSentenceIndex);
+                if (isAudioPlaying) {
+                  speakSentence(activeAudioSentenceIndex);
                 }
               }}
-              className="px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[9.5px] font-mono font-bold text-amber-200 transition-colors"
+              className="px-1.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[9px] font-mono font-bold text-amber-200 transition-colors"
             >
               {rate}x
             </button>
@@ -160,82 +163,57 @@ export const MediumAudioPlayerBar: React.FC<MediumAudioPlayerBarProps> = ({ loca
             <button
               onClick={() => {
                 window.speechSynthesis.cancel();
-                setIsPlaying(false);
+                setAudioPlaying(false);
                 setIsOpen(false);
               }}
               className="p-1 hover:bg-white/20 rounded-full text-paper/80 hover:text-white transition-colors"
-              title="Close Audio Reader"
+              title="Close Audio Player"
             >
-              <X className="w-4 h-4 text-coral" />
+              <X className="w-3.5 h-3.5 text-coral" />
             </button>
           </div>
         </div>
 
-        {/* Medium-Style Live Karaoke Sentence Highlighter Text */}
-        <div className="bg-black/35 p-2.5 rounded-2xl max-h-22 overflow-y-auto border border-white/10 text-xs sm:text-[13px] leading-relaxed scrollbar-thin">
-          <p className="space-x-1">
-            {sentences.map((sentence, idx) => {
-              const isCurrent = idx === currentSentenceIndex && isPlaying;
-              const isPast = idx < currentSentenceIndex;
-              return (
-                <span
-                  key={idx}
-                  onClick={() => speakSentence(idx)}
-                  className={`inline cursor-pointer transition-all duration-200 ${
-                    isCurrent
-                      ? 'bg-amber-300 text-ink-black font-extrabold px-1.5 py-0.5 rounded-md shadow-md ring-2 ring-amber-400'
-                      : isPast
-                      ? 'text-paper/50'
-                      : 'text-paper/90 hover:text-amber-200'
-                  }`}
-                >
-                  {sentence}{' '}
-                </span>
-              );
-            })}
-          </p>
-        </div>
-
-        {/* Controls Bar */}
+        {/* Floating Player Controls & Live Progress */}
         <div className="flex items-center justify-between pt-0.5">
-          <span className="text-[9.5px] font-mono text-amber-100/70">
-            {currentSentenceIndex + 1} / {sentences.length} {locale === 'hi' ? 'वाक्य' : 'sentences'}
+          <span className="text-[9px] font-mono text-amber-100/80">
+            {activeAudioSentenceIndex + 1} / {sentences.length} {locale === 'hi' ? 'वाक्य' : 'sentences'}
           </span>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {/* Prev Sentence */}
             <button
-              onClick={() => speakSentence(Math.max(0, currentSentenceIndex - 1))}
-              disabled={currentSentenceIndex === 0}
+              onClick={() => speakSentence(Math.max(0, activeAudioSentenceIndex - 1))}
+              disabled={activeAudioSentenceIndex === 0}
               className="p-1.5 bg-white/10 hover:bg-white/20 rounded-full text-paper disabled:opacity-30 transition-all hover:scale-105 active:scale-95"
-              title="Previous sentence"
+              title="Previous"
             >
-              <SkipBack className="w-3.5 h-3.5" />
+              <SkipBack className="w-3 h-3" />
             </button>
 
             {/* Play / Pause */}
             <button
               onClick={togglePlay}
-              className="p-2.5 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-ink-teal font-black rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 ring-2 ring-amber-400/80"
-              title={isPlaying ? 'Pause' : 'Play'}
+              className="p-2 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-ink-teal font-black rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 ring-2 ring-amber-400/80"
+              title={isAudioPlaying ? 'Pause' : 'Play'}
             >
-              {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
+              {isAudioPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current ml-0.5" />}
             </button>
 
             {/* Next Sentence */}
             <button
-              onClick={() => speakSentence(Math.min(sentences.length - 1, currentSentenceIndex + 1))}
-              disabled={currentSentenceIndex >= sentences.length - 1}
+              onClick={() => speakSentence(Math.min(sentences.length - 1, activeAudioSentenceIndex + 1))}
+              disabled={activeAudioSentenceIndex >= sentences.length - 1}
               className="p-1.5 bg-white/10 hover:bg-white/20 rounded-full text-paper disabled:opacity-30 transition-all hover:scale-105 active:scale-95"
-              title="Next sentence"
+              title="Next"
             >
-              <SkipForward className="w-3.5 h-3.5" />
+              <SkipForward className="w-3 h-3" />
             </button>
           </div>
 
-          <span className="text-[9.5px] font-mono text-emerald-300 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-amber-300" />
-            {isPlaying ? (locale === 'hi' ? 'वाचन जारी...' : 'Narrating...') : (locale === 'hi' ? 'रुका हुआ' : 'Paused')}
+          <span className="text-[9px] font-mono text-emerald-300 flex items-center gap-1">
+            <Sparkles className="w-2.5 h-2.5 text-amber-300" />
+            {isAudioPlaying ? (locale === 'hi' ? 'पन्ने पर वाचन...' : 'Reading Page...') : (locale === 'hi' ? 'रुका हुआ' : 'Paused')}
           </span>
         </div>
       </div>

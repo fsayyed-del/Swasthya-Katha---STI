@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Locale } from '@/src/domain/content/schema';
 import { ShieldCheck, Stethoscope, Sparkles, AlertCircle, Users, CheckCircle2, Pill } from 'lucide-react';
 import { SoundButton } from '../portrait/SoundButton';
+import { useBookStore } from '@/lib/state/bookStore';
 
 export interface ClinicalPhotoItem {
   id: string;
@@ -50,6 +51,17 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
   const partnerProtocol = data.partnerProtocol ? (data.partnerProtocol[locale] || data.partnerProtocol.en) : null;
   const closedSettingPearl = data.closedSettingPearl ? (data.closedSettingPearl[locale] || data.closedSettingPearl.en) : null;
 
+  // Live Audio Highlighting State
+  const isAudioPlaying = useBookStore((s) => s.isAudioPlaying);
+  const activeAudioSentenceIndex = useBookStore((s) => s.activeAudioSentenceIndex);
+  const currentLeafIndex = useBookStore((s) => s.currentLeafIndex);
+
+  // Active page matching logic
+  const isThisPageNarrating =
+    isAudioPlaying &&
+    pageNumber !== undefined &&
+    (pageNumber === 2 * currentLeafIndex || pageNumber === 2 * currentLeafIndex - 1);
+
   const audioScriptText = `${title}. ${overview} ${isHindi ? 'पुरुषों में लक्षण:' : 'Male Findings:'} ${maleDetails} ${isHindi ? 'महिलाओं में लक्षण:' : 'Female Findings:'} ${femaleDetails} ${regimen ? `${isHindi ? 'उपचार किट:' : 'Treatment:'} ${regimen}` : ''}`;
 
   const malePhoto = data.photos.find((p) => p.gender === 'male') || data.photos[0];
@@ -72,16 +84,28 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
           </span>
         </div>
 
-        {/* Fraunces Display Title */}
-        <h2 className="text-sm sm:text-base md:text-lg font-black font-display text-ink-teal leading-tight tracking-tight">
+        {/* Fraunces Display Title with Live Audio Highlight */}
+        <h2
+          className={`text-sm sm:text-base md:text-lg font-black font-display text-ink-teal leading-tight tracking-tight transition-all duration-300 ${
+            isThisPageNarrating && activeAudioSentenceIndex === 0
+              ? 'bg-amber-200/90 text-ink-black px-2 py-0.5 rounded-md ring-2 ring-amber-400 shadow-xs scale-[1.01]'
+              : ''
+          }`}
+        >
           {title}
         </h2>
       </div>
 
-      {/* Main Scrollable Body with Rich Clinical Intelligence */}
+      {/* Main Scrollable Body with Real-Time Content Highlighting */}
       <div className="flex-1 overflow-y-auto pr-0.5 space-y-2 py-0.5">
-        {/* Overview Paragraph */}
-        <div className="bg-paper-shadow/70 border-l-3 border-brass px-2.5 py-1.5 rounded-r-xl border-y border-r border-brass/25 text-[9.5px] sm:text-[10.5px] text-ink leading-relaxed font-medium shadow-xs">
+        {/* Overview Paragraph with Live Audio Highlight */}
+        <div
+          className={`border-l-3 border-brass px-2.5 py-1.5 rounded-r-xl border-y border-r border-brass/25 text-[9.5px] sm:text-[10.5px] text-ink leading-relaxed font-medium shadow-xs transition-all duration-300 ${
+            isThisPageNarrating && activeAudioSentenceIndex === 1
+              ? 'bg-amber-100/95 ring-2 ring-amber-400 shadow-md scale-[1.01]'
+              : 'bg-paper-shadow/70'
+          }`}
+        >
           <p>{overview}</p>
         </div>
 
@@ -89,7 +113,13 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {/* MALE PRESENTATION */}
           {malePhoto && (
-            <div className="bg-paper rounded-xl border border-brass/40 overflow-hidden shadow-xs flex flex-col space-y-1.5 p-1.5 ring-1 ring-black/5">
+            <div
+              className={`bg-paper rounded-xl border overflow-hidden shadow-xs flex flex-col space-y-1.5 p-1.5 ring-1 transition-all duration-300 ${
+                isThisPageNarrating && activeAudioSentenceIndex === 2
+                  ? 'border-amber-400 ring-2 ring-amber-400 bg-amber-50/60 shadow-md scale-[1.01]'
+                  : 'border-brass/40 ring-black/5'
+              }`}
+            >
               <div className="relative w-full aspect-[16/10] bg-black/10 rounded-lg overflow-hidden border border-brass/20">
                 <div className="absolute top-1 left-1 z-10 bg-ink-teal/95 text-paper px-2 py-0.5 text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider rounded-md shadow-xs flex items-center gap-1">
                   <span>{isHindi ? '♂ पुरुष लक्षण (Male)' : '♂ Male Presentation'}</span>
@@ -119,7 +149,13 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
 
           {/* FEMALE PRESENTATION */}
           {femalePhoto && (
-            <div className="bg-paper rounded-xl border border-brass/40 overflow-hidden shadow-xs flex flex-col space-y-1.5 p-1.5 ring-1 ring-black/5">
+            <div
+              className={`bg-paper rounded-xl border overflow-hidden shadow-xs flex flex-col space-y-1.5 p-1.5 ring-1 transition-all duration-300 ${
+                isThisPageNarrating && activeAudioSentenceIndex === 3
+                  ? 'border-amber-400 ring-2 ring-amber-400 bg-amber-50/60 shadow-md scale-[1.01]'
+                  : 'border-brass/40 ring-black/5'
+              }`}
+            >
               <div className="relative w-full aspect-[16/10] bg-black/10 rounded-lg overflow-hidden border border-brass/20">
                 <div className="absolute top-1 left-1 z-10 bg-coral/95 text-paper px-2 py-0.5 text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider rounded-md shadow-xs flex items-center gap-1">
                   <span>{isHindi ? '♀ महिला लक्षण (Female)' : '♀ Female Presentation'}</span>
@@ -151,9 +187,15 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
         {/* High-Yield Field Coordinator Action Section (NACO SCM Protocol & Partner Guidelines) */}
         {(regimen || partnerProtocol || closedSettingPearl) && (
           <div className="space-y-1.5 pt-1">
-            {/* Prescribed Regimen Pill */}
+            {/* Prescribed Regimen Pill with Live Audio Highlight */}
             {regimen && (
-              <div className="bg-emerald-50/90 border border-emerald-300 rounded-xl p-2 text-[8.5px] sm:text-[9.5px] text-emerald-950 flex items-start gap-2 shadow-xs">
+              <div
+                className={`border rounded-xl p-2 text-[8.5px] sm:text-[9.5px] text-emerald-950 flex items-start gap-2 shadow-xs transition-all duration-300 ${
+                  isThisPageNarrating && activeAudioSentenceIndex >= 4
+                    ? 'bg-amber-100 border-amber-400 ring-2 ring-amber-400 shadow-md scale-[1.01]'
+                    : 'bg-emerald-50/90 border-emerald-300'
+                }`}
+              >
                 <Pill className="w-3.5 h-3.5 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold uppercase tracking-wider text-emerald-900 block text-[8px] sm:text-[9px]">

@@ -9,6 +9,7 @@ interface MythFactFlipCardProps {
   factText: string;
   locale: Locale;
   index: number;
+  isHighlighted?: boolean;
   className?: string;
 }
 
@@ -17,10 +18,12 @@ export const MythFactFlipCard: React.FC<MythFactFlipCardProps> = ({
   factText,
   locale,
   index,
+  isHighlighted = false,
   className = '',
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const isHindi = locale === 'hi';
+  const shouldFlip = isFlipped || isHighlighted;
 
   return (
     <div
@@ -28,10 +31,12 @@ export const MythFactFlipCard: React.FC<MythFactFlipCardProps> = ({
         e.stopPropagation();
         setIsFlipped(!isFlipped);
       }}
-      className={`group perspective-1000 w-full min-h-[70px] sm:min-h-[78px] cursor-pointer select-none ${className}`}
+      className={`group perspective-1000 w-full min-h-[70px] sm:min-h-[78px] cursor-pointer select-none transition-all duration-300 ${
+        isHighlighted ? 'scale-[1.02] ring-2 ring-amber-400 rounded-2xl' : ''
+      } ${className}`}
       role="button"
       tabIndex={0}
-      aria-label={`Comparison Card ${index}: ${isFlipped ? 'Fact view' : 'Myth view'}. Hover or tap to flip.`}
+      aria-label={`Comparison Card ${index}: ${shouldFlip ? 'Fact view' : 'Myth view'}. Hover or tap to flip.`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -41,7 +46,7 @@ export const MythFactFlipCard: React.FC<MythFactFlipCardProps> = ({
     >
       <div
         className={`flip-card-inner relative w-full h-full rounded-2xl transform-style-preserve-3d transition-transform duration-500 shadow-xs group-hover:rotate-y-180 ${
-          isFlipped ? 'rotate-y-180' : ''
+          shouldFlip ? 'rotate-y-180' : ''
         }`}
       >
         {/* FRONT: Calming Soft Peach / Linen (Myth) */}

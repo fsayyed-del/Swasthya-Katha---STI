@@ -12,6 +12,7 @@ interface BookStoreState {
   locale: Locale;
   isAudioPopoverOpen: boolean;
   isAudioPlaying: boolean;
+  activeAudioSentenceIndex: number;
   audioProgress: number;
   facilitatorUnlocked: boolean;
   hasSeenDragHint: boolean;
@@ -24,6 +25,7 @@ interface BookStoreState {
   setLocale: (locale: Locale) => void;
   setAudioPopoverOpen: (open: boolean) => void;
   setAudioPlaying: (playing: boolean) => void;
+  setActiveAudioSentenceIndex: (index: number) => void;
   setAudioProgress: (progress: number) => void;
   unlockFacilitator: (passcode: string) => boolean;
   dismissDragHint: () => void;
@@ -40,6 +42,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
   locale: 'en',
   isAudioPopoverOpen: false,
   isAudioPlaying: false,
+  activeAudioSentenceIndex: 0,
   audioProgress: 0,
   facilitatorUnlocked: false,
   hasSeenDragHint: false,
@@ -49,7 +52,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
     if (clamped !== get().currentLeafIndex) {
       playPageTurnSound();
     }
-    set({ currentLeafIndex: clamped });
+    set({ currentLeafIndex: clamped, isAudioPlaying: false, activeAudioSentenceIndex: 0 });
   },
 
   nextLeaf: () => {
@@ -61,7 +64,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
       lastTurnTimestamp = now;
       playPageTurnSound();
       const nextIdx = get().currentLeafIndex + 1;
-      set({ currentLeafIndex: nextIdx, turnDirection: 'forward' });
+      set({ currentLeafIndex: nextIdx, turnDirection: 'forward', isAudioPlaying: false, activeAudioSentenceIndex: 0 });
     }
   },
 
@@ -74,7 +77,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
       lastTurnTimestamp = now;
       playPageTurnSound();
       const prevIdx = get().currentLeafIndex - 1;
-      set({ currentLeafIndex: prevIdx, turnDirection: 'backward' });
+      set({ currentLeafIndex: prevIdx, turnDirection: 'backward', isAudioPlaying: false, activeAudioSentenceIndex: 0 });
     }
   },
 
@@ -82,6 +85,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
   setLocale: (locale: Locale) => set({ locale }),
   setAudioPopoverOpen: (isAudioPopoverOpen: boolean) => set({ isAudioPopoverOpen }),
   setAudioPlaying: (isAudioPlaying: boolean) => set({ isAudioPlaying }),
+  setActiveAudioSentenceIndex: (activeAudioSentenceIndex: number) => set({ activeAudioSentenceIndex }),
   setAudioProgress: (audioProgress: number) => set({ audioProgress }),
 
   unlockFacilitator: (passcode: string) => {
