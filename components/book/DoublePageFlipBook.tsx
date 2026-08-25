@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Locale } from '@/src/domain/content/schema';
 import { useBookStore } from '@/lib/state/bookStore';
 import { Page00Cover } from '../portrait/pages/Page00Cover';
@@ -27,6 +27,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
   const { currentLeafIndex, setLeafIndex, nextLeaf, prevLeaf } = useBookStore();
   const bookRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   const totalLeaves = 8; // 8 physical leaves = 16 rich pages
 
@@ -65,29 +66,36 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentLeafIndex, nextLeaf, prevLeaf, setLeafIndex]);
 
-  // Touch Swipe handlers
+  // Touch Swipe handlers with dominant axis locking for butter-smooth mobile sliding
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
+    if (touchStartX.current === null || touchStartY.current === null) return;
     const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
     const diffX = touchStartX.current - touchEndX;
+    const diffY = touchStartY.current - touchEndY;
 
-    if (diffX > 40 && currentLeafIndex < totalLeaves) {
-      nextLeaf();
-    } else if (diffX < -40 && currentLeafIndex > 0) {
-      prevLeaf();
+    // Only trigger horizontal flip if horizontal movement is dominant
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+      if (diffX > 0 && currentLeafIndex < totalLeaves) {
+        nextLeaf();
+      } else if (diffX < 0 && currentLeafIndex > 0) {
+        prevLeaf();
+      }
     }
     touchStartX.current = null;
+    touchStartY.current = null;
   };
 
-  // Page click handler matching the author's logic
+  // Page click handler matching author's logic
   const handlePageClick = (e: React.MouseEvent, leafIdx: number, isBack: boolean) => {
     const target = e.target as HTMLElement;
     // Don't turn page if clicking interactive controls
-    if (target.closest('button, a, input, select, [role="button"], .perspective-1000, .flip-card-inner, audio, video')) {
+    if (target.closest('button, a, input, select, [role="button"], audio, video')) {
       return;
     }
     if (isBack) {
@@ -116,15 +124,6 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
         <Page02TOC
           locale={locale}
           onNavigateToPage={(pageIdx) => {
-            // Map 1-based page number to leaf index:
-            // Page 1..2 -> Leaf 0 / 1
-            // Page 3..4 -> Leaf 1 / 2
-            // Page 5..6 -> Leaf 2 / 3
-            // Page 7..8 -> Leaf 3 / 4
-            // Page 9..10 -> Leaf 4 / 5
-            // Page 11..12 -> Leaf 5 / 6
-            // Page 13..14 -> Leaf 6 / 7
-            // Page 15 -> Leaf 7
             const targetLeaf = Math.min(totalLeaves, Math.ceil(pageIdx / 2));
             setLeafIndex(targetLeaf);
           }}
@@ -214,31 +213,31 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
 
   return (
     <div
-      className="flipbook-container-stage w-full h-full flex flex-col items-center justify-center relative select-none py-2"
+      className="flipbook-container-stage w-full h-full flex flex-col items-center justify-center relative select-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Floating Left Page Turn Button */}
+      {/* Floating Left Page Turn Button (Hidden on Mobile) */}
       {currentLeafIndex > 0 && (
         <button
           onClick={() => prevLeaf()}
-          className="fixed left-2 sm:left-6 top-1/2 -translate-y-1/2 z-50 p-3 sm:p-4 rounded-full bg-ink-teal/95 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
+          className="hidden md:flex fixed left-4 lg:left-8 top-1/2 -translate-y-1/2 z-50 p-3.5 rounded-full bg-ink-teal/90 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
           aria-label="Previous Page"
           title="Previous Page (←)"
         >
-          <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 text-brass-light" />
+          <ChevronLeft className="w-6 h-6 text-brass-light" />
         </button>
       )}
 
-      {/* Floating Right Page Turn Button */}
+      {/* Floating Right Page Turn Button (Hidden on Mobile) */}
       {currentLeafIndex < totalLeaves && (
         <button
           onClick={() => nextLeaf()}
-          className="fixed right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 p-3 sm:p-4 rounded-full bg-ink-teal/95 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
+          className="hidden md:flex fixed right-4 lg:right-8 top-1/2 -translate-y-1/2 z-50 p-3.5 rounded-full bg-ink-teal/90 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
           aria-label="Next Page"
           title="Next Page (→)"
         >
-          <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 text-brass-light" />
+          <ChevronRight className="w-6 h-6 text-brass-light" />
         </button>
       )}
 
@@ -255,7 +254,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
         {leaves.map((leaf) => (
           <div
             key={leaf.index}
-            className="page"
+            className={`page ${leaf.index === 0 && currentLeafIndex === 0 ? 'animate-preslide-hint' : ''}`}
             style={
               {
                 '--i': leaf.index,
