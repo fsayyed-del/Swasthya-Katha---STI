@@ -39,9 +39,9 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
   const [enteredPin, setEnteredPin] = useState('');
   const [pinError, setPinError] = useState(false);
 
-  // Camera Gesture State (Default active with tutorial overlay)
-  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
-  const [showTutorial, setShowTutorial] = useState(true);
+  // Camera Gesture State (Default inactive so user lands directly on clean Cover page with zero popups)
+  const [isCameraEnabled, setIsCameraEnabled] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const handleCameraCommand = useCallback((cmd: CameraGestureCommand) => {
     if (cmd.type === 'GESTURE_COMMIT') {
@@ -50,7 +50,6 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
       } else if (cmd.direction === 'backward') {
         prevLeaf();
       }
-      // Auto dismiss tutorial once a gesture is performed
       setShowTutorial(false);
     } else if (cmd.type === 'CAMERA_STOP' || cmd.type === 'CAMERA_ERROR') {
       setIsCameraEnabled(false);
@@ -155,7 +154,7 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
       {/* Medium-Style Live Karaoke Audio Player Bar */}
       <MediumAudioPlayerBar locale={locale} />
 
-      {/* Hand Gesture Swipe & Tilt Animated Tutorial Overlay */}
+      {/* Hand Gesture Swipe & Tilt Animated Tutorial Overlay (only shown when user clicks camera) */}
       <GestureTutorialOverlay
         isOpen={showTutorial}
         onDismiss={() => setShowTutorial(false)}
