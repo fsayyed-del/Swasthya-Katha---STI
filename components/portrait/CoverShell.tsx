@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Locale } from '@/src/domain/content/schema';
-import { Sparkles, MoveRight, BookOpen, ShieldCheck, Stethoscope, FileText, Download, PlusSquare, X } from 'lucide-react';
+import { Sparkles, MoveRight, BookOpen, ShieldCheck, Stethoscope, FileText, Download, PlusSquare, X, Printer } from 'lucide-react';
 import { LocaleSwitcher } from '../ui/LocaleSwitcher';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 
@@ -21,20 +21,18 @@ export const CoverShell: React.FC<CoverShellProps> = ({
 }) => {
   const isHindi = locale === 'hi';
   const { isInstallable, isInstalled, isIOS, installPWA } = usePWAInstall();
-  const [showIOSModal, setShowIOSModal] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
-  const handleDownloadClick = async (e: React.MouseEvent) => {
+  const handleDownloadClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setShowDownloadModal(true);
+  };
 
+  const handlePWAInstallAction = async () => {
     if (isIOS) {
-      setShowIOSModal(true);
       return;
     }
-
-    const success = await installPWA();
-    if (!success) {
-      setShowIOSModal(true);
-    }
+    await installPWA();
   };
 
   return (
@@ -68,12 +66,11 @@ export const CoverShell: React.FC<CoverShellProps> = ({
         </div>
       </div>
 
-      {/* Center Editorial Title & Purpose Block (Strictly budgeted vertical spacing) */}
+      {/* Center Editorial Title & Purpose Block */}
       <div className="relative z-10 text-center my-auto space-y-1.5 sm:space-y-2 shrink-0 py-0.5">
         {/* Compact Book Emblem Icon */}
         <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-xl bg-gradient-to-br from-[#123A3C] via-[#1E4D4F] to-[#0A2224] text-paper flex items-center justify-center shadow-md border border-amber-300/60 p-1.5 group-hover:scale-105 transition-transform duration-300">
           <svg viewBox="0 0 100 100" className="w-full h-full fill-none stroke-current" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round">
-            {/* Open Book Vector */}
             <path d="M 50,22 C 35,16 20,20 12,24 L 12,76 C 20,72 35,68 50,74 C 65,68 80,72 88,76 L 88,24 C 80,20 65,16 50,22 Z" fill="rgba(250, 246, 237, 0.2)" stroke="#E0C58E" />
             <path d="M 50,22 L 50,74" stroke="#E0C58E" strokeWidth="4" />
             <path d="M 24,38 L 40,36" stroke="#D8EEE6" strokeWidth="3" />
@@ -99,7 +96,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
           </div>
         </div>
 
-        {/* Contextual Narrative from Project Concept */}
+        {/* Contextual Narrative */}
         <p className="text-[8.5px] sm:text-[9.5px] text-ink-muted font-body font-medium max-w-sm mx-auto leading-tight line-clamp-2 px-1">
           {isHindi
             ? 'कारागारों एवं बंद संस्थानों में पुरुषों व महिलाओं में STI/सिफलिस लक्षणों की त्वरित पहचान, सिंड्रोमिक केस मैनेजमेंट (SCM), समय पर रेफरल व राष्ट्रीय रिपोर्टिंग गाइड।'
@@ -123,7 +120,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
         </div>
       </div>
 
-      {/* Bottom Dual Action Buttons: Open & Download Ebook (Always Fully Visible on Mobile) */}
+      {/* Bottom Dual Action Buttons: Open & Download / Print PDF */}
       <div className="relative z-10 space-y-1 shrink-0 pt-0.5 pb-1">
         {/* Open Handbook Button */}
         <div className="flex items-center justify-center">
@@ -134,33 +131,33 @@ export const CoverShell: React.FC<CoverShellProps> = ({
           </div>
         </div>
 
-        {/* Download Ebook Button */}
-        <div className="flex items-center justify-center">
+        {/* Download Ebook / Print PDF Options */}
+        <div className="flex items-center justify-center gap-2">
           <button
             onClick={handleDownloadClick}
             className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[9.5px] sm:text-[10px] font-bold border transition-all shadow-xs bg-paper hover:bg-amber-100 text-ink-teal border-brass/60 hover:scale-105"
-            title="Download ebook for offline reading"
+            title="Download ebook or printable PDF handbook"
           >
             <Download className="w-3 h-3 text-coral" />
-            <span>{isHindi ? 'ई-बुक डाउनलोड करें' : 'Download Ebook'}</span>
+            <span>{isHindi ? 'ई-बुक / PDF डाउनलोड' : 'Download Ebook / PDF'}</span>
           </button>
         </div>
       </div>
 
-      {/* iOS / Browser Installation Helper Modal */}
-      {showIOSModal && (
+      {/* Download & PDF Handbook Options Modal */}
+      {showDownloadModal && (
         <div
           onClick={(e) => e.stopPropagation()}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in"
         >
-          <div className="bg-paper border-2 border-brass rounded-2xl max-w-xs w-full p-4 shadow-2xl space-y-3 text-ink">
+          <div className="bg-paper border-2 border-brass rounded-2xl max-w-sm w-full p-4 shadow-2xl space-y-3 text-ink">
             <div className="flex items-center justify-between border-b border-brass/40 pb-1.5">
               <div className="flex items-center gap-1.5 font-bold text-xs text-ink-teal">
                 <Download className="w-4 h-4 text-coral" />
-                <span>{isHindi ? 'ई-बुक डाउनलोड करें' : 'Download Handbook'}</span>
+                <span>{isHindi ? 'ई-बुक एवं PDF विकल्प' : 'Ebook & PDF Handbook'}</span>
               </div>
               <button
-                onClick={() => setShowIOSModal(false)}
+                onClick={() => setShowDownloadModal(false)}
                 className="p-1 hover:bg-black/10 rounded-full"
               >
                 <X className="w-4 h-4 text-ink-muted" />
@@ -169,29 +166,63 @@ export const CoverShell: React.FC<CoverShellProps> = ({
 
             <p className="text-[11px] text-ink leading-relaxed font-medium">
               {isHindi
-                ? 'इस संपूर्ण सचित्र पुस्तिका को अपने फोन, टैबलेट या कंप्यूटर पर 100% बिना इंटरनेट के उपयोग हेतु डाउनलोड करें:'
-                : 'Save this entire medical handbook to your home screen / desktop for 100% offline access in closed settings:'}
+                ? 'स्वास्थ्य कथा को अपने डिवाइस पर सहेजें या आधिकारिक 9-पेज प्रिंट करने योग्य PDF खोलें:'
+                : 'Save Swasthya Katha to your device or open the official 9-page printable PDF handbook:'}
             </p>
 
-            <div className="bg-paper-shadow/80 p-2.5 rounded-xl border border-brass/30 space-y-2 text-[10px] font-medium text-ink">
-              <div className="flex items-start gap-2">
-                <span className="w-4 h-4 rounded-full bg-ink-teal text-paper flex items-center justify-center text-[9px] font-bold shrink-0">1</span>
-                <span>{isHindi ? 'ब्राउज़र के मेन्यू या शेयर बटन पर टैप करें' : 'Tap the Share or Browser Menu (⎋)'}</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="w-4 h-4 rounded-full bg-ink-teal text-paper flex items-center justify-center text-[9px] font-bold shrink-0">2</span>
-                <span className="flex items-center gap-1">
-                  <span>{isHindi ? '"होम स्क्रीन पर जोड़ें" चुनें' : 'Select "Add to Home Screen"'}</span>
-                  <PlusSquare className="w-3 h-3 text-ink-teal" />
+            <div className="space-y-2">
+              {/* Option 1: Standard Printable A4 PDF Handbook */}
+              <a
+                href="/handbook.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between p-2.5 rounded-xl bg-amber-500/15 border border-amber-600/30 hover:bg-amber-500/25 transition-all text-ink-teal group/link"
+              >
+                <div className="flex items-center gap-2">
+                  <Printer className="w-4 h-4 text-[#A84833] shrink-0" />
+                  <div className="text-left">
+                    <span className="text-[11px] font-bold block leading-tight">
+                      {isHindi ? 'आधिकारिक 9-पेज PDF खोलें / प्रिंट करें' : 'Open / Print Official 9-Page PDF'}
+                    </span>
+                    <span className="text-[9.5px] text-ink-muted leading-tight block">
+                      {isHindi ? 'A4 साइज, सभी NACO किट एवं क्लिनिकल फोटो सहित' : 'A4 Portrait with authentic NACO kits & clinical photos'}
+                    </span>
+                  </div>
+                </div>
+                <MoveRight className="w-3.5 h-3.5 text-brass group-hover/link:translate-x-1 transition-transform" />
+              </a>
+
+              {/* Option 2: Offline PWA App Install */}
+              <div className="p-2.5 rounded-xl bg-paper-shadow/80 border border-brass/30 space-y-1.5 text-ink text-[10px]">
+                <span className="font-bold text-ink-teal block">
+                  {isHindi ? '100% ऑफलाइन ऐप (PWA)' : '100% Offline App (PWA)'}
                 </span>
+                <p className="text-ink-muted leading-tight text-[9.5px]">
+                  {isHindi
+                    ? 'जेलों एवं बंद संस्थानों में बिना इंटरनेट के 3D फ्लिपबुक चलाने हेतु होम स्क्रीन पर जोड़ें।'
+                    : 'Save the interactive 3D flipbook for zero-internet field visits in closed facilities.'}
+                </p>
+                {!isIOS && isInstallable ? (
+                  <button
+                    onClick={handlePWAInstallAction}
+                    className="w-full py-1 bg-ink-teal text-paper rounded-lg text-[10px] font-bold shadow hover:bg-teal-dark"
+                  >
+                    {isHindi ? 'फोन / कंप्यूटर पर इंस्टॉल करें' : 'Install Offline App'}
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-[9px] text-care-blue-dark font-semibold">
+                    <PlusSquare className="w-3 h-3" />
+                    <span>{isHindi ? 'ब्राउज़र मेन्यू से "Add to Home Screen" चुनें' : 'Use Browser Menu → "Add to Home Screen"'}</span>
+                  </div>
+                )}
               </div>
             </div>
 
             <button
-              onClick={() => setShowIOSModal(false)}
-              className="w-full py-1.5 bg-ink-teal text-paper rounded-xl text-xs font-bold shadow hover:bg-teal-dark"
+              onClick={() => setShowDownloadModal(false)}
+              className="w-full py-1.5 bg-ink-teal/20 text-ink-teal hover:bg-ink-teal/30 rounded-xl text-xs font-bold"
             >
-              {isHindi ? 'समझ गया' : 'Got it'}
+              {isHindi ? 'बंद करें' : 'Close'}
             </button>
           </div>
         </div>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swasthya Katha — Field Handbook: STI &amp; Syphilis Ready Reckoner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+  :root{
+    --teal:#123A3C; --brass:#B08D57; --coral:#D97B66;
+    --linen:#FAF6ED; --ivory:#F4EFE6; --ink:#1B1B18;
+    --kit1:#8A8D8F; --kit2:#4F7A6C; --kit3:#FFFFFF; --kit4:#4C7EA8;
+    --kit5:#B23A3A; --kit6:#D9A93B; --kit7:#2B2B2B;
+  }
+  *{box-sizing:border-box;}
+  body{ font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:#d8d2c4; margin:0;
+        -webkit-print-color-adjust:exact; print-color-adjust:exact; counter-reset: pagenum; font-size:15px; }
+  h1,h2,h3{ font-family:'Fraunces',Georgia,serif; color:var(--teal); margin:0 0 6px; }
+  .kitcode,.dose,code{ font-family:'JetBrains Mono','Courier New',monospace; }
+
+  #printBtn{ position:fixed; top:16px; right:16px; z-index:99; background:var(--teal); color:var(--ivory);
+             border:2px solid var(--brass); border-radius:10px; padding:14px 22px; font-weight:700; font-size:15px;
+             cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.25); transition:transform 0.2s; }
+  #printBtn:hover{ background:#0c2627; transform:scale(1.03); }
+
+  .page{ background:var(--linen); width:210mm; min-height:297mm; margin:14mm auto; padding:16mm 15mm 20mm;
+         box-shadow:0 6px 28px rgba(0,0,0,.18); position:relative; counter-increment: pagenum; }
+  .page-eyebrow{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--brass); font-weight:700;
+                 border-bottom:1px solid var(--brass); padding-bottom:6px; margin-bottom:14px; display:flex; justify-content:space-between; }
+  .page-footer{ position:absolute; left:15mm; right:15mm; bottom:8mm; font-size:10px; color:#7a7368;
+                border-top:1px solid #ddd4c0; padding-top:6px; display:flex; justify-content:space-between; }
+  .page-footer::after{ content:"Page " counter(pagenum) " of 9"; }
+  .draft-flag{ display:inline-block; background:var(--coral); color:#fff; font-size:10px; font-weight:700;
+               letter-spacing:.06em; text-transform:uppercase; padding:3px 9px; border-radius:4px; }
+
+  /* ---- Cover ---- */
+  .cover{ text-align:center; display:flex; flex-direction:column; justify-content:center; }
+  .cover .inst{ font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); font-weight:700; }
+  .cover h1{ font-size:44px; line-height:1.15; margin:18px 0 8px; }
+  .cover h2{ font-family:'Inter',sans-serif; font-weight:600; font-size:17px; color:var(--ink); margin-bottom:20px; }
+  .cover .rule{ width:90px; height:3px; background:var(--brass); margin:20px auto; }
+  .bigline{ font-size:20px; font-weight:700; color:var(--teal); margin:18px 0; }
+  .cover .draftline{ margin-top:26px; font-size:12px; color:var(--coral); font-weight:600; max-width:480px; margin-left:auto; margin-right:auto; }
+
+  /* ---- how-to steps ---- */
+  .step-row{ display:flex; gap:14px; margin:18px 0; }
+  .step{ flex:1; background:var(--ivory); border:1px solid #e3d9c4; border-radius:12px; padding:16px 14px; }
+  .step .n{ font-family:'Fraunces',serif; font-size:30px; color:var(--brass); font-weight:800; }
+  .step p{ font-size:14px; margin:6px 0 0; line-height:1.5; font-weight:600; }
+
+  .safety-banner{ background:var(--teal); color:#fff; border-radius:12px; padding:14px 18px; font-size:15px;
+                   font-weight:700; text-align:center; margin:16px 0; }
+  .safety-banner span{ display:block; font-size:12px; font-weight:500; color:#cfe0dd; margin-top:4px; }
+
+  /* ---- kit color wall ---- */
+  .kitwall{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0; }
+  .kitwall .kc{ border-radius:10px; padding:12px 10px; text-align:center; }
+  .kitwall .kc .name{ font-weight:800; font-size:13px; }
+  .kitwall .kc .use{ font-size:10.5px; margin-top:4px; line-height:1.3; }
+  .kit1bg{background:var(--kit1); color:#fff;} .kit2bg{background:var(--kit2); color:#fff;}
+  .kit3bg{background:var(--kit3); color:var(--teal); border:2px solid var(--teal);}
+  .kit4bg{background:var(--kit4); color:#fff;} .kit5bg{background:var(--kit5); color:#fff;}
+  .kit6bg{background:var(--kit6); color:#26210f;} .kit7bg{background:var(--kit7); color:#fff;}
+
+  p{ line-height:1.6; font-size:14px; }
+  ul{ line-height:1.6; font-size:14px; margin:6px 0; padding-left:20px; }
+  .section-title{ margin-bottom:10px; }
+  .section-title h2{ font-size:24px; }
+
+  .fixmix-box{ border-left:5px solid var(--teal); background:#eef4f3; padding:12px 14px; font-size:12.5px; border-radius:0 8px 8px 0; margin:12px 0; }
+  .disclaimer-box{ border-left:5px solid var(--coral); background:#fff8f3; padding:12px 14px; font-size:12.5px; border-radius:0 8px 8px 0; margin:12px 0; }
+  .disclaimer-box b{ color:var(--coral); }
+  .checklist-box{ background:var(--ivory); border:1px solid #e3d9c4; border-radius:12px; padding:16px 18px; margin:14px 0; }
+  .checklist-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px 20px; }
+  .checklist-grid div{ font-size:13px; padding:4px 0; border-bottom:1px dotted #d8cfb8; }
+
+  /* ---- syndrome flow card ---- */
+  .flow-card{ background:var(--ivory); border:2px solid #e3d9c4; border-radius:14px; padding:16px 18px; margin-bottom:14px; }
+  .flow-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .flow-head h3{ font-size:19px; }
+  .flow-head .organism{ font-style:italic; font-weight:400; font-size:11.5px; color:#5a5346; display:block; }
+  .kit-badge{ font-size:12px; font-weight:800; padding:6px 12px; border-radius:20px; white-space:nowrap; }
+  .kit1{background:var(--kit1); color:#fff;} .kit2{background:var(--kit2); color:#fff;}
+  .kit3{background:var(--kit3); color:var(--teal); border:2px solid var(--teal);}
+  .kit4{background:var(--kit4); color:#fff;} .kit5{background:var(--kit5); color:#fff;}
+  .kit6{background:var(--kit6); color:#26210f;} .kit7{background:var(--kit7); color:#fff;}
+  .nonkit{background:#e9e3d3; color:#3a352d; border:1px solid #cfc4a4;}
+
+  .spot-it{ background:#fff; border-radius:10px; padding:10px 14px; border:1.5px solid #ece3cf; margin-top:4px; }
+  .spot-it .lbl{ font-size:11px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; color:var(--brass); }
+  .spot-it ul{ margin:6px 0 0; padding-left:20px; }
+  .spot-it li{ font-size:14px; font-weight:600; margin-bottom:3px; }
+
+  .kitline{ display:flex; align-items:center; gap:10px; background:#fff; border-radius:10px; padding:10px 14px; margin-top:8px; border:1.5px solid #ece3cf; }
+  .kitline p{ margin:0; font-size:14px; font-weight:700; }
+
+  .doselock{ background:#f3efe4; border-radius:10px; padding:8px 14px; margin-top:8px; border:1px dashed var(--brass); }
+  .doselock .lbl{ font-size:10px; text-transform:uppercase; letter-spacing:.06em; font-weight:800; color:var(--brass); }
+  .doselock .dose{ font-size:12px; display:block; margin:4px 0 0; line-height:1.5; }
+
+  .pearl{ border-left:4px solid var(--brass); background:#fbf6ec; padding:8px 12px; margin-top:8px; font-size:12.5px; border-radius:0 8px 8px 0; }
+  .pearl b{ color:var(--brass); }
+  .partner-line{ font-size:12.5px; margin-top:6px; color:#3a352d; }
+  .partner-line b{ color:var(--teal); }
+
+  .clinical-img-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .clinical-img-card{ background:#fff; border:1px solid #e3d9c4; border-radius:8px; overflow:hidden; }
+  .clinical-img-card img{ width:100%; height:110px; object-fit:cover; display:block; }
+  .clinical-img-card .caption{ font-size:10px; padding:4px 8px; color:#3a352d; font-weight:600; line-height:1.3; }
+
+  table.matrix{ width:100%; border-collapse:collapse; font-size:12px; margin-top:10px; }
+  table.matrix th{ background:var(--teal); color:#fff; text-align:left; padding:9px 8px; font-weight:700; }
+  table.matrix td{ padding:9px 8px; border-bottom:1px solid #e3d9c4; vertical-align:top; }
+  table.matrix tr:nth-child(even) td{ background:#f0e9d8; }
+  .swatch{ display:inline-block; width:13px; height:13px; border-radius:3px; margin-right:6px; vertical-align:-2px; }
+
+  .mf-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+  .mf-card{ background:var(--ivory); border-radius:10px; padding:12px 14px; border:1px solid #e3d9c4; }
+  .mf-card .myth{ font-size:12.5px; color:var(--coral); font-weight:700; }
+  .mf-card .fact{ font-size:12.5px; margin-top:6px; }
+  .mf-card .fact b{ color:var(--teal); }
+
+  .helpline-card{ background:var(--teal); color:var(--ivory); border-radius:12px; padding:16px 20px; margin-top:10px; }
+  .helpline-card .num{ font-family:'Fraunces',serif; font-size:30px; font-weight:800; color:#fff; }
+  .helpline-card p{ color:#dfe8e6; margin:4px 0 0; }
+  .fill{ background:#fff9ee; border:1px dashed var(--brass); border-radius:6px; padding:2px 6px; font-size:12px; color:#7a6a3e; }
+
+  .glossary{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+  .glossary .g{ background:#fff; border-radius:8px; padding:8px 12px; border:1px solid #ece3cf; font-size:12.5px; }
+  .glossary .g b{ color:var(--teal); }
+
+  @media print{
+    body{background:#fff;}
+    #printBtn{display:none;}
+    .page{box-shadow:none; margin:0; page-break-after:always;}
+    .page:last-child{page-break-after:auto;}
+  }
+</style>
+</head>
+<body>
+
+<button id="printBtn" onclick="window.print()">🖨 Print / Save as PDF</button>
+
+<!-- ============ PAGE 1 — COVER ============ -->
+<div class="page cover">
+  <div class="page-eyebrow"><span>SWASTHYA KATHA — FIELD EDITION</span><span class="draft-flag">Draft — pending clinical sign-off</span></div>
+  <div class="inst">India HIV/AIDS Alliance &nbsp;•&nbsp; NACO National AIDS &amp; STD Control Programme (NACP Phase V)</div>
+  <h1>Swasthya Katha<br>STI &amp; Syphilis Field Handbook</h1>
+  <h2>A simple, step-by-step ready reckoner for outreach workers, peer educators, coordinators and clinic staff in prisons and closed settings</h2>
+  <div class="rule"></div>
+  <p class="bigline">Look. Match. Act.</p>
+  <div class="step-row">
+    <div class="step"><div class="n">1</div><p>Look at what the person shows or tells you</p></div>
+    <div class="step"><div class="n">2</div><p>Match it to one box in this book</p></div>
+    <div class="step"><div class="n">3</div><p>Give the matching kit, or send them onward — never guess</p></div>
+  </div>
+  <div class="safety-banner">Not sure which box fits? Don't guess.<span>Call your medical officer or the helpline on the last page. That is always the right choice.</span></div>
+  <p class="draftline">This is a working draft. Every dose in this book must be checked by your programme's clinical lead against the current official NACO guidelines before it is printed and used in the field.</p>
+  <div class="page-footer"><span>Prepared as a working draft — not yet clinically approved</span></div>
+</div>
+
+<!-- ============ PAGE 2 — HOW TO USE + KIT WALL + TB SCREEN ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 1 — BEFORE YOU START</span><span>Swasthya Katha Field Handbook</span></div>
+  <div class="section-title"><h2>The 7 Kits, At a Glance</h2></div>
+  <p>Every kit has a color. Learn the colors first — they matter more than the names.</p>
+  <div class="kitwall">
+    <div class="kc kit1bg"><div class="name">1 · Grey</div><div class="use">Discharge / leaking fluid from the private parts</div></div>
+    <div class="kc kit2bg"><div class="name">2 · Green</div><div class="use">Unusual vaginal discharge, itching</div></div>
+    <div class="kc kit3bg"><div class="name">3 · White</div><div class="use">A sore or ulcer on the private parts</div></div>
+    <div class="kc kit4bg"><div class="name">4 · Blue</div><div class="use">Same as White, if allergic to penicillin</div></div>
+    <div class="kc kit5bg"><div class="name">5 · Red</div><div class="use">Painful blisters that break open</div></div>
+    <div class="kc kit6bg"><div class="name">6 · Yellow</div><div class="use">Lower belly pain in a woman</div></div>
+    <div class="kc kit7bg"><div class="name">7 · Black</div><div class="use">A painful swollen lump in the groin</div></div>
+  </div>
+  <div class="disclaimer-box"><b>Who gives the kit:</b> this page tells you which color matches which sign. Who is allowed to hand over the tablets, and how much, follows your own programme's training and supervision rule — this book supports that training, it doesn't replace it.</div>
+
+  <div class="section-title" style="margin-top:16px;"><h2>Quick Word List</h2></div>
+  <div class="glossary">
+    <div class="g"><b>Discharge</b> — fluid or liquid coming from the private parts that isn't normal.</div>
+    <div class="g"><b>Ulcer / sore</b> — a break or wound in the skin that doesn't heal quickly.</div>
+    <div class="g"><b>Bubo</b> — a swollen, sometimes painful lump in the groin.</div>
+    <div class="g"><b>Presumptive treatment</b> — giving the medicine because the pattern matches, even before a lab result comes back.</div>
+    <div class="g"><b>Partner notification</b> — telling a person's recent partner(s) so they can get checked too.</div>
+    <div class="g"><b>Refer</b> — send the person to a doctor or the nearest clinic instead of treating them yourself.</div>
+  </div>
+
+  <div class="section-title" style="margin-top:16px;"><h2>Intake Screening</h2></div>
+  <div class="fixmix-box"><b>A correction worth knowing:</b> the list below is a <b>TB (tuberculosis) symptom check</b>, not an STI check — it just happens to be done at the same time, at intake. Keep the two separate in your head: TB symptoms below, STI/RTI signs on the pages that follow.</div>
+  <div class="checklist-box">
+    <h3 style="font-size:15px;">TB symptom check — ask about all ten</h3>
+    <div class="checklist-grid">
+      <div>1. Cough</div><div>6. Out of breath easily</div>
+      <div>2. Fever</div><div>7. Not wanting to eat</div>
+      <div>3. Sweating heavily at night</div><div>8. Feeling very tired</div>
+      <div>4. Losing weight without trying</div><div>9. Swelling in the neck</div>
+      <div>5. Chest pain</div><div>10. Coughing up blood — refer today, don't wait</div>
+    </div>
+  </div>
+  <p>Alongside this, offer the <b>HIV + Syphilis quick test</b> — one finger-prick, one result in about 20–30 minutes. A positive result on either goes to the clinic the same day.</p>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 3 — SPOT IT: SORES/ULCERS ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 2 — SPOT IT (1/4)</span><span>Sores on the private parts</span></div>
+  <div class="section-title"><h2>A Sore or Ulcer — What Kind?</h2></div>
+  <p>The single most useful question: <b>does it hurt?</b></p>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>One sore, no pain<span class="organism">Likely: Primary Syphilis</span></h3><span class="kit-badge kit3">Give Kit 3 · White</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Just one sore, not several</li><li>Clean, smooth edges</li><li>Firm to the touch</li><li>Doesn't hurt at all</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/primary-syphilis-male.webp" alt="Primary Syphilis Male Chancre">
+        <div class="caption">♂ Primary Chancre (Male): Dry, painless ulcer on glans</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/primary-syphilis-female.webp" alt="Primary Syphilis Female Chancre">
+        <div class="caption">♀ Primary Chancre (Female): Painless ulcer on vulva</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit3">Kit 3</span><p>Give one injection + one tablet, as trained.</p></div>
+    <div class="doselock"><div class="lbl">Exact dose — for the dispensing officer to confirm</div><span class="dose">Inj. Benzathine Penicillin G 2.4 MU IM, single dose + Tab. Azithromycin 1 g, single dose. Penicillin-allergic → Kit 4 (Doxycycline 100mg BD ×15 days + Azithromycin 1g). Not for pregnant clients.</span></div>
+    <div class="partner-line"><b>Also do:</b> ask about partners from the last 3 months — they need checking too.</div>
+    <div class="pearl"><b>Remember:</b> because it doesn't hurt, people often don't mention it. Always ask directly.</div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>One or more sores, very painful<span class="organism">Likely: Chancroid</span></h3><span class="kit-badge kit3">Give Kit 3 · White</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>One or more sores</li><li>Ragged, messy edges</li><li>Soft, not firm</li><li>Hurts a lot</li><li>Sometimes a painful swollen lump in the groin</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/chancroid-lesions.webp" alt="Chancroid Ulcers">
+        <div class="caption">Chancroid: Multiple deep, ragged, painful ulcers</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/pediculosis-pubic-hair.webp" alt="Pediculosis Pubis">
+        <div class="caption">Pediculosis Pubis: Crab lice and nits on pubic hair</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit3">Kit 3</span><p>Same kit as the painless sore above — it covers both at once.</p></div>
+    <div class="pearl"><b>Safety rule:</b> if there's a swollen lump, never cut or squeeze it. If it's soft and full of fluid, only a trained person should draw fluid out, through healthy skin only.</div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Rash on palms and soles, or patchy hair loss<span class="organism">Likely: Secondary Syphilis</span></h3><span class="kit-badge kit3">Give Kit 3 · White</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Rash spreads across the body, including palms and soles</li><li>Patches of hair missing</li><li>Sores or bumps in the mouth</li><li>Flat, wart-like bumps in warm skin folds</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/secondary-syphilis-palms.webp" alt="Secondary Syphilis Palms Rash">
+        <div class="caption">Secondary Syphilis: Copper-red rash on palms</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/secondary-syphilis-condyloma-lata.webp" alt="Condyloma Lata">
+        <div class="caption">Condyloma Lata: Highly infectious moist lesions</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit3">Kit 3</span><p>Ask the dispensing officer — the exact schedule depends on how long the person has been infected.</p></div>
+    <div class="doselock"><div class="lbl">Exact dose — confirm staging with the clinician first</div><span class="dose">Under 1 year infected: single injection, same as Kit 3 above. Over 1 year, or unknown: same injection, once a week for 3 weeks. Staging must be confirmed by the treating clinician — don't guess it from this page.</span></div>
+    <div class="partner-line"><b>Also do:</b> ask about partners from the last 12 months.</div>
+  </div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 4 — SPOT IT: DISCHARGE ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 2 — SPOT IT (2/4)</span><span>Discharge or leaking fluid</span></div>
+  <div class="section-title"><h2>Discharge — What Kind?</h2></div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Thick, heavy, yellow-white discharge<span class="organism">Likely: Gonorrhoea</span></h3><span class="kit-badge kit1">Give Kit 1 · Grey</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Thick and heavy — hard to miss in men</li><li>Burning or pain when passing urine</li><li>In women, may show almost nothing — don't rule it out just because there are no signs</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/gonorrhea-male-urethritis.webp" alt="Male Gonococcal Urethritis">
+        <div class="caption">♂ Male Urethritis: Copious creamy purulent discharge</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/gonorrhea-female-urethritis.webp" alt="Female Gonococcal Urethritis">
+        <div class="caption">♀ Female Urethritis: Purulent discharge at meatus</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit1">Kit 1</span><p>One tablet of each kind, taken together, once.</p></div>
+    <div class="doselock"><div class="lbl">Exact dose</div><span class="dose">Tab. Cefixime 400 mg single dose + Tab. Azithromycin 1 g single dose.</span></div>
+    <div class="partner-line"><b>Also do:</b> treat the partner too, even if they show nothing — ask about partners from the last 60 days.</div>
+    <div class="pearl"><b>Remember:</b> a lot of women carry this with no signs at all. If her partner has it, treat her too — don't wait for her to show something.</div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Thin, watery discharge — or none at all<span class="organism">Likely: Chlamydia</span></h3><span class="kit-badge kit1">Give Kit 1</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Thinner and lighter than the gonorrhoea discharge</li><li>Very often — no discharge noticed at all</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/chlamydia-male-urethritis.webp" alt="Chlamydial Urethritis">
+        <div class="caption">♂ Chlamydial Urethritis: Thin, clear-to-white discharge</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/lgv-inguinal-bubo.webp" alt="LGV Inguinal Bubo">
+        <div class="caption">LGV Bubo: Unilateral tender groin swelling</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit1">Kit 1</span><p>Same kit as gonorrhoea above — one dose covers both.</p></div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Painful swollen lump in the groin, with or without a small sore first<span class="organism">Likely: LGV</span></h3><span class="kit-badge kit7">Give Kit 7 · Black</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>A firm, painful, growing lump in the groin</li><li>Sometimes a tiny sore came first, and healed unnoticed</li></ul>
+    </div>
+    <div class="doselock"><div class="lbl">Exact dose</div><span class="dose">Tab. Doxycycline 100mg BD ×21 days (42 tabs) + Tab. Azithromycin 1g single dose.</span></div>
+    <div class="pearl"><b>Safety rule:</b> never cut or drain this lump. If needed, only a trained person draws fluid through healthy skin nearby.</div>
+  </div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 5 — SPOT IT: BLISTERS/ITCH ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 2 — SPOT IT (3/4)</span><span>Blisters and itching</span></div>
+  <div class="section-title"><h2>Blisters &amp; Itching</h2></div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Small painful blisters, then open sores<span class="organism">Likely: Genital Herpes</span></h3><span class="kit-badge kit5">Give Kit 5 · Red</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Clusters of small blisters</li><li>They break open into shallow, painful sores</li><li>First time is usually worse — may come with fever</li><li>Comes back sometimes — that's normal for this condition, not a new infection each time</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/herpes-primary-male.webp" alt="Genital Herpes Male">
+        <div class="caption">♂ Genital Herpes (Male): Clustered fluid-filled vesicles</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/herpes-primary-female.webp" alt="Genital Herpes Female">
+        <div class="caption">♀ Genital Herpes (Female): Painful coalescing ulcers</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit5">Kit 5</span><p>Tablets three times a day, for one week.</p></div>
+    <div class="doselock"><div class="lbl">Exact dose</div><span class="dose">Tab. Acyclovir 400mg, 3 times a day for 7 days (21 tablets) — for a first episode. A repeat episode may need a shorter course — check with the clinician.</span></div>
+    <div class="pearl"><b>Remember:</b> this doesn't fully cure — it eases the episode. Say that plainly so the person isn't confused later.</div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Soft, painless, cauliflower-shaped bump<span class="organism">Genital warts (HPV)</span></h3><span class="kit-badge kit3 nonkit">Clinical Care</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Painless</li><li>Bumpy, rough surface — like a small cauliflower</li><li>Can be one or a cluster</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/warts-giant-male.webp" alt="Giant Condyloma Male">
+        <div class="caption">♂ Genital Warts (Male): Giant verrucous lesions</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/warts-female-fourchette.webp" alt="Genital Warts Female">
+        <div class="caption">♀ Genital Warts (Female): Fourchette verrucous lesions</div>
+      </div>
+    </div>
+    <div class="kitline"><p>No tablet kit for this one — refer to Suraksha Clinic for Podophyllin / Cryotherapy. Offer women cervical screening.</p></div>
+  </div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 6 — SPOT IT: WOMEN'S SYMPTOMS ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 2 — SPOT IT (4/4)</span><span>Signs in women</span></div>
+  <div class="section-title"><h2>Vaginal Discharge &amp; Belly Pain</h2></div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Unusual vaginal discharge, itching or smell<span class="organism">Vaginitis</span></h3><span class="kit-badge kit2">Give Kit 2 · Green</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Discharge that looks, smells, or feels different from usual</li><li>Itching or soreness</li><li>No belly pain, no fever</li></ul>
+    </div>
+    <div class="clinical-img-grid">
+      <div class="clinical-img-card">
+        <img src="/images/clinical/gonorrhea-cervicitis.webp" alt="Cervicitis Vaginitis">
+        <div class="caption">Endocervicitis: Purulent exudate & friable cervix</div>
+      </div>
+      <div class="clinical-img-card">
+        <img src="/images/clinical/gonorrhea-bartholins-abscess.webp" alt="Bartholins Abscess">
+        <div class="caption">Bartholin's Abscess: Fluctuant tender labial mass</div>
+      </div>
+    </div>
+    <div class="kitline"><span class="kit-badge kit2">Kit 2</span><p>Two tablets, taken together, once.</p></div>
+    <div class="doselock"><div class="lbl">Exact dose</div><span class="dose">Tab. Secnidazole 2g single dose + Tab. Fluconazole 150mg single dose.</span></div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-head"><h3>Lower belly pain, may have fever<span class="organism">Pelvic Inflammatory Disease (PID)</span></h3><span class="kit-badge kit6">Give Kit 6 · Yellow</span></div>
+    <div class="spot-it"><div class="lbl">Spot it</div>
+      <ul><li>Pain low in the belly, not just discharge</li><li>Sometimes fever</li><li>Needs treatment quickly — don't wait and see</li></ul>
+    </div>
+    <div class="kitline"><span class="kit-badge kit6">Kit 6</span><p>One tablet once, plus two more medicines twice a day for two weeks.</p></div>
+    <div class="doselock"><div class="lbl">Exact dose</div><span class="dose">Tab. Cefixime 400mg single dose + Tab. Metronidazole 400mg BD ×14 days (28 tabs) + Cap. Doxycycline 100mg BD ×14 days (28 tabs).</span></div>
+    <div class="partner-line"><b>Also do:</b> give the male partner Kit 1, even without symptoms.</div>
+    <div class="pearl"><b>Refer if:</b> high fever, can't keep tablets down, or pain is severe — this needs a clinician, not just the kit.</div>
+  </div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 7 — KIT MASTER MATRIX ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 3 — QUICK LOOKUP TABLE</span><span>All 7 Kits, One Page</span></div>
+  <div class="section-title"><h2>Kit Master Matrix</h2></div>
+  <div class="fixmix-box"><b>Note:</b> NACO's system runs Kit 1 through Kit 7. Two extra conditions (warts, lice) are treated but don't have their own numbered kit.</div>
+  <table class="matrix">
+    <tr><th>Kit</th><th>Color</th><th>Used for</th><th>Contains</th><th>Partner rule</th></tr>
+    <tr><td>1</td><td><span class="swatch" style="background:var(--kit1);"></span>Grey</td><td>Discharge (gonorrhoea + chlamydia)</td><td class="kitcode">Azithromycin 1g (1) + Cefixime 400mg (1)</td><td>Treat, 60 days</td></tr>
+    <tr><td>2</td><td><span class="swatch" style="background:var(--kit2);"></span>Green</td><td>Vaginal discharge</td><td class="kitcode">Secnidazole 2g (1) + Fluconazole 150mg (1)</td><td>If symptomatic</td></tr>
+    <tr><td>3</td><td><span class="swatch" style="background:var(--kit3); border:1px solid var(--teal);"></span>White</td><td>Genital ulcer (syphilis + chancroid)</td><td class="kitcode">Benzathine Penicillin 2.4 MU (1) + Azithromycin 1g (1)</td><td>3 / 12 months</td></tr>
+    <tr><td>4</td><td><span class="swatch" style="background:var(--kit4);"></span>Blue</td><td>Genital ulcer — penicillin allergy</td><td class="kitcode">Doxycycline 100mg BD ×15d (30) + Azithromycin 1g (1)</td><td>Same as Kit 3</td></tr>
+    <tr><td>5</td><td><span class="swatch" style="background:var(--kit5);"></span>Red</td><td>Genital herpes, first episode</td><td class="kitcode">Acyclovir 400mg TDS ×7d (21)</td><td>Counselling</td></tr>
+    <tr><td>6</td><td><span class="swatch" style="background:var(--kit6);"></span>Yellow</td><td>Pelvic Inflammatory Disease</td><td class="kitcode">Cefixime 400mg (1) + Metronidazole 400mg BD ×14d (28) + Doxycycline 100mg BD ×14d (28)</td><td>Partner → Kit 1</td></tr>
+    <tr><td>7</td><td><span class="swatch" style="background:var(--kit7);"></span>Black</td><td>Lymphogranuloma Venereum</td><td class="kitcode">Doxycycline 100mg BD ×21d (42) + Azithromycin 1g (1)</td><td>Extended tracing</td></tr>
+  </table>
+  <div class="disclaimer-box" style="margin-top:14px;"><b>Before this leaves draft:</b> every dose and duration above must be checked by your clinical lead against the current NACO National Technical Guidelines, and signed below.</div>
+  <div class="checklist-box">
+    <div class="checklist-grid">
+      <div>Clinical reviewer: <span class="fill">[name, role]</span></div>
+      <div>Date reviewed: <span class="fill">[date]</span></div>
+      <div>Guideline checked: <span class="fill">[e.g. NACO 2024]</span></div>
+      <div>Next review due: <span class="fill">[date]</span></div>
+    </div>
+  </div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 8 — COUNSELLING / MYTHS / FAQ ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 4 — TALKING TO PEOPLE</span><span>Rights, Myths &amp; Simple Answers</span></div>
+  <div class="section-title"><h2>Counselling &amp; Common Myths</h2></div>
+
+  <h3 style="font-size:15px;">What every person has a right to</h3>
+  <p>Under the HIV and AIDS Act, 2017: their result is private, they must agree before being tested, and no one can be treated worse because of their status. Explain this before testing, in plain words, every time.</p>
+
+  <h3 style="font-size:15px; margin-top:12px;">Telling partners, without breaking trust</h3>
+  <p>With the person's permission, help them think through who else might be at risk — but never say their name or result to that person without separate permission.</p>
+
+  <h3 style="font-size:15px; margin-top:14px;">Four things people often believe that aren't true</h3>
+  <div class="mf-grid">
+    <div class="mf-card"><div class="myth">"You can tell just by looking."</div><div class="fact"><b>Truth:</b> many people show nothing at all. Only a test tells you for sure.</div></div>
+    <div class="mf-card"><div class="myth">"You can catch it from a cup or a toilet."</div><div class="fact"><b>Truth:</b> it spreads through sex or blood, not sharing everyday things.</div></div>
+    <div class="mf-card"><div class="myth">"Getting tested means everyone finds out."</div><div class="fact"><b>Truth:</b> it's private. Nobody has to know unless the person chooses to tell them.</div></div>
+    <div class="mf-card"><div class="myth">"The signs went away, so it's gone."</div><div class="fact"><b>Truth:</b> signs can settle before the infection does. Finish every tablet in the kit.</div></div>
+  </div>
+
+  <h3 style="font-size:15px; margin-top:14px;">Where to send someone</h3>
+  <div class="checklist-box">
+    <div class="checklist-grid">
+      <div>Nearest Suraksha Clinic: <span class="fill">[name, address, phone]</span></div>
+      <div>Nearest ICTC: <span class="fill">[name, address, phone]</span></div>
+      <div>Nearest ART Centre: <span class="fill">[name, address, phone]</span></div>
+      <div>Medical officer on call: <span class="fill">[name, phone]</span></div>
+    </div>
+  </div>
+  <div class="helpline-card">
+    <div class="num">1097</div>
+    <p>NACO National AIDS Helpline — free, from any phone, anywhere in India.</p>
+  </div>
+  <div class="disclaimer-box" style="margin-top:12px;"><b>Fill in the boxes above</b> with your facility's real contacts before this is printed and handed out. A wrong number helps no one.</div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off</span></div>
+</div>
+
+<!-- ============ PAGE 9 — WHEN IN DOUBT / SUMMARY WALL ============ -->
+<div class="page">
+  <div class="page-eyebrow"><span>SECTION 5 — LAST PAGE</span><span>Keep This Nearby</span></div>
+  <div class="section-title"><h2>When in Doubt</h2></div>
+  <div class="safety-banner" style="font-size:18px;">Refer, don't guess.<span>Every kit on the wall below is a starting point, not a final answer. If two boxes seem to match, or none do, send the person to the clinic today.</span></div>
+
+  <div class="kitwall" style="margin-top:20px;">
+    <div class="kc kit1bg"><div class="name">1 · Grey</div><div class="use">Discharge</div></div>
+    <div class="kc kit2bg"><div class="name">2 · Green</div><div class="use">Vaginal discharge</div></div>
+    <div class="kc kit3bg"><div class="name">3 · White</div><div class="use">Painless or painful sore</div></div>
+    <div class="kc kit4bg"><div class="name">4 · Blue</div><div class="use">Sore, penicillin-allergic</div></div>
+    <div class="kc kit5bg"><div class="name">5 · Red</div><div class="use">Painful blisters</div></div>
+    <div class="kc kit6bg"><div class="name">6 · Yellow</div><div class="use">Belly pain (women)</div></div>
+    <div class="kc kit7bg"><div class="name">7 · Black</div><div class="use">Groin lump</div></div>
+  </div>
+
+  <p style="margin-top:20px;">This handbook was built for people doing real work in hard settings, with limited time and limited privacy. It is a starting point, written in plain language on purpose — it is not a replacement for training, supervision, or the judgement of a qualified clinician. Use it, question it, and help improve it.</p>
+
+  <div class="checklist-box" style="margin-top:14px;">
+    <h3 style="font-size:15px;">Document control</h3>
+    <div class="checklist-grid">
+      <div>Prepared for: <span class="fill">India HIV/AIDS Alliance</span></div>
+      <div>Version: <span class="fill">Field Edition, draft 1</span></div>
+      <div>Guideline base: <span class="fill">NACO NACP-V, to be checked against 2024 NTG</span></div>
+      <div>Status: <span class="fill">Not yet cleared for field distribution</span></div>
+    </div>
+  </div>
+  <div class="page-footer"><span>Draft — pending clinical sign-off · India HIV/AIDS Alliance</span></div>
+</div>
+
+</body>
+</html>
