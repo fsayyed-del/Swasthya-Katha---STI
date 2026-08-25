@@ -23,9 +23,9 @@ export interface DiseaseEditorialData {
   maleDetails: Partial<Record<Locale, string>> & { en: string };
   femaleDetails: Partial<Record<Locale, string>> & { en: string };
   photos: ClinicalPhotoItem[];
-  regimen?: { en: string; hi: string };
-  partnerProtocol?: { en: string; hi: string };
-  closedSettingPearl?: { en: string; hi: string };
+  regimen?: Partial<Record<Locale, string>> & { en: string };
+  partnerProtocol?: Partial<Record<Locale, string>> & { en: string };
+  closedSettingPearl?: Partial<Record<Locale, string>> & { en: string };
 }
 
 interface EditorialDiseasePageProps {
