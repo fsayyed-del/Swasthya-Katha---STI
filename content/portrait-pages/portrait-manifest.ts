@@ -36,12 +36,12 @@ export const PORTRAIT_BOOK_PAGES: PortraitPageContent[] = [
       te: 'స్వాస్థ్య కథ',
     },
     eyebrow: {
-      en: 'National Health Edition 2026',
-      hi: 'राष्ट्रीय स्वास्थ्य संस्करण 2026',
-      mr: 'राष्ट्रीय आवृत्ती २०२६',
-      bn: 'জাতীয় সংস্করণ ২০২৬',
-      ta: 'தேசிய பதிப்பு 2026',
-      te: 'జాతీయ సంచిక 2026',
+      en: 'National Syndromic Guidelines',
+      hi: 'राष्ट्रीय सिंड्रोमिक दिशानिर्देश',
+      mr: 'राष्ट्रीय मार्गदर्शक तत्त्वे',
+      bn: 'জাতীয় নির্দেশিকা',
+      ta: 'தேசிய வழிகாட்டுதல்கள்',
+      te: 'జాతీయ మార్గదర్శకాలు',
     },
     subheading: {
       en: 'A visual, respectful guide to health, testing, and care.',
