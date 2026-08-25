@@ -18,6 +18,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
       en: 'Solitary, painless genital chancre with clean base on labia majora/minora, posterior fourchette, or cervix. Often unnoticed due to internal location.',
       hi: 'योनिद्वार, लेबिया या गर्भाशय ग्रीवा पर साफ तल वाला दर्द-रहित घाव। आंतरिक होने से अक्सर ध्यान नहीं जाता।',
     },
+    regimen: {
+      en: 'Inj. Benzathine Penicillin G 2.4 MU IM Single Dose + Tab. Azithromycin 1g OD Single Dose (NACO Kit 3 White). If Penicillin-allergic: Kit 4 Blue (Cap. Doxycycline 100mg BD x 14 days).',
+      hi: 'इंजेक्शन बेंजाथिन पेनिसिलिन 2.4 MU IM एकल खुराक + टैबलेट एज़िथ्रोमाइसिन 1g एकल खुराक (किट 3 सफेद)। पेनिसिलिन एलर्जी में किट 4 नीला (डॉक्सीसाइक्लिन 100mg BD x 14 दिन)।',
+    },
+    partnerProtocol: {
+      en: 'Trace and treat all sexual contacts from the past 3 months simultaneously.',
+      hi: 'पिछले 3 महीनों के सभी यौन साथियों की पहचान कर एक साथ उपचार दें।',
+    },
+    closedSettingPearl: {
+      en: 'Painless ulcers break the mucosal barrier and multiply HIV transmission risk 3-5x. Dual Rapid HIV/Syphilis screening is mandatory.',
+      hi: 'दर्द-रहित घाव त्वचा की सुरक्षा तोड़कर HIV के खतरे को 3-5 गुना बढ़ा देता है। दोहरी HIV/सिफलिस त्वरित जांच अनिवार्य है।',
+    },
     photos: [
       {
         id: 'primary-syphilis-male',
@@ -59,6 +71,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
       en: 'Palmar/plantar hyperkeratotic rashes, oral mucous patches, diffuse lymphadenopathy, patchy alopecia, and hypertrophic perianal condyloma lata.',
       hi: 'हथेलियों पर चकत्ते, मुंह के भीतर सफेद संक्रामक छाले और गुदा के आसपास उभरे हुए गीले मस्से।',
     },
+    regimen: {
+      en: 'Inj. Benzathine Penicillin G 2.4 MU IM weekly x 3 doses (or Kit 4 Blue: Cap. Doxycycline 100mg BD x 14 days).',
+      hi: 'इंजेक्शन बेंजाथिन पेनिसिलिन 2.4 MU IM साप्ताहिक (3 खुराक) अथवा किट 4 नीला (डॉक्सीसाइक्लिन 100mg BD x 14 दिन)।',
+    },
+    partnerProtocol: {
+      en: 'Notify and treat all sexual contacts from the past 12 months.',
+      hi: 'पिछले 1 वर्ष के सभी यौन संपर्कों की पहचान कर उपचार दें।',
+    },
+    closedSettingPearl: {
+      en: 'Moist condyloma lata lesions contain dense treponemal spirochetes. Standard universal precautions are essential in closed barrack living.',
+      hi: 'कंडायलोमा लाटा में अत्यधिक संक्रामक रोगाणु होते हैं। बैरकों में स्वच्छता व सावधानी अनिवार्य है।',
+    },
     photos: [
       {
         id: 'secondary-syphilis-palms',
@@ -89,8 +113,8 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
     title: { en: 'Gonorrhea (Neisseria gonorrhoeae)', hi: 'गोनोरिया (सुजाक संक्रमण)' },
     kitBadge: { en: 'NACO Kit 1 (Grey)', hi: 'NACO किट 1 (ग्रे)', color: '#4A5568' },
     overview: {
-      en: 'Gram-negative diplococcal infection causing acute severe burning during urination and thick, purulent yellow-green discharge. Can lead to cervicitis, conjunctivitis, and disseminated infection.',
-      hi: 'बैक्टीरिया जनित संक्रमण जिसमें पेशाब में तीव्र जलन और गाढ़ा पीला-हरा मवाद जैसा स्राव होता है। यह गर्भाशय ग्रीवा और आंखों में भी फैल सकता है।',
+      en: 'Gram-negative diplococcal infection causing acute severe burning during urination and thick, purulent yellow-green discharge. Can lead to cervicitis, epididymitis, and arthritis.',
+      hi: 'बैक्टीरिया जनित संक्रमण जिसमें पेशाब में तीव्र जलन और गाढ़ा पीला-हरा मवाद जैसा स्राव होता है। यह गर्भाशय ग्रीवा और अंडकोष में सूजन फैला सकता है।',
     },
     maleDetails: {
       en: 'Acute gonococcal urethritis with intense dysuria, erythema at the urethral meatus, and copious purulent creamy discharge within 2–7 days of exposure.',
@@ -98,7 +122,19 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
     },
     femaleDetails: {
       en: 'Gonococcal urethritis and endocervicitis with friable cervix, abnormal vaginal discharge, pelvic pain, or asymptomatic progression to PID in 70% of cases.',
-      hi: 'योनि व मूत्रमार्ग से मवाद स्राव और गर्भाशय ग्रीवा में सूजन। 70% महिलाओं में कोई दर्द नहीं होता।',
+      hi: 'योनि व मूत्रमार्ग से मवाद स्राव और गर्भाशय ग्रीवा में सूजन। 70% महिलाओं में कोई स्पष्ट दर्द नहीं होता।',
+    },
+    regimen: {
+      en: 'Tab. Cefixime 400mg OD STAT + Tab. Azithromycin 1g OD STAT (NACO Kit 1 Grey).',
+      hi: 'टैबलेट सेफिक्सिम 400mg + टैबलेट एज़िथ्रोमाइसिन 1g एकल खुराक (किट 1 ग्रे)।',
+    },
+    partnerProtocol: {
+      en: 'Treat all sexual partners from the past 60 days simultaneously.',
+      hi: 'पिछले 60 दिनों के सभी यौन साथियों का एक साथ उपचार करें।',
+    },
+    closedSettingPearl: {
+      en: '70% of female gonococcal infections are asymptomatic. Screening high-risk prison populations uncovers hidden disease reservoirs.',
+      hi: '70% महिलाओं में कोई लक्षण नहीं होते। जेलों में नियमित स्वास्थ्य जांच छिपे हुए संक्रमणों को रोकने में सहायक है।',
     },
     photos: [
       {
@@ -141,6 +177,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
       en: 'Mucopurulent cervicitis with yellow exudate from cervical os, cervical friability, deep dyspareunia, and risk of ascending Pelvic Inflammatory Disease (PID).',
       hi: 'गर्भाशय ग्रीवा में सूजन, छूने पर रक्तस्राव और पेट के निचले हिस्से में तेज दर्द।',
     },
+    regimen: {
+      en: 'For Discharge: Kit 1 Grey (Cefixime + Azithromycin). For Inguinal Bubo (LGV): Cap. Doxycycline 100mg BD x 21 days + Tab. Azithromycin 1g STAT (NACO Kit 7 Black).',
+      hi: 'स्राव हेतु: किट 1 ग्रे। जांघ की गिल्टी (एलजीवी बूबो) हेतु: किट 7 काला (डॉक्सीसाइक्लिन 100mg BD x 21 दिन + एज़िथ्रोमाइसिन 1g)।',
+    },
+    partnerProtocol: {
+      en: 'Treat all sexual contacts within 3 weeks prior to bubo onset.',
+      hi: 'गिल्टी दिखने से 3 सप्ताह पूर्व के सभी यौन साथियों का उपचार करें।',
+    },
+    closedSettingPearl: {
+      en: 'DO NOT incise or drain LGV buboes surgically, as this causes non-healing sinus tracts and chronic fistulas.',
+      hi: 'जांघ की गिल्टी (बूबो) पर कभी चीरा न लगाएं, इससे पुराना नासूर (फिस्टुला) बन सकता है। केवल दवा से इलाज करें।',
+    },
     photos: [
       {
         id: 'chlamydia-male',
@@ -181,6 +229,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
     femaleDetails: {
       en: 'Multiple coalescing superficial ulcerations of the vulva, severe dysuria, vaginal discharge, and cervical erosive ulcerations.',
       hi: 'योनिद्वार और लेबिया पर अत्यधिक दर्दनाक छालों व घावों का फैलाव, जिससे पेशाब में तेज चुभन होती है।',
+    },
+    regimen: {
+      en: 'Tab. Acyclovir 400mg TDS x 7 days (21 tablets total) (NACO Kit 5 Red). Keep lesions clean and dry.',
+      hi: 'टैबलेट एसाइक्लोविर 400mg दिन में 3 बार x 7 दिन (कुल 21 गोलियां) (किट 5 लाल)। घाव को साफ व सूखा रखें।',
+    },
+    partnerProtocol: {
+      en: 'Partner treatment is NOT indicated unless active vesicular lesions are present. Counsel on viral shedding.',
+      hi: 'यदि साथी में छाले नहीं हैं तो दवा की जरूरत नहीं। सुरक्षित व्यवहार की काउंसलिंग दें।',
+    },
+    closedSettingPearl: {
+      en: 'HSV-2 lesions double lifetime HIV transmission susceptibility. Provide barrier counseling & ongoing support.',
+      hi: 'हर्पीस के घाव HIV के खतरे को दोगुना कर देते हैं। सुरक्षा उपायों की निरंतर काउंसलिंग दें।',
     },
     photos: [
       {
@@ -223,6 +283,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
       en: 'Extremely painful ragged ulcerations at fourchette and introitus; intense nocturnal itching in pubic region and perianal area.',
       hi: 'योनि प्रवेश द्वार पर गहरे दर्दनाक घाव और प्यूबिक क्षेत्र में तेज खुजली।',
     },
+    regimen: {
+      en: 'Chancroid: Inj. Benzathine Penicillin 2.4 MU + Tab. Azithromycin 1g (Kit 3 White). Pediculosis: Permethrin 1% lotion + wash all clothing/bedding.',
+      hi: 'चैनक्रॉइड: किट 3 सफेद (पेनिसिलिन + एज़िथ्रोमाइसिन)। जूँ: पर्मेथ्रिन 1% लोशन + कपड़े व बिस्तर गर्म पानी से धोना।',
+    },
+    partnerProtocol: {
+      en: 'Treat all sexual contacts from the past 14 days and inspect barrack cellmates for body lice.',
+      hi: 'पिछले 14 दिनों के यौन संपर्कों और बैरक के अन्य बंदियों में जूँ की जांच व उपचार करें।',
+    },
+    closedSettingPearl: {
+      en: 'In closed facilities, crab lice spread rapidly through shared bedding. Institutional laundering is key to eradication.',
+      hi: 'जेलों में साझा कंबलों से जूँ तेजी से फैलती है। कंबलों और कपड़ों की सफाई सबसे महत्वपूर्ण है।',
+    },
     photos: [
       {
         id: 'chancroid-lesions',
@@ -264,6 +336,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
       en: 'Extensive verrucous lesions on posterior fourchette, labia majora/minora, vaginal introitus, and perianal region.',
       hi: 'योनिद्वार, लेबिया और गुदा के आसपास उभरे हुए खुरदुरे मस्सों का गुच्छा।',
     },
+    regimen: {
+      en: 'Topical Podophyllin 20-25% applied by clinician, Trichloroacetic Acid (TCA 80-90%), or Cryotherapy at Suraksha Clinic.',
+      hi: 'सुरक्षा क्लिनिक में डॉक्टर द्वारा पोडोफिलिन 20-25% का लेप, टीसीए (TCA) अथवा क्रायोथेरेपी।',
+    },
+    partnerProtocol: {
+      en: 'Clinical examination of sexual partners; promote regular barrier protection (NACO condoms).',
+      hi: 'यौन साथी की शारीरिक जांच और नियमित कंडोम के प्रयोग की सलाह दें।',
+    },
+    closedSettingPearl: {
+      en: 'Persistent HPV lesions require referral to Suraksha Clinics / Gynaecology for cervical cancer screening (Pap smear/VIA).',
+      hi: 'लंबे समय तक रहने वाले मस्सों में सर्वाइकल कैंसर जांच (पैप स्मीयर) हेतु सुरक्षा क्लिनिक रेफर करें।',
+    },
     photos: [
       {
         id: 'warts-female-fourchette',
@@ -304,6 +388,18 @@ export const EDITORIAL_DISEASE_DATA: Record<string, DiseaseEditorialData> = {
     femaleDetails: {
       en: 'Curd-like white or frothy greenish discharge, vulvar erythema, dyspareunia, cervical motion tenderness, and lower abdominal pain.',
       hi: 'दही जैसा सफेद या हरा झागदार स्राव, तीव्र खुजली, गर्भाशय ग्रीवा में दर्द और पेट के निचले हिस्से में सूजन।',
+    },
+    regimen: {
+      en: 'Vaginitis: Tab. Secnidazole 2g STAT + Cap. Fluconazole 150mg STAT (Kit 2 Green). PID: Tab. Cefixime 400mg STAT + Tab. Metronidazole 400mg BD x 14d + Cap. Doxycycline 100mg BD x 14d (Kit 6 Yellow).',
+      hi: 'योनि स्राव: किट 2 हरा (सेकनिडाजोल 2g + फ्लुकोनाजोल 150mg)। पीआईडी: किट 6 पीला (सेफिक्सिम 400mg + मेट्रोनिडाजोल 400mg BD x 14 दिन + डॉक्सीसाइक्लिन 100mg BD x 14 दिन)।',
+    },
+    partnerProtocol: {
+      en: 'For PID & Trichomoniasis, treat male partner simultaneously with Kit 1 Grey (Cefixime + Azithromycin).',
+      hi: 'पीआईडी एवं ट्राइकोमोनास में पुरुष साथी को भी किट 1 ग्रे देकर साथ में उपचार करें।',
+    },
+    closedSettingPearl: {
+      en: 'PID carries high risk of tubal infertility and chronic pelvic pain. Review in 72 hours; immediately refer if fever persists.',
+      hi: 'पीआईडी से बांझपन का खतरा होता है। 72 घंटे में सुधार न होने पर तुरंत उच्च केंद्र रेफर करें।',
     },
     photos: [
       {

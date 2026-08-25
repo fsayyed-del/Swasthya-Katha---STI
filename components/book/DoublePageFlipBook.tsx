@@ -13,7 +13,7 @@ import { Page07GetHelp } from '../portrait/pages/Page07GetHelp';
 import { Page08Closing } from '../portrait/pages/Page08Closing';
 import { EditorialDiseasePage } from '../clinical/EditorialDiseasePage';
 import { EDITORIAL_DISEASE_DATA } from '@/content/clinical/editorial-disease-data';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 
 interface DoublePageFlipBookProps {
   locale: Locale;
@@ -80,7 +80,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
     const diffY = touchStartY.current - touchEndY;
 
     // Only trigger horizontal flip if horizontal movement is dominant
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 25) {
       if (diffX > 0 && currentLeafIndex < totalLeaves) {
         nextLeaf();
       } else if (diffX < 0 && currentLeafIndex > 0) {
@@ -91,11 +91,11 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
     touchStartY.current = null;
   };
 
-  // Page click handler matching author's logic
+  // Page click handler
   const handlePageClick = (e: React.MouseEvent, leafIdx: number, isBack: boolean) => {
     const target = e.target as HTMLElement;
     // Don't turn page if clicking interactive controls
-    if (target.closest('button, a, input, select, [role="button"], audio, video')) {
+    if (target.closest('button, a, input, select, [role="button"], audio, video, img')) {
       return;
     }
     if (isBack) {
@@ -217,7 +217,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Floating Left Page Turn Button (Hidden on Mobile) */}
+      {/* Floating Desktop Page Turn Button (Hidden on Mobile) */}
       {currentLeafIndex > 0 && (
         <button
           onClick={() => prevLeaf()}
@@ -229,7 +229,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
         </button>
       )}
 
-      {/* Floating Right Page Turn Button (Hidden on Mobile) */}
+      {/* Floating Desktop Page Turn Button (Hidden on Mobile) */}
       {currentLeafIndex < totalLeaves && (
         <button
           onClick={() => nextLeaf()}
@@ -251,34 +251,64 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
           } as React.CSSProperties
         }
       >
-        {leaves.map((leaf) => (
-          <div
-            key={leaf.index}
-            className={`page ${leaf.index === 0 && currentLeafIndex === 0 ? 'animate-preslide-hint' : ''}`}
-            style={
-              {
-                '--i': leaf.index,
-              } as React.CSSProperties
-            }
-          >
-            {/* FRONT FACE */}
+        {leaves.map((leaf) => {
+          // Virtualize rendering: Only render nearby leaves for maximum GPU speed
+          const isNear = Math.abs(leaf.index - currentLeafIndex) <= 2;
+          return (
             <div
-              className={`front ${leaf.index === 0 ? 'cover' : ''}`}
-              onClick={(e) => handlePageClick(e, leaf.index, false)}
+              key={leaf.index}
+              className={`page ${leaf.index === 0 && currentLeafIndex === 0 ? 'animate-preslide-hint' : ''}`}
+              style={
+                {
+                  '--i': leaf.index,
+                  visibility: isNear ? 'visible' : 'hidden',
+                } as React.CSSProperties
+              }
             >
-              {leaf.front}
-            </div>
+              {/* FRONT FACE */}
+              <div
+                className={`front ${leaf.index === 0 ? 'cover' : ''}`}
+                onClick={(e) => handlePageClick(e, leaf.index, false)}
+              >
+                {leaf.front}
+              </div>
 
-            {/* BACK FACE */}
-            <div
-              className={`back ${leaf.index === totalLeaves - 1 ? 'cover' : ''}`}
-              onClick={(e) => handlePageClick(e, leaf.index, true)}
-            >
-              {leaf.back}
+              {/* BACK FACE */}
+              <div
+                className={`back ${leaf.index === totalLeaves - 1 ? 'cover' : ''}`}
+                onClick={(e) => handlePageClick(e, leaf.index, true)}
+              >
+                {leaf.back}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+
+      {/* Mobile Subtle Bottom Navigation Bar (Ultra-responsive page flipping & progress indicator) */}
+      {currentLeafIndex > 0 && (
+        <div className="fixed bottom-2 z-40 flex md:hidden items-center justify-between gap-3 px-3 py-1 bg-ink-teal/90 backdrop-blur-md text-paper rounded-full border border-brass/40 shadow-lg text-[10px] font-bold">
+          <button
+            onClick={() => prevLeaf()}
+            disabled={currentLeafIndex === 0}
+            className="px-2 py-0.5 rounded-full hover:bg-white/10 disabled:opacity-30 transition-all active:scale-90"
+          >
+            ← {locale === 'hi' ? 'पिछला' : 'Prev'}
+          </button>
+
+          <span className="font-mono text-amber-200">
+            {currentLeafIndex * 2} / {totalLeaves * 2}
+          </span>
+
+          <button
+            onClick={() => nextLeaf()}
+            disabled={currentLeafIndex === totalLeaves}
+            className="px-2 py-0.5 rounded-full hover:bg-white/10 disabled:opacity-30 transition-all active:scale-90"
+          >
+            {locale === 'hi' ? 'अगला' : 'Next'} →
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -22,7 +22,6 @@
   /* Material & Depth Tokens */
   --shadow-contact: 0 4px 14px rgba(18, 58, 60, 0.12);
   --shadow-spread: 0 20px 50px rgba(18, 58, 60, 0.22);
-  --shadow-gutter: inset 0 0 35px rgba(18, 58, 60, 0.25);
 }
 
 body {
@@ -40,7 +39,7 @@ body {
 }
 
 /* =========================================================================
-   AUTHENTIC PURE CSS FLIPBOOK ENGINE (Ultra-Optimized 60fps Mobile Performance)
+   AUTHENTIC PURE CSS FLIPBOOK ENGINE (Ultra-Optimized 120fps Performance)
    ========================================================================= */
 
 .flipbook-container-stage {
@@ -62,11 +61,9 @@ body {
   margin: auto;
   width: min(47vw, 660px);
   height: min(92vh, 880px);
-  pointer-events: none;
   transform-style: preserve-3d;
-  transition: translate 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: translate 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
   translate: calc(min(var(--c), 1) * 50%) 0%;
-  will-change: translate;
 }
 
 @media (min-width: 1024px) {
@@ -86,7 +83,6 @@ body {
 }
 
 .page {
-  --thickness: 4;
   flex: none;
   display: flex;
   width: 100%;
@@ -96,12 +92,11 @@ body {
   transform-style: preserve-3d;
   transform-origin: left center;
   transition:
-    transform 0.48s cubic-bezier(0.25, 1, 0.5, 1),
-    rotate 0.48s cubic-bezier(0.25, 1, 0.5, 1) calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 25ms);
+    transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1),
+    rotate 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
   translate: calc(var(--i) * -100%) 0px 0px;
-  transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px));
+  transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.5px));
   rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
-  will-change: transform, rotate;
 }
 
 .front,
@@ -128,7 +123,7 @@ body {
   border-right: 2px solid rgba(176, 141, 87, 0.35);
   border-top: 1px solid rgba(176, 141, 87, 0.2);
   border-bottom: 1px solid rgba(176, 141, 87, 0.2);
-  box-shadow: 0 12px 32px rgba(18, 58, 60, 0.12);
+  box-shadow: 0 8px 24px rgba(18, 58, 60, 0.1);
 }
 
 .back {
@@ -136,99 +131,30 @@ body {
   border-left: 2px solid rgba(176, 141, 87, 0.35);
   border-top: 1px solid rgba(176, 141, 87, 0.2);
   border-bottom: 1px solid rgba(176, 141, 87, 0.2);
-  box-shadow: 0 12px 32px rgba(18, 58, 60, 0.12);
+  box-shadow: 0 8px 24px rgba(18, 58, 60, 0.1);
 }
 
-/* Mobile Preslide Gesture Cue Animation (Nudges page 2 times on mobile load to teach swiping) */
+/* Mobile Preslide Gesture Cue Animation */
 @keyframes preslide-nudge {
   0%, 100% {
-    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px)) rotateY(0deg);
+    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.5px)) rotateY(0deg);
   }
   20% {
-    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px)) rotateY(-12deg);
+    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.5px)) rotateY(-10deg);
   }
   40% {
-    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px)) rotateY(0deg);
+    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.5px)) rotateY(0deg);
   }
   60% {
-    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px)) rotateY(-12deg);
+    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.5px)) rotateY(-10deg);
   }
   80% {
-    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.8px)) rotateY(0deg);
+    transform: translateZ(calc((var(--c) - var(--i) - 0.5) * 1.5px)) rotateY(0deg);
   }
 }
 
 .animate-preslide-hint {
   animation: preslide-nudge 2s cubic-bezier(0.25, 1, 0.5, 1) 0.8s 1;
-}
-
-/* Hand Wave Tutorial Animation */
-@keyframes hand-wave-anim {
-  0% {
-    transform: translateX(18px) rotate(10deg);
-  }
-  50% {
-    transform: translateX(-18px) rotate(-10deg);
-  }
-  100% {
-    transform: translateX(18px) rotate(10deg);
-  }
-}
-
-.animate-hand-wave {
-  animation: hand-wave-anim 2.2s ease-in-out infinite;
-}
-
-/* Live Equalizer Audio Waveform Bars */
-@keyframes equalizer-bar-1 {
-  0%, 100% { height: 4px; }
-  50% { height: 16px; }
-}
-@keyframes equalizer-bar-2 {
-  0%, 100% { height: 14px; }
-  50% { height: 6px; }
-}
-@keyframes equalizer-bar-3 {
-  0%, 100% { height: 8px; }
-  50% { height: 18px; }
-}
-
-.animate-eq-1 { animation: equalizer-bar-1 0.7s ease-in-out infinite; }
-.animate-eq-2 { animation: equalizer-bar-2 0.6s ease-in-out infinite; }
-.animate-eq-3 { animation: equalizer-bar-3 0.8s ease-in-out infinite; }
-
-/* Deckle Edge & Paper Grain Texture */
-.deckle-edge {
-  box-shadow: 
-    0 2px 6px rgba(18, 58, 60, 0.06),
-    0 12px 30px rgba(18, 58, 60, 0.12),
-    inset 0 0 0 1px rgba(216, 206, 184, 0.7);
-}
-
-/* Signature Chapter-Colored Edge Stripe (Thumb-Index) */
-.chapter-edge-green {
-  border-right: 7px solid var(--mineral-green);
-}
-
-.chapter-edge-coral {
-  border-right: 7px solid var(--coral);
-}
-
-.chapter-edge-blue {
-  border-right: 7px solid var(--care-blue);
-}
-
-/* Luxury Gold-Foil Metallic Gradient Helper */
-.gold-foil-badge {
-  background: linear-gradient(135deg, #D4AF37 0%, #F5E08B 50%, #AA771C 100%);
-  color: #123A3C;
-  font-weight: 800;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
-}
-
-/* Brass-Ringed Sound Button */
-.sound-btn-ring {
-  box-shadow: 0 0 0 2px #B08D57, 0 4px 12px rgba(176, 141, 87, 0.4);
 }
 
 /* 3D Flip Card Styles */
