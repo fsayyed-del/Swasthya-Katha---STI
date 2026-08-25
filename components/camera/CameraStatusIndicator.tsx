@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Camera, CameraOff, Sparkles, ArrowLeft, ArrowRight, Volume2, Layers, Hand, Pointer } from 'lucide-react';
+import { Camera, CameraOff, Sparkles, ArrowLeft, ArrowRight, Volume2, Layers, Hand, Pointer, Target } from 'lucide-react';
 import { Locale } from '@/src/domain/content/schema';
 
 interface CameraStatusIndicatorProps {
   isActive: boolean;
-  lastDirection: 'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | null;
-  lastSource?: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | null;
+  lastDirection: 'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | 'fist' | null;
+  lastSource?: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | 'fist' | null;
   onStop: () => void;
   onOpenModal: () => void;
   locale: Locale;
@@ -49,6 +49,11 @@ export const CameraStatusIndicator: React.FC<CameraStatusIndicatorProps> = ({
         <span className="flex items-center gap-1 text-care-blue-light font-extrabold text-[11px] animate-bounce">
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>⬅️ Prev Spread</span>
+        </span>
+      ) : lastDirection === 'fist' ? (
+        <span className="flex items-center gap-1 text-amber-300 font-extrabold text-[11px] animate-bounce">
+          <Target className="w-3.5 h-3.5" />
+          <span>Shift+Tab 🎯</span>
         </span>
       ) : lastDirection === 'point' || lastSource === 'point' ? (
         <span className="flex items-center gap-1 text-emerald-300 font-extrabold text-[11px] animate-bounce">

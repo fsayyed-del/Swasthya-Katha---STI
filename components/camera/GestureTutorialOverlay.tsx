@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Locale } from '@/src/domain/content/schema';
-import { Sparkles, MoveRight, MoveLeft, MoveUp, MoveDown, Volume2, Check } from 'lucide-react';
+import { Sparkles, MoveRight, MoveLeft, MoveUp, MoveDown, Target, Check } from 'lucide-react';
 
 interface GestureTutorialOverlayProps {
   isOpen: boolean;
@@ -24,19 +24,19 @@ export const GestureTutorialOverlay: React.FC<GestureTutorialOverlayProps> = ({
         {/* Top Badge */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-ink-black text-paper rounded-full text-xs font-mono font-bold uppercase tracking-widest shadow-md">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>{isHindi ? 'सिंगल फिंगर जेस्चर' : 'INDEX FINGER 4-WAY CONTROL'}</span>
+          <span>{isHindi ? 'टच-फ्री जेस्चर गाइड' : 'TOUCH-FREE GESTURE GUIDE'}</span>
         </div>
 
         {/* Animated Hand Demonstration Showing Index Finger */}
-        <div className="relative w-40 h-36 mx-auto bg-paper-shadow/60 rounded-2xl border-2 border-brass/40 flex items-center justify-center overflow-hidden shadow-inner">
+        <div className="relative w-40 h-32 mx-auto bg-paper-shadow/60 rounded-2xl border-2 border-brass/40 flex items-center justify-center overflow-hidden shadow-inner">
           <div className="relative animate-hand-wave">
-            <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-black text-white font-mono text-[10px] font-black rounded tracking-wider shadow">
-              INDEX FINGER ☝️
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-black text-white font-mono text-[9px] font-black rounded tracking-wider shadow">
+              INDEX ☝️ & PALM ✋
             </div>
 
             <svg
               viewBox="0 0 100 120"
-              className="w-24 h-24 stroke-ink-teal fill-transparent"
+              className="w-20 h-20 stroke-ink-teal fill-transparent"
               strokeWidth="2.5"
               strokeDasharray="4 3"
               strokeLinecap="round"
@@ -49,7 +49,7 @@ export const GestureTutorialOverlay: React.FC<GestureTutorialOverlayProps> = ({
             </svg>
           </div>
 
-          <div className="absolute bottom-1 inset-x-2 flex items-center justify-between text-[10px] font-mono font-bold text-ink-muted">
+          <div className="absolute bottom-1 inset-x-2 flex items-center justify-between text-[9px] font-mono font-bold text-ink-muted">
             <span className="flex items-center gap-0.5 text-care-blue-dark">
               <MoveLeft className="w-2.5 h-2.5" /> Prev
             </span>
@@ -67,7 +67,7 @@ export const GestureTutorialOverlay: React.FC<GestureTutorialOverlayProps> = ({
           <div className="flex items-center justify-between font-bold text-ink-teal">
             <div className="flex items-center gap-1.5">
               <span className="w-4 h-4 rounded-full bg-ink-teal text-paper flex items-center justify-center text-[9px] font-mono">1</span>
-              <span>{isHindi ? '👈 / 👉 उंगली बाएं या दाएं हिलाएं' : '👈 / 👉 Point Finger Left / Right'}</span>
+              <span>{isHindi ? '👈 / 👉 उंगली बाएं/दाएं हिलाएं' : '👈 / 👉 Point Finger Left / Right'}</span>
             </div>
             <span className="text-[10px] text-coral font-mono uppercase">Turn Page</span>
           </div>
@@ -75,7 +75,7 @@ export const GestureTutorialOverlay: React.FC<GestureTutorialOverlayProps> = ({
           <div className="flex items-center justify-between font-bold text-ink-teal">
             <div className="flex items-center gap-1.5">
               <span className="w-4 h-4 rounded-full bg-ink-teal text-paper flex items-center justify-center text-[9px] font-mono">2</span>
-              <span>{isHindi ? '👆 / 👇 उंगली ऊपर या नीचे हिलाएं' : '👆 / 👇 Point Finger Up / Down'}</span>
+              <span>{isHindi ? '👆 / 👇 उंगली ऊपर/नीचे हिलाएं' : '👆 / 👇 Point Finger Up / Down'}</span>
             </div>
             <span className="text-[10px] text-care-blue-dark font-mono uppercase">Change Kit</span>
           </div>
@@ -83,9 +83,17 @@ export const GestureTutorialOverlay: React.FC<GestureTutorialOverlayProps> = ({
           <div className="flex items-center justify-between font-bold text-ink-teal">
             <div className="flex items-center gap-1.5">
               <span className="w-4 h-4 rounded-full bg-ink-teal text-paper flex items-center justify-center text-[9px] font-mono">3</span>
-              <span>{isHindi ? '☝️ उंगली 1 सेकंड रोकें (Still Hold)' : '☝️ Hold Finger Still (1s)'}</span>
+              <span>{isHindi ? '☝️ उंगली 1 सेकंड रोकें' : '☝️ Hold Hand Still (1s)'}</span>
             </div>
             <span className="text-[10px] text-mineral-green-dark font-mono uppercase">Play Audio</span>
+          </div>
+
+          <div className="flex items-center justify-between font-bold text-ink-teal border-t border-brass/20 pt-1">
+            <div className="flex items-center gap-1.5">
+              <span className="w-4 h-4 rounded-full bg-amber-500 text-paper flex items-center justify-center text-[9px] font-mono">4</span>
+              <span>{isHindi ? '✋➜✊ हथेली खोलें फिर बंद करें' : '✋➜✊ Open Palm then Fist'}</span>
+            </div>
+            <span className="text-[10px] text-amber-600 font-mono uppercase">Shift+Tab</span>
           </div>
         </div>
 

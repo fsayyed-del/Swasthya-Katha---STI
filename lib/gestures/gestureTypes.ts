@@ -1,4 +1,4 @@
-export type GestureDirection = 'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | 'none';
+export type GestureDirection = 'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | 'fist' | 'none';
 
 export interface HandLandmarkPoint {
   x: number;
@@ -10,9 +10,12 @@ export interface HandLandmarkPoint {
 }
 
 export type CameraGestureCommand =
-  | { type: 'GESTURE_COMMIT'; direction: 'forward' | 'backward'; source?: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' }
+  | { type: 'GESTURE_COMMIT'; direction: 'forward' | 'backward'; source?: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | 'fist' }
   | { type: 'GESTURE_CYCLE_OPTION'; direction: 'next' | 'prev' }
   | { type: 'GESTURE_AUDIO_TOGGLE' }
+  | { type: 'GESTURE_FOCUS_TOGGLE'; active?: boolean }
+  | { type: 'GESTURE_FOCUS_SELECT' }
+  | { type: 'GESTURE_FOCUS_NAVIGATE'; direction: 'next' | 'prev' }
   | { type: 'CAMERA_READY' }
   | { type: 'CAMERA_STOP' }
   | { type: 'CAMERA_ERROR'; error: string };
@@ -26,7 +29,7 @@ export interface SwipeObservation {
   confidence: number;
   durationMs: number;
   direction: GestureDirection;
-  source: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | 'none';
+  source: 'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | 'fist' | 'none';
 }
 
 export type CameraGestureState =

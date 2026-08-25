@@ -29,6 +29,9 @@ interface BookStoreState {
   dismissDragHint: () => void;
 }
 
+let lastTurnTimestamp = 0;
+const TURN_ANIMATION_LOCK_MS = 750; // Strictly matching CSS 3D turn duration (700ms) to prevent double page flips
+
 export const useBookStore = create<BookStoreState>((set, get) => ({
   currentLeafIndex: 0,
   totalLeaves: 8, // Exactly 8 physical leaves = 16 rich pages (Cover to Back Cover)
@@ -50,7 +53,12 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
   },
 
   nextLeaf: () => {
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    if (now - lastTurnTimestamp < TURN_ANIMATION_LOCK_MS) {
+      return; // Locked during ongoing page turn animation
+    }
     if (get().currentLeafIndex < get().totalLeaves) {
+      lastTurnTimestamp = now;
       playPageTurnSound();
       const nextIdx = get().currentLeafIndex + 1;
       set({ currentLeafIndex: nextIdx, turnDirection: 'forward' });
@@ -58,7 +66,12 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
   },
 
   prevLeaf: () => {
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    if (now - lastTurnTimestamp < TURN_ANIMATION_LOCK_MS) {
+      return; // Locked during ongoing page turn animation
+    }
     if (get().currentLeafIndex > 0) {
+      lastTurnTimestamp = now;
       playPageTurnSound();
       const prevIdx = get().currentLeafIndex - 1;
       set({ currentLeafIndex: prevIdx, turnDirection: 'backward' });

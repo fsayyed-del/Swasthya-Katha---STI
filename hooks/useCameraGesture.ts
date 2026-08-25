@@ -14,23 +14,32 @@ export interface UseCameraGestureOptions {
 export function useCameraGesture({
   enabled,
   onCommand,
-  cooldownMs = 550,
+  cooldownMs = 800,
 }: UseCameraGestureOptions) {
   const [state, setState] = useState<CameraGestureState>('CAMERA_OFF');
-  const [lastDirection, setLastDirection] = useState<'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | null>(null);
-  const [lastSource, setLastSource] = useState<'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | null>(null);
+  const [lastDirection, setLastDirection] = useState<'forward' | 'backward' | 'up' | 'down' | 'hold' | 'point' | 'fist' | null>(null);
+  const [lastSource, setLastSource] = useState<'swipe' | 'tilt' | 'vertical' | 'hold' | 'point' | 'fist' | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const smootherRef = useRef(new LandmarkSmoother(0.6));
-  const classifierRef = useRef(new SwipeClassifier(220, 0.06, 0.00025));
+  const smootherRef = useRef(new LandmarkSmoother(0.55));
+  const classifierRef = useRef(new SwipeClassifier(240, 0.08, 0.0003));
   const lastCommitTimeRef = useRef(0);
   const isNeutralArmedRef = useRef(true);
+
+  // Focus Mode state (Shift+Tab touch-free control)
+  const isFocusModeActiveRef = useRef(false);
 
   // Deliberate Hand Raise tracking for Audio Palm Hold
   const hasHandMovedRecentlyRef = useRef(false);
   const palmHoldStartTimeRef = useRef<number | null>(null);
   const palmHoldPosRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Open Palm to Fist Pulse Tracker (for Focus Mode toggle & Selection)
+  const wasPalmOpenRef = useRef(false);
+  const palmOpenTimestampRef = useRef(0);
+  const lastPulseTimeRef = useRef(0);
+  const pulsePendingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const stopCamera = useCallback(() => {
     if (videoRef.current && videoRef.current.srcObject) {
@@ -166,17 +175,64 @@ export function useCameraGesture({
             }
 
             // Settle / Re-arm check
-            if (motionPixelCount < 14 && now - lastCommitTimeRef.current > cooldownMs) {
+            if (motionPixelCount < 12 && now - lastCommitTimeRef.current > cooldownMs) {
               isNeutralArmedRef.current = true;
             }
 
-            // 1. DELIBERATE PALM HOLD AUDIO TOGGLE:
-            // Requires that hand was raised/moved, then held completely still in frame
-            if (skinPixelCount >= 220 && hasHandMovedRecentlyRef.current) {
+            // 1. OPEN PALM TO FIST TRANSITION DETECTION (✋ ➜ ✊)
+            if (skinPixelCount >= 230) {
+              wasPalmOpenRef.current = true;
+              palmOpenTimestampRef.current = now;
+            } else if (
+              wasPalmOpenRef.current &&
+              skinPixelCount <= 140 &&
+              now - palmOpenTimestampRef.current <= 600 &&
+              now - lastCommitTimeRef.current > 450
+            ) {
+              // Registered Open Palm -> Close Fist transition
+              wasPalmOpenRef.current = false;
+              lastCommitTimeRef.current = now;
+              setLastDirection('fist');
+              setLastSource('fist');
+
+              const timeSinceLastPulse = now - lastPulseTimeRef.current;
+              lastPulseTimeRef.current = now;
+
+              if (!isFocusModeActiveRef.current) {
+                // Focus mode is OFF -> Activate Focus Mode
+                isFocusModeActiveRef.current = true;
+                onCommand({ type: 'GESTURE_FOCUS_TOGGLE', active: true });
+                window.dispatchEvent(new CustomEvent('gesture:focus-mode-toggle', { detail: { active: true } }));
+              } else {
+                // Focus mode is ON: Check single vs double pulse
+                if (timeSinceLastPulse < 1200) {
+                  // Double Pulse -> Exit Focus Mode
+                  if (pulsePendingTimerRef.current) {
+                    clearTimeout(pulsePendingTimerRef.current);
+                    pulsePendingTimerRef.current = null;
+                  }
+                  isFocusModeActiveRef.current = false;
+                  onCommand({ type: 'GESTURE_FOCUS_TOGGLE', active: false });
+                  window.dispatchEvent(new CustomEvent('gesture:focus-mode-toggle', { detail: { active: false } }));
+                } else {
+                  // Single Pulse -> Select / Click focused item
+                  pulsePendingTimerRef.current = setTimeout(() => {
+                    if (isFocusModeActiveRef.current) {
+                      onCommand({ type: 'GESTURE_FOCUS_SELECT' });
+                      window.dispatchEvent(new CustomEvent('gesture:focus-select'));
+                    }
+                    pulsePendingTimerRef.current = null;
+                  }, 400);
+                }
+              }
+            }
+
+            // 2. DELIBERATE PALM HOLD AUDIO TOGGLE (Only when not in focus mode)
+            if (!isFocusModeActiveRef.current && skinPixelCount >= 220 && hasHandMovedRecentlyRef.current) {
               const palmMeanX = skinSumX / skinPixelCount / width;
               const palmMeanY = skinSumY / skinPixelCount / height;
 
-              if (motionPixelCount < 18) {
+              if (motionPixelCount < 16) {
                 if (!palmHoldStartTimeRef.current) {
                   palmHoldStartTimeRef.current = now;
                   palmHoldPosRef.current = { x: palmMeanX, y: palmMeanY };
@@ -200,7 +256,7 @@ export function useCameraGesture({
               palmHoldStartTimeRef.current = null;
             }
 
-            // 2. DYNAMIC INDEX FINGER 4-WAY NAVIGATION (Left, Right, Up, Down)
+            // 3. DYNAMIC INDEX FINGER NAVIGATION
             if (motionPixelCount >= 20) {
               const meanX = motionSumX / motionPixelCount / width;
               const meanY = motionSumY / motionPixelCount / height;
@@ -214,23 +270,31 @@ export function useCameraGesture({
               const obs = classifierRef.current.classify();
               const timeSinceCommit = now - lastCommitTimeRef.current;
 
-              if (obs.direction !== 'none' && obs.confidence >= 0.55 && isNeutralArmedRef.current && timeSinceCommit > cooldownMs) {
+              if (obs.direction !== 'none' && obs.confidence >= 0.6 && isNeutralArmedRef.current && timeSinceCommit > cooldownMs) {
                 lastCommitTimeRef.current = now;
                 isNeutralArmedRef.current = false;
                 palmHoldStartTimeRef.current = null;
                 setLastDirection(obs.direction);
                 setLastSource(obs.source === 'none' ? null : obs.source);
 
-                if (obs.direction === 'forward' || obs.direction === 'backward') {
-                  onCommand({
-                    type: 'GESTURE_COMMIT',
-                    direction: obs.direction,
-                    source: obs.source === 'none' ? undefined : obs.source,
-                  });
-                } else if (obs.direction === 'up' || obs.direction === 'down') {
-                  const cycleDir = obs.direction === 'up' ? 'next' : 'prev';
-                  onCommand({ type: 'GESTURE_CYCLE_OPTION', direction: cycleDir });
-                  window.dispatchEvent(new CustomEvent('gesture:cycle-option', { detail: { direction: cycleDir } }));
+                if (isFocusModeActiveRef.current) {
+                  // In Focus Mode: Hand motions navigate Shift+Tab focus
+                  const navDir = obs.direction === 'forward' || obs.direction === 'down' ? 'next' : 'prev';
+                  onCommand({ type: 'GESTURE_FOCUS_NAVIGATE', direction: navDir });
+                  window.dispatchEvent(new CustomEvent('gesture:focus-navigate', { detail: { direction: navDir } }));
+                } else {
+                  // Normal Reading Mode: Page flips & option cycles
+                  if (obs.direction === 'forward' || obs.direction === 'backward') {
+                    onCommand({
+                      type: 'GESTURE_COMMIT',
+                      direction: obs.direction,
+                      source: obs.source === 'none' ? undefined : obs.source,
+                    });
+                  } else if (obs.direction === 'up' || obs.direction === 'down') {
+                    const cycleDir = obs.direction === 'up' ? 'next' : 'prev';
+                    onCommand({ type: 'GESTURE_CYCLE_OPTION', direction: cycleDir });
+                    window.dispatchEvent(new CustomEvent('gesture:cycle-option', { detail: { direction: cycleDir } }));
+                  }
                 }
 
                 classifierRef.current.clear();

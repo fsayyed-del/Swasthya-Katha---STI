@@ -9,6 +9,7 @@ import { QuickExitButton } from '../ui/QuickExitButton';
 import { ReadingSettingsModal, ReadingSettings } from '../ui/ReadingSettingsModal';
 import { CameraStatusIndicator } from '../camera/CameraStatusIndicator';
 import { GestureTutorialOverlay } from '../camera/GestureTutorialOverlay';
+import { TouchFreeFocusController } from '../camera/TouchFreeFocusController';
 import { MediumAudioPlayerBar } from '../audio/MediumAudioPlayerBar';
 import { useCameraGesture } from '@/hooks/useCameraGesture';
 import { useBookStore } from '@/lib/state/bookStore';
@@ -147,6 +148,9 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
           />
         )}
       </main>
+
+      {/* Touch-Free Full Focus (Shift+Tab) Controller Overlay */}
+      <TouchFreeFocusController locale={locale} />
 
       {/* Medium-Style Live Karaoke Audio Player Bar */}
       <MediumAudioPlayerBar locale={locale} />

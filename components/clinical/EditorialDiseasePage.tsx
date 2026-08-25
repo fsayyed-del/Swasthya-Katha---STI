@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Locale } from '@/src/domain/content/schema';
 import { ShieldCheck } from 'lucide-react';
+import { SoundButton } from '../portrait/SoundButton';
 
 export interface ClinicalPhotoItem {
   id: string;
@@ -43,6 +44,8 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
   const maleDetails = data.maleDetails[locale] || data.maleDetails.en;
   const femaleDetails = data.femaleDetails[locale] || data.femaleDetails.en;
 
+  const audioScriptText = `${title}. ${overview} ${isHindi ? 'पुरुषों में लक्षण:' : 'Male Findings:'} ${maleDetails} ${isHindi ? 'महिलाओं में लक्षण:' : 'Female Findings:'} ${femaleDetails}`;
+
   return (
     <div className="w-full h-full p-3 sm:p-4 md:p-5 flex flex-col justify-between select-none overflow-hidden text-ink bg-paper">
       {/* Top Editorial Header */}
@@ -70,7 +73,7 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
           <p>{overview}</p>
         </div>
 
-        {/* Dual Clinical Images Grid (Male & Female side-by-side with CDC Citations) */}
+        {/* Dual Clinical Images Grid (Male & Female side-by-side with Canonical Citations) */}
         <div className="grid grid-cols-2 gap-2">
           {data.photos.slice(0, 2).map((photo) => (
             <div
@@ -133,13 +136,16 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
         </div>
       </div>
 
-      {/* Editorial Footer */}
+      {/* Editorial Footer with Sound Button */}
       <div className="pt-1 border-t border-brass/30 flex items-center justify-between text-[9px] sm:text-[10px] text-ink-muted font-mono font-medium shrink-0">
         <div className="flex items-center gap-1">
           <ShieldCheck className="w-3 h-3 text-mineral-green" />
           <span>Suraksha Clinic Syndromic Standard</span>
         </div>
-        <span>{pageNumber ? `Page 0${pageNumber}` : ''}</span>
+        <div className="flex items-center gap-3">
+          <SoundButton textToSpeak={audioScriptText} locale={locale} pageNumber={pageNumber} />
+          <span className="font-bold text-brass">{pageNumber ? `Page 0${pageNumber}` : ''}</span>
+        </div>
       </div>
     </div>
   );
