@@ -52,20 +52,20 @@ export const Page06MythFact: React.FC<Page06MythFactProps> = ({ locale }) => {
       locale={locale}
     >
       {/* Top Header */}
-      <div>
-        <div className="text-xs font-bold text-coral-dark uppercase tracking-widest border-b border-brass/30 pb-1">
+      <div className="shrink-0">
+        <div className="text-[10px] font-bold text-coral-dark uppercase tracking-widest border-b border-brass/30 pb-0.5">
           {page.eyebrow?.[locale] || page.eyebrow?.en}
         </div>
-        <h2 className="text-2xl sm:text-3xl font-black font-display text-ink-teal mt-1">
+        <h2 className="text-xl sm:text-2xl font-black font-display text-ink-teal mt-0.5">
           {page.title[locale] || page.title.en}
         </h2>
-        <p className="text-xs sm:text-sm text-ink-muted mt-0.5 font-medium">
+        <p className="text-[10.5px] sm:text-xs text-ink-muted mt-0.5 font-medium">
           {page.subheading?.[locale] || page.subheading?.en}
         </p>
       </div>
 
       {/* 3 Interactive 3D Flip Comparison Cards */}
-      <div className="space-y-2.5 pt-1">
+      <div className="space-y-1.5 flex-1 flex flex-col justify-between overflow-hidden my-auto py-0.5">
         {cards.map((c) => (
           <MythFactFlipCard
             key={c.idx}
