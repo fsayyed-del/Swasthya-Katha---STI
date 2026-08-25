@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Locale } from '@/src/domain/content/schema';
 import { PORTRAIT_BOOK_PAGES } from '@/content/portrait-pages/portrait-manifest';
 import { PageSurface } from '../PageSurface';
-import { Users, Pill, Stethoscope, ShieldCheck, Sparkles, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+import { Users, Pill, Stethoscope, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface Page05KitCabinetProps {
   locale: Locale;
@@ -24,6 +24,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'ग्रे (Grey)' : 'Grey',
       color: '#4A5568',
       textColor: '#FFFFFF',
+      bgTint: 'rgba(74, 85, 104, 0.09)',
+      borderColor: 'rgba(74, 85, 104, 0.4)',
       syndromeShort: isHindi ? 'स्राव व जलन' : 'Discharge',
       syndrome: isHindi ? 'मूत्रमार्ग / ग्रीवा स्राव एवं अंडकोष सूजन' : 'Urethral & Cervical Discharge, Scrotal Swelling',
       indications: isHindi
@@ -46,6 +48,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'हरा (Green)' : 'Green',
       color: '#2F855A',
       textColor: '#FFFFFF',
+      bgTint: 'rgba(47, 133, 90, 0.10)',
+      borderColor: 'rgba(47, 133, 90, 0.45)',
       syndromeShort: isHindi ? 'योनि स्राव' : 'Vaginitis',
       syndrome: isHindi ? 'योनि स्राव एवं तीव्र खुजली (Vaginitis)' : 'Vaginal Discharge Syndrome (Vaginitis)',
       indications: isHindi
@@ -66,8 +70,10 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       code: 'Kit 3',
       name: isHindi ? 'किट 3: सफेद' : 'Kit 3: White',
       colorName: isHindi ? 'सफेद (White)' : 'White',
-      color: '#E2E8F0',
+      color: '#CBD5E0',
       textColor: '#1A202C',
+      bgTint: 'rgba(203, 213, 224, 0.28)',
+      borderColor: 'rgba(160, 174, 192, 0.55)',
       syndromeShort: isHindi ? 'दर्द-रहित घाव' : 'GUD Syphilis',
       syndrome: isHindi ? 'दर्द-रहित जननांग घाव (सिफलिस व चैनक्रॉइड)' : 'Non-Herpetic Genital Ulcers (Syphilis & Chancroid)',
       indications: isHindi
@@ -90,6 +96,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'नीला (Blue)' : 'Blue',
       color: '#2B6CB0',
       textColor: '#FFFFFF',
+      bgTint: 'rgba(43, 108, 176, 0.10)',
+      borderColor: 'rgba(43, 108, 176, 0.45)',
       syndromeShort: isHindi ? 'पेनिसिलिन एलर्जी' : 'Penicillin Allergy',
       syndrome: isHindi ? 'पेनिसिलिन एलर्जी वाले जननांग घाव' : 'Genital Ulcers (Penicillin Allergic Patients)',
       indications: isHindi
@@ -112,6 +120,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'लाल (Red)' : 'Red',
       color: '#C53030',
       textColor: '#FFFFFF',
+      bgTint: 'rgba(197, 48, 48, 0.10)',
+      borderColor: 'rgba(197, 48, 48, 0.45)',
       syndromeShort: isHindi ? 'हर्पीस छाले' : 'Herpes Ulcers',
       syndrome: isHindi ? 'दर्दनाक छाले एवं जननांग हर्पीस (HSV-2)' : 'Herpetic Genital Ulcers (Genital Herpes)',
       indications: isHindi
@@ -133,6 +143,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'पीला (Yellow)' : 'Yellow',
       color: '#D69E2E',
       textColor: '#1A202C',
+      bgTint: 'rgba(214, 158, 46, 0.14)',
+      borderColor: 'rgba(214, 158, 46, 0.5)',
       syndromeShort: isHindi ? 'पेट दर्द PID' : 'Lower Abdomen PID',
       syndrome: isHindi ? 'पेट के निचले हिस्से में दर्द (PID)' : 'Lower Abdominal Pain (LAP) / PID',
       indications: isHindi
@@ -156,6 +168,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'काला (Black)' : 'Black',
       color: '#1A202C',
       textColor: '#FFFFFF',
+      bgTint: 'rgba(26, 32, 44, 0.10)',
+      borderColor: 'rgba(26, 32, 44, 0.45)',
       syndromeShort: isHindi ? 'गिल्टी सूजन' : 'Inguinal Bubo',
       syndrome: isHindi ? 'जांघ की गिल्टी में सूजन (बूबो) एवं LGV' : 'Inguinal Bubo & LGV Proctitis',
       indications: isHindi
@@ -178,6 +192,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       colorName: isHindi ? 'भूरा (Brown)' : 'Brown',
       color: '#7B341E',
       textColor: '#FFFFFF',
+      bgTint: 'rgba(123, 52, 30, 0.11)',
+      borderColor: 'rgba(123, 52, 30, 0.45)',
       syndromeShort: isHindi ? 'एनोरेक्टल स्राव' : 'Anorectal Discharge',
       syndrome: isHindi ? 'एनोरेक्टल स्राव सिंड्रोम (Anorectal Discharge)' : 'Anorectal Discharge Syndrome',
       indications: isHindi
@@ -223,8 +239,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
       audioScriptText={`${activeKit.name}. ${activeKit.syndrome}. ${isHindi ? 'पहचान:' : 'Signs:'} ${activeKit.indications.join(', ')}. ${isHindi ? 'दवाएं:' : 'Regimen:'} ${activeKit.drugs.map((d) => `${d.name} (${d.dose})`).join(' + ')}. ${activeKit.partnerProtocol}`}
       locale={locale}
     >
-      {/* Top Header Section */}
-      <div className="flex items-center justify-between border-b border-brass/40 pb-1 shrink-0">
+      {/* Top Header Section with Clean Spacing */}
+      <div className="flex items-center justify-between border-b border-brass/40 pb-1 shrink-0 mb-1">
         <div>
           <div className="text-[9px] sm:text-[10px] font-mono font-bold text-care-blue-dark uppercase tracking-widest flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-amber-500" />
@@ -241,8 +257,8 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
         </div>
       </div>
 
-      {/* 8-Kit Interactive Pouch Shelf Selector */}
-      <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 py-1 shrink-0">
+      {/* 8-Kit Interactive Pouch Shelf Selector (Adequate Top Margin) */}
+      <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 my-1 shrink-0">
         {kits.map((k) => {
           const isSelected = selectedKit === k.id;
           return (
@@ -272,10 +288,16 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
         })}
       </div>
 
-      {/* Master 3D Sealed Kit Inspection Spec-Sheet */}
-      <div className="flex-1 flex flex-col justify-between bg-paper-shadow/50 border-2 border-brass/40 rounded-2xl p-2.5 sm:p-3 space-y-1.5 overflow-hidden my-auto shadow-sm">
+      {/* Master 3D Sealed Kit Inspection Spec-Sheet with Dynamic Color Background Tint */}
+      <div
+        className="flex-1 flex flex-col justify-between border-2 rounded-2xl p-2.5 sm:p-3 space-y-1.5 overflow-hidden my-auto shadow-sm transition-colors duration-300"
+        style={{
+          backgroundColor: activeKit.bgTint,
+          borderColor: activeKit.borderColor,
+        }}
+      >
         {/* Top Pouch Banner with Authentic Packaging Emblems */}
-        <div className="flex items-center justify-between border-b border-brass/30 pb-1.5 shrink-0">
+        <div className="flex items-center justify-between border-b border-black/10 pb-1.5 shrink-0">
           <div className="flex items-center gap-2">
             {/* Sealed Color Badge */}
             <div
@@ -299,9 +321,9 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
         {/* 2-Column Clinical Representation Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1 overflow-hidden">
           {/* Left Column: Clinical Signs & Symptoms */}
-          <div className="bg-paper p-2 rounded-xl border border-brass/30 flex flex-col justify-between shadow-xs">
+          <div className="bg-paper/90 backdrop-blur-xs p-2 rounded-xl border border-black/10 flex flex-col justify-between shadow-xs">
             <div>
-              <div className="flex items-center gap-1.5 text-[9.5px] font-bold text-ink-teal uppercase tracking-wider border-b border-brass/20 pb-1 mb-1">
+              <div className="flex items-center gap-1.5 text-[9.5px] font-bold text-ink-teal uppercase tracking-wider border-b border-black/10 pb-1 mb-1">
                 <Stethoscope className="w-3.5 h-3.5 text-mineral-green shrink-0" />
                 <span>{isHindi ? 'लक्षण पहचान (Signs & Symptoms)' : 'Clinical Indications & Signs'}:</span>
               </div>
@@ -317,15 +339,15 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
           </div>
 
           {/* Right Column: Certified Drug Regimen */}
-          <div className="bg-paper p-2 rounded-xl border border-brass/30 flex flex-col justify-between shadow-xs">
+          <div className="bg-paper/90 backdrop-blur-xs p-2 rounded-xl border border-black/10 flex flex-col justify-between shadow-xs">
             <div>
-              <div className="flex items-center gap-1.5 text-[9.5px] font-bold text-coral-dark uppercase tracking-wider border-b border-brass/20 pb-1 mb-1">
+              <div className="flex items-center gap-1.5 text-[9.5px] font-bold text-coral-dark uppercase tracking-wider border-b border-black/10 pb-1 mb-1">
                 <Pill className="w-3.5 h-3.5 text-coral shrink-0" />
                 <span>{isHindi ? 'दवा संरचना (Composition)' : 'Certified Drug Regimen'}:</span>
               </div>
               <div className="space-y-1">
                 {activeKit.drugs.map((drug, i) => (
-                  <div key={i} className="bg-paper-shadow/60 p-1.5 rounded-lg border border-brass/20">
+                  <div key={i} className="bg-white/80 p-1.5 rounded-lg border border-black/5">
                     <div className="font-mono font-bold text-[9.5px] sm:text-[10px] text-ink-teal leading-tight">
                       {drug.name}
                     </div>
@@ -340,7 +362,7 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
         </div>
 
         {/* Mandatory Partner Management Banner */}
-        <div className="bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-amber-500/15 border border-amber-500/35 p-1.5 rounded-xl flex items-center justify-between gap-2 shrink-0">
+        <div className="bg-amber-500/15 border border-amber-500/35 p-1.5 rounded-xl flex items-center justify-between gap-2 shrink-0">
           <div className="flex items-center gap-1.5">
             <Users className="w-4 h-4 text-amber-800 shrink-0" />
             <div className="text-[9px] sm:text-[10px] text-ink leading-tight">
