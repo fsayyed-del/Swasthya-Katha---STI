@@ -107,7 +107,7 @@ export const Page01Gestures: React.FC<Page01GesturesProps> = ({ locale, onOpenCa
 
       {/* Footer Hint */}
       <div className="border-t border-brass/30 pt-1 text-center text-[10px] text-ink-muted font-mono">
-        <span>Swasthya Katha Universal Interaction Standard</span>
+        <span>{isHindi ? 'राष्ट्रीय सिंड्रोमिक दिशानिर्देश • NACO 2026' : 'National Syndromic Guidelines • NACO 2026'}</span>
       </div>
     </PageSurface>
   );

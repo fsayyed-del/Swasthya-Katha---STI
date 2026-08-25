@@ -24,8 +24,8 @@ export const NonDiagnosticDisclaimer: React.FC<NonDiagnosticDisclaimerProps> = (
         <ShieldAlert className="w-4 h-4 text-coral shrink-0" />
         <span>
           {isHindi
-            ? 'गैर-निदान प्रकटीकरण (Non-Diagnostic Disclaimer)'
-            : 'Non-Diagnostic Education Standard'}
+            ? 'क्लिनिकल मार्गदर्शन सूचना (Educational Notice)'
+            : 'Clinical Educational Notice'}
         </span>
       </div>
 

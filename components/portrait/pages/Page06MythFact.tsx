@@ -106,7 +106,7 @@ export const Page06MythFact: React.FC<Page06MythFactProps> = ({ locale }) => {
               : 'Accurate scientific awareness is the strongest shield against stigma and misinformation.'}
           </span>
         </span>
-        <span className="font-bold text-[#A84833] shrink-0">NACO Certified</span>
+        <span className="font-bold text-[#A84833] shrink-0">{isHindi ? 'NACO दिशानिर्देश' : 'NACO Guidelines'}</span>
       </div>
     </PageSurface>
   );

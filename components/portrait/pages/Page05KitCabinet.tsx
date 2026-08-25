@@ -244,7 +244,7 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
         <div>
           <div className="text-[9px] sm:text-[10px] font-mono font-bold text-care-blue-dark uppercase tracking-widest flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-amber-500" />
-            <span>{isHindi ? 'NACO 2025/2026 राष्ट्रीय सिंड्रोमिक मानक' : 'NACO 2025/2026 CLINICAL STANDARDS'}</span>
+            <span>{isHindi ? 'NACO राष्ट्रीय सिंड्रोमिक दिशानिर्देश' : 'NACO National Syndromic Guidelines'}</span>
           </div>
           <h2 className="text-base sm:text-lg font-black font-display text-ink-teal leading-tight">
             {isHindi ? 'NACO कलर-कोडेड किट गाइड (8 किट)' : 'NACO Color-Coded STI Treatment Kits'}
@@ -253,7 +253,7 @@ export const Page05KitCabinet: React.FC<Page05KitCabinetProps> = ({ locale }) =>
 
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-mineral-green/15 border border-mineral-green/30 text-[9px] font-bold text-mineral-green-dark">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Suraksha Standard</span>
+          <span>{isHindi ? 'NACO SCM दिशानिर्देश' : 'NACO SCM Guidelines'}</span>
         </div>
       </div>
 
