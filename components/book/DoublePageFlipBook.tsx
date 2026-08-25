@@ -221,7 +221,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
       {currentLeafIndex > 0 && (
         <button
           onClick={() => prevLeaf()}
-          className="hidden md:flex fixed left-4 lg:left-8 top-1/2 -translate-y-1/2 z-50 p-3.5 rounded-full bg-ink-teal/90 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
+          className="!hidden md:!flex fixed left-4 lg:left-8 top-1/2 -translate-y-1/2 z-50 p-3.5 rounded-full bg-ink-teal/90 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
           aria-label="Previous Page"
           title="Previous Page (←)"
         >
@@ -233,7 +233,7 @@ export const DoublePageFlipBook: React.FC<DoublePageFlipBookProps> = ({
       {currentLeafIndex < totalLeaves && (
         <button
           onClick={() => nextLeaf()}
-          className="hidden md:flex fixed right-4 lg:right-8 top-1/2 -translate-y-1/2 z-50 p-3.5 rounded-full bg-ink-teal/90 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
+          className="!hidden md:!flex fixed right-4 lg:right-8 top-1/2 -translate-y-1/2 z-50 p-3.5 rounded-full bg-ink-teal/90 hover:bg-ink-teal text-paper shadow-2xl backdrop-blur-sm border-2 border-brass/60 transition-all hover:scale-110 active:scale-95"
           aria-label="Next Page"
           title="Next Page (→)"
         >
