@@ -39,12 +39,13 @@ echo   [4] 🇮🇳 Generate Hindi Movie Recap (25-30 Min Full Story Breakdown)
 echo   [5] 🎬 Generate 10-20 Min Long-Form Deep Dive / Documentary
 echo   [6] 💎 Generate Matt Parr High-RPM Pillar ($35-$80 CPM)
 echo   [7] 💸 MoneyPrinterTurbo Video (Google AI Studio + Audio Ducking)
-echo   [8] 🖥️ Open Graphical Control Center Window (GUI)
-echo   [9] ❌ Exit
+echo   [8] 👶 US/Global Kids & Toddler Learning Video (Cocomelon / Infobells)
+echo   [9] 🖥️ Open Graphical Control Center Window (GUI)
+echo   [0] ❌ Exit
 echo.
 echo ===============================================================================
 
-choice /c 123456789 /n /m "Press a number (1-9): "
+choice /c 1234567890 /n /m "Press a number (0-9): "
 set opt=%errorlevel%
 
 if "%opt%"=="1" goto opt1
@@ -56,6 +57,7 @@ if "%opt%"=="6" goto opt6
 if "%opt%"=="7" goto opt7
 if "%opt%"=="8" goto opt8
 if "%opt%"=="9" goto opt9
+if "%opt%"=="10" goto opt0
 
 :opt1
 cls
@@ -92,8 +94,8 @@ exit /b
 
 :opt4
 cls
-echo >> Crawling Target Channels (Movies Insight, Climax Explained, Cinema Shaukeens) & Producing 8-Min Story...
-python scripts\target_channel_movie_crawler.py --duration 8
+echo >> Crawling Target Channels & Producing 25-30 Min Cinema Story...
+python scripts\target_channel_movie_crawler.py --duration 25
 echo.
 echo ===============================================================================
 echo  Video Generation Complete!
@@ -136,9 +138,20 @@ exit /b
 
 :opt8
 cls
+echo >> Generating US/Global Kids Learning Video (Cocomelon & Infobells Style)...
+python scripts\kids_animation_engine.py --category learning --duration 3
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt9
+cls
 echo >> Launching Graphical Control Center...
 start "" python scripts\desktop_dashboard.py
 exit /b
 
-:opt9
+:opt0
 exit /b

@@ -57,6 +57,11 @@ PIPELINES = [
         "name": "🔥 Viral Top-5 Ranking Countdown Short",
         "script": "scripts/viral_ranking_shorts.py",
         "args": []
+    },
+    {
+        "name": "👶 US/Global Kids & Toddler Learning Video (Cocomelon/Infobells)",
+        "script": "scripts/kids_animation_engine.py",
+        "args": ["--category", "learning", "--duration", "3"]
     }
 ]
 
