@@ -251,15 +251,23 @@ def upload_to_youtube(video_path: str, title: str, description: str, tags: list,
     req = youtube.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
 
     res = None
-    while res is None:
-        status, res = req.next_chunk()
-        if status:
-            print(f"Uploading... {int(status.progress() * 100)}%", file=sys.stderr)
+    try:
+        while res is None:
+            status, res = req.next_chunk()
+            if status:
+                print(f"Uploading... {int(status.progress() * 100)}%", file=sys.stderr)
 
-    vid_id = res.get("id")
-    url = f"https://youtu.be/{vid_id}"
-    print(f">> LIVE on YouTube: {url}", file=sys.stderr)
-    return {"videoId": vid_id, "videoUrl": url}
+        vid_id = res.get("id")
+        url = f"https://youtu.be/{vid_id}"
+        print(f">> LIVE on YouTube: {url}", file=sys.stderr)
+        return {"videoId": vid_id, "videoUrl": url, "status": "uploaded"}
+    except Exception as e:
+        err_str = str(e)
+        if "uploadLimitExceeded" in err_str or "exceeded the number of videos" in err_str:
+            print(f"\n⚠️ YouTube Daily Upload Limit Reached: {e}", file=sys.stderr)
+            print(f"📁 Video successfully rendered and saved at: {video_path}", file=sys.stderr)
+            return {"videoId": None, "videoUrl": None, "localVideoPath": video_path, "status": "limit_reached_saved_locally"}
+        raise e
 
 def run_moneyprinterturbo_pipeline(topic="The Future of Autonomous AI Agents in 2026", is_portrait=True, duration_sec=45):
     print(f"\n=======================================================")

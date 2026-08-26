@@ -361,15 +361,24 @@ def publish_to_youtube(video_path: str, title: str, description: str, tags: list
     request = youtube.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
 
     response = None
-    while response is None:
-        status, response = request.next_chunk()
-        if status:
-            print(f"Uploading... {int(status.progress() * 100)}%", file=sys.stderr)
+    try:
+        while response is None:
+            status, response = request.next_chunk()
+            if status:
+                print(f"Uploading... {int(status.progress() * 100)}%", file=sys.stderr)
 
-    vid_id = response.get("id")
-    url = f"https://youtu.be/{vid_id}"
-    print(f"🎉 LIVE on YouTube: {url}", file=sys.stderr)
-    return {"videoId": vid_id, "videoUrl": url}
+        vid_id = response.get("id")
+        url = f"https://youtu.be/{vid_id}"
+        print(f"🎉 LIVE on YouTube: {url}", file=sys.stderr)
+        return {"videoId": vid_id, "videoUrl": url, "status": "uploaded"}
+    except Exception as e:
+        err_str = str(e)
+        if "uploadLimitExceeded" in err_str or "exceeded the number of videos" in err_str:
+            print(f"\n⚠️ YouTube Daily Upload Limit Reached: {e}", file=sys.stderr)
+            print(f"📁 Video successfully rendered and preserved locally at: {video_path}", file=sys.stderr)
+            print("⏳ Will automatically publish once YouTube resets daily upload quota.", file=sys.stderr)
+            return {"videoId": None, "videoUrl": None, "localVideoPath": video_path, "status": "limit_reached_saved_locally"}
+        raise e
 
 # ---------------------------------------------------------------------------
 # End-to-End Flagship Production
