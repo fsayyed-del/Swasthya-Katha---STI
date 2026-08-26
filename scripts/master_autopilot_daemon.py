@@ -88,11 +88,11 @@ def run_cycle():
         except Exception as e:
             log(f">> [CYCLE #{cycle_idx}] Error during execution: {e}")
 
-        interval_hours = 6
-        log(f">> Sleeping for {interval_hours} hours until next autonomous release cycle...")
-        for remaining in range(interval_hours * 3600, 0, -300):
-            time.sleep(300)
-            log(f"   [Heartbeat] Next video in {remaining // 60} minutes.")
+        interval_minutes = 60
+        log(f">> Cycle complete! Sleeping for {interval_minutes} minutes until next autonomous release cycle...")
+        for remaining in range(interval_minutes * 60, 0, -180):
+            time.sleep(min(180, remaining))
+            log(f"   [Heartbeat] Next high-RPM video in {remaining // 60} minutes.")
 
 if __name__ == "__main__":
     run_cycle()

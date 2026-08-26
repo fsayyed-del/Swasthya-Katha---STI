@@ -128,6 +128,75 @@ FLAGSHIP_STORIES = [
             "modern hospital patient medical recovery"
         ],
         "tags": ["medicalhistory", "sciencefacts", "penicillin", "discovery", "history", "shorts", "education"]
+    },
+    {
+        "niche": "Quantitative Trading & Wall Street Algorithms",
+        "cpm_tier": "$85 CPM",
+        "category_id": "28",
+        "title": "The 100-Line Python Script That Makes Wall Street Millions 📈 #Shorts",
+        "hook_first_5s": "High-frequency hedge funds pay millions for algorithms that execute trades in four hundred nanoseconds.",
+        "script": (
+            "High-frequency hedge funds pay millions for algorithms that execute trades in four hundred nanoseconds. "
+            "They run proprietary fiber optic cables straight through mountains between Chicago and New York to shave off three milliseconds. "
+            "Their mathematical models exploit microscopic price imbalances across global exchanges before human traders even see the order book. "
+            "A single automated arbitrage script can generate tens of millions in risk-free profit annually. "
+            "The entire global financial market is now governed by autonomous software code. "
+            "Subscribe to unlock how quantitative wealth systems dominate modern finance."
+        ),
+        "broll_queries": [
+            "stock market trading monitors wall street",
+            "fiber optic cable data server room",
+            "mathematical formulas algorithm data glowing",
+            "cryptocurrency trading graph quantitative finance",
+            "high frequency financial trading charts"
+        ],
+        "tags": ["quanttrading", "algorithmictrading", "finance", "python", "wallstreet", "software", "wealth", "shorts"]
+    },
+    {
+        "niche": "AI Energy Crisis & Nuclear Data Centers",
+        "cpm_tier": "$80 CPM",
+        "category_id": "28",
+        "title": "Why Tech Giants Are Secretly Buying Nuclear Power Plants ⚡ #Shorts",
+        "hook_first_5s": "Microsoft, Amazon, and Google are striking multibillion-dollar deals to restart nuclear reactors.",
+        "script": (
+            "Microsoft, Amazon, and Google are striking multibillion-dollar deals to restart decommissioned nuclear reactors. "
+            "A single next-generation AI training cluster consumes as much continuous electricity as a mid-sized city. "
+            "Traditional power grids are collapsing under the immense electrical load required by hundreds of thousands of AI GPUs. "
+            "To achieve continuous twenty-four-seven power without carbon emissions, Big Tech is investing in small modular nuclear reactors. "
+            "The future of artificial intelligence isn't just about code—it is an unprecedented global race for pure electrical energy. "
+            "Subscribe to uncover the massive infrastructure battles powering the AI age."
+        ),
+        "broll_queries": [
+            "nuclear power plant cooling towers energy",
+            "server room data center glowing blue",
+            "high voltage electricity power lines grid",
+            "artificial intelligence gpu server cluster",
+            "futuristic energy clean power technology"
+        ],
+        "tags": ["nuclearai", "bigtech", "microsoft", "energycrisis", "datacenter", "futuretech", "shorts", "business"]
+    },
+    {
+        "niche": "Enterprise AI Defense & Palantir Monopolies",
+        "cpm_tier": "$75 CPM",
+        "category_id": "28",
+        "title": "The Secret AI Defense Software Tracking Everything in Real Time 🛰️ #Shorts",
+        "hook_first_5s": "This single piece of software can predict military movements before generals give the order.",
+        "script": (
+            "This single piece of software can predict military movements before generals give the order. "
+            "It is Palantir Foundry, an AI intelligence operating system integrated into global defense, commercial aviation, and supply chains. "
+            "It aggregates satellite feeds, cellular triangulation, financial transactions, and drone telemetry into a real-time digital twin of Earth. "
+            "Governments and Fortune 100 corporations rely on its algorithmic predictions to make trillion-dollar strategic decisions. "
+            "The most powerful weapon of the twenty-first century is not kinetic—it is predictive intelligence. "
+            "Subscribe to investigate the classified software platforms reshaping global power."
+        ),
+        "broll_queries": [
+            "satellite orbit globe high tech surveillance",
+            "military command control center monitors",
+            "drone telemetry infrared aerial camera",
+            "cybersecurity data matrix digital intelligence",
+            "global network connections glowing earth"
+        ],
+        "tags": ["palantir", "defenseai", "intelligence", "geopolitics", "software", "techmonopoly", "shorts", "cyber"]
     }
 ]
 
@@ -429,6 +498,30 @@ def produce_flagship_video(story_index=0, privacy="public"):
     result = publish_to_youtube(master_video, story["title"], desc, story["tags"], category_id=story["category_id"], privacy=privacy)
     return result
 
+def get_next_story_index() -> int:
+    state_file = os.path.join(TEMP_DIR, "story_state.json")
+    idx = 0
+    try:
+        if os.path.exists(state_file):
+            with open(state_file, "r") as f:
+                idx = json.load(f).get("next_index", 0)
+    except Exception:
+        pass
+    next_idx = (idx + 1) % len(FLAGSHIP_STORIES)
+    try:
+        with open(state_file, "w") as f:
+            json.dump({"next_index": next_idx}, f)
+    except Exception:
+        pass
+    return idx
+
 if __name__ == "__main__":
-    res = produce_flagship_video(story_index=0, privacy="public")
+    import argparse
+    parser = argparse.ArgumentParser(description="Flagship High-RPM Video Producer")
+    parser.add_argument("--story", type=int, default=-1, help="Specific story index to produce")
+    parser.add_argument("--privacy", default="public", choices=["public", "unlisted", "private"])
+    args = parser.parse_args()
+
+    chosen_idx = args.story if args.story >= 0 else get_next_story_index()
+    res = produce_flagship_video(story_index=chosen_idx, privacy=args.privacy)
     print(json.dumps(res, indent=2))
