@@ -116,7 +116,7 @@ Respond in JSON with:
     ]
 
     print(f">> Generating Viral Ranking Script with NVIDIA NIM for '{topic}'...", file=sys.stderr)
-    res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=1500)
+    res_text = call_nvidia_nim(messages, max_tokens=1500)
 
     try:
         clean = res_text.strip()

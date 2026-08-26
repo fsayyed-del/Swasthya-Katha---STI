@@ -32,38 +32,38 @@ load_env()
 NVIDIA_API_KEY = os.environ.get("NVIDIA_API_KEY", "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")
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 
-def call_nvidia_nim(messages: list, model="meta/llama-3.1-70b-instruct", temperature=0.7, max_tokens=2048, timeout=180) -> str:
-    """Calls NVIDIA Inference Microservice with the specified model, robust retries, and fallback."""
+def call_nvidia_nim(messages: list, model="meta/llama-3.2-11b-vision-instruct", temperature=0.7, max_tokens=2048, timeout=60) -> str:
+    """Calls NVIDIA Inference Microservice with active model and seamless fallback to Unified AI."""
     headers = {
         "Authorization": f"Bearer {NVIDIA_API_KEY}",
         "Content-Type": "application/json"
     }
     payload = {
-        "model": model,
+        "model": "meta/llama-3.2-11b-vision-instruct",
         "messages": messages,
         "temperature": temperature,
         "max_tokens": max_tokens
     }
 
-    # Attempt primary model
-    for attempt in range(2):
-        try:
-            response = requests.post(NVIDIA_BASE_URL, headers=headers, json=payload, timeout=timeout)
-            if response.status_code == 200:
-                data = response.json()
-                return data["choices"][0]["message"]["content"]
-            print(f">> NVIDIA NIM retry ({response.status_code}): {response.text[:100]}", file=sys.stderr)
-        except Exception as e:
-            print(f">> NVIDIA NIM connection warning (Attempt {attempt+1}): {e}", file=sys.stderr)
-            time.sleep(2)
+    # Attempt active NVIDIA NIM model
+    try:
+        response = requests.post(NVIDIA_BASE_URL, headers=headers, json=payload, timeout=timeout)
+        if response.status_code == 200:
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
+        print(f">> NVIDIA NIM notice ({response.status_code}): {response.text[:80]}", file=sys.stderr)
+    except Exception as e:
+        print(f">> NVIDIA NIM connection notice: {e}", file=sys.stderr)
 
-    # Fallback to ultra-fast 8B model if 70B times out
-    print(">> Falling back to fast NVIDIA NIM 8B model...", file=sys.stderr)
-    payload["model"] = "meta/llama-3.1-8b-instruct"
-    response = requests.post(NVIDIA_BASE_URL, headers=headers, json=payload, timeout=120)
-    if response.status_code != 200:
-        raise RuntimeError(f"NVIDIA NIM Error {response.status_code}: {response.text}")
-    return response.json()["choices"][0]["message"]["content"]
+    # Seamless fallback to Unified AI Engine (Gemini / Groq / OpenRouter)
+    print(">> Switching to Unified AI Engine fallback...", file=sys.stderr)
+    try:
+        from unified_ai_engine import call_ai
+        # Format messages to prompt
+        prompt = "\n".join([f"{m.get('role', 'user')}: {m.get('content', '')}" for m in messages])
+        return call_ai(prompt, max_tokens=max_tokens)
+    except Exception as e:
+        raise RuntimeError(f"All AI endpoints exhausted: {e}")
 
 def generate_premium_script_with_nvidia(raw_transcript: str, channel: dict) -> dict:
     """Uses NVIDIA Llama 3.1 to generate high-retention script, B-roll prompts, and viral title."""
