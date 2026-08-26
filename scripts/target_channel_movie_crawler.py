@@ -477,9 +477,20 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
     generate_voice_sync(data["script"], voice_audio)
     duration = get_duration(voice_audio)
 
-    # 4. Sourcing Realistic Cinema Footage
+    # 4. Sourcing Realistic Cinema Footage & Actual Web Movie Stills
     broll_queries = data.get("broll_queries", [])
-    clips = download_cinema_footage(broll_queries, target_count=18)
+    clips = download_cinema_footage(broll_queries, target_count=10)
+
+    # Scrape actual movie scene stills from web and animate them with Ken Burns motion
+    try:
+        from movie_scene_web_scraper import scrape_movie_stills_from_web, convert_still_to_cinematic_motion_clip
+        movie_stills = scrape_movie_stills_from_web(target["title"], max_images=8)
+        for s_img in movie_stills:
+            m_clip = convert_still_to_cinematic_motion_clip(s_img)
+            clips.append(m_clip)
+        print(f">> Successfully Integrated {len(movie_stills)} Authentic Web Movie Scene Clips!", file=sys.stderr)
+    except Exception as e:
+        print(f"  -> Web stills notice: {e}", file=sys.stderr)
 
     # 5. Render Master Video (Clean Full-Screen Auto-Dubbed, No Subtitle Boxes)
     out_video = os.path.join("output", f"filmy_kahani_{int(time.time())}.mp4")
