@@ -202,20 +202,12 @@ def compile_channel_video(clips: list, audio_path: str, srt_path: str, is_portra
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_file, "-c", "copy", raw],
                    check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    srt_escaped = os.path.abspath(srt_path).replace("\\", "/").replace(":", "\\:")
-    subtitle_filter = (
-        f"subtitles='{srt_escaped}':force_style='"
-        f"FontName=Trebuchet MS,FontSize={'18' if is_portrait else '16'},PrimaryColour=&H00FFFFFF&,BackColour=&H80000000&,"
-        f"BorderStyle=3,Outline=1.5,Shadow=2,Alignment=2,MarginV={'120' if is_portrait else '50'}'"
-    )
-
     subprocess.run([
         "ffmpeg", "-y", "-i", raw, "-i", audio_path, "-t", str(duration),
-        "-vf", subtitle_filter,
         "-c:v", "libx264", "-preset", "fast", "-crf", "19", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k", "-shortest", out_video
     ], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print(f">> Finished Synced Video ({duration:.1f}s): {out_video}", file=sys.stderr)
+    print(f">> Finished Clean Synced Video ({duration:.1f}s): {out_video}", file=sys.stderr)
 
 def publish_to_channel(video_path: str, title: str, description: str, tags: list, category_id: str, refresh_token: str = None):
     print(f">> Uploading to YouTube [Category: {category_id}]...", file=sys.stderr)

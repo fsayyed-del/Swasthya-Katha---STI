@@ -272,11 +272,19 @@ Output ONLY the Hindi spoken text for this chapter.
         "tags": blueprint.get("tags", ["movieexplainedinhindi", "filmykahani", "thriller", "endingexplained"])
     }
 
-async def generate_voice(text: str, out_path: str):
+def generate_voice_sync(text: str, out_path: str):
     print(">> Synthesizing Studio Hindi Voiceover (hi-IN-MadhurNeural)...", file=sys.stderr)
-    comm = edge_tts.Communicate(text, voice="hi-IN-MadhurNeural", rate="+3%", pitch="-1Hz")
-    await comm.save(out_path)
-    print(f">> Voiceover ready: {out_path}", file=sys.stderr)
+    import re
+    clean_text = re.sub(r'---.*?---', '', text).replace('#', '').strip()
+    txt_file = out_path + ".txt"
+    with open(txt_file, "w", encoding="utf-8") as f:
+        f.write(clean_text)
+    edge_bin = os.path.join(os.path.dirname(sys.executable), "edge-tts")
+    if not os.path.exists(edge_bin):
+        edge_bin = "edge-tts"
+    cmd = [edge_bin, "-f", txt_file, "--voice", "hi-IN-MadhurNeural", "--rate", "+4%", "--write-media", out_path]
+    subprocess.run(cmd, check=True)
+    print(f">> Voiceover ready: {out_path} ({os.path.getsize(out_path)/1024:.1f} KB)", file=sys.stderr)
 
 def get_duration(audio_path: str) -> float:
     cmd = ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", audio_path]
@@ -363,15 +371,15 @@ def generate_suspense_score(duration: float, out_path: str):
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-def compile_anti_copyright_video(clips: list, voice_audio: str, srt_path: str, out_video: str):
+def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
     """
     Ultra-Fast Single-Pass Cinema Video Compiler:
-    1. Normalizes raw clips rapidly (original duration, 0.2s each).
+    1. Normalizes raw clips rapidly.
     2. Builds a continuous dynamic loopreel.
-    3. Renders entire 25-30 min video with subtitles & audio ducking in a single fast pass (<60s).
+    3. Renders entire video with clean full-screen visuals and studio voiceover + ducked ambient score in a single fast pass.
     """
     duration = get_duration(voice_audio)
-    print(f">> Rendering {duration/60:.1f}-Minute Master 1080p Video (Ultra-Fast Hardware Engine)...", file=sys.stderr)
+    print(f">> Rendering {duration/60:.1f}-Minute Master 1080p Video (Clean Full-Screen Auto-Dubbed, No Caption Boxes)...", file=sys.stderr)
 
     # Fast normalization of raw clips (keep short 5-8s length)
     norm_clips = []
@@ -398,22 +406,14 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, srt_path: str, o
     bgm_path = os.path.join(TEMP_DIR, "cin_bgm.mp3")
     generate_suspense_score(duration, bgm_path)
 
-    # Subtitle overlay styling
-    srt_escaped = os.path.abspath(srt_path).replace("\\", "/").replace(":", "\\:")
-    subtitle_filter = (
-        f"subtitles='{srt_escaped}':force_style='"
-        f"FontName=Trebuchet MS,FontSize=16,PrimaryColour=&H00FFFFFF&,BackColour=&H80000000&,"
-        f"BorderStyle=3,Outline=1.8,Shadow=2,Alignment=2,MarginV=50'"
-    )
-
+    # Audio mix: Studio Voiceover + Ducked Ambient Suspense Score
     filter_complex = (
-        f"[0:v]{subtitle_filter}[v_out];"
         f"[1:a]volume=1.0[voice];"
         f"[2:a]volume=0.12[bgm];"
         f"[voice][bgm]amix=inputs=2:duration=first[a_out]"
     )
 
-    # Single-pass loop render with ultrafast threading
+    # Single-pass loop render with ultrafast threading (Clean Full-Screen Video, No Caption Boxes)
     cmd = [
         "ffmpeg", "-y",
         "-stream_loop", "-1", "-f", "concat", "-safe", "0", "-i", concat_file,
@@ -421,8 +421,8 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, srt_path: str, o
         "-i", bgm_path,
         "-t", str(duration),
         "-filter_complex", filter_complex,
-        "-map", "[v_out]", "-map", "[a_out]",
-        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22", "-threads", "0", "-pix_fmt", "yuv420p",
+        "-map", "0:v", "-map", "[a_out]",
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "20", "-threads", "0", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "192k",
         out_video
     ]
@@ -466,22 +466,18 @@ def run_target_channel_crawler_pipeline(duration_minutes=25):
     # 2. Extract Transcript & Rewrite with Anti-Copyright Storytelling
     data = rewrite_with_anti_copyright_intelligence(target, target_minutes=duration_minutes)
 
-    # 3. Studio Hindi Voiceover
+    # 3. Studio Hindi Voiceover (Auto-Dubbed)
     voice_audio = os.path.join(TEMP_DIR, "target_voice.mp3")
-    asyncio.run(generate_voice(data["script"], voice_audio))
+    generate_voice_sync(data["script"], voice_audio)
     duration = get_duration(voice_audio)
 
-    # 4. Subtitles
-    srt_path = os.path.join(TEMP_DIR, "target_subs.srt")
-    generate_subtitles(data["script"], duration, srt_path)
-
-    # 5. Sourcing Realistic Cinema Footage
+    # 4. Sourcing Realistic Cinema Footage
     broll_queries = data.get("broll_queries", [])
     clips = download_cinema_footage(broll_queries, target_count=18)
 
-    # 6. Render Master Video with Anti-Copyright Transformations
+    # 5. Render Master Video (Clean Full-Screen Auto-Dubbed, No Subtitle Boxes)
     out_video = os.path.join("output", f"filmy_kahani_{int(time.time())}.mp4")
-    compile_anti_copyright_video(clips, voice_audio, srt_path, out_video)
+    compile_anti_copyright_video(clips, voice_audio, out_video)
 
     # 7. Auto Thumbnail
     create_high_ctr_thumbnail(data["title"][:40], is_portrait=False)
