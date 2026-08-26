@@ -8,7 +8,9 @@
       "language": "en",
       "voice": "en-US-ChristopherNeural",
       "format": "landscape",
-      "broll_types": ["cinematic suspense", "film camera", "dark theater", "action scene"]
+      "youtube_category_id": "1",
+      "target_word_count": 600,
+      "broll_types": ["cinematic suspense", "film camera", "dark theater", "action scene", "mystery room"]
     },
     {
       "id": "movies_hi",
@@ -18,7 +20,9 @@
       "language": "hi",
       "voice": "hi-IN-MadhurNeural",
       "format": "landscape",
-      "broll_types": ["cinematic drama", "action chase", "suspense dark room", "mystery detective"]
+      "youtube_category_id": "1",
+      "target_word_count": 600,
+      "broll_types": ["cinematic drama", "action chase", "suspense dark room", "mystery detective", "old city night"]
     },
     {
       "id": "educational",
@@ -28,7 +32,9 @@
       "language": "en",
       "voice": "en-US-GuyNeural",
       "format": "landscape",
-      "broll_types": ["laboratory science", "microscope", "historical archives", "nature universe"]
+      "youtube_category_id": "27",
+      "target_word_count": 650,
+      "broll_types": ["laboratory science", "microscope", "historical archives", "nature universe", "research lab"]
     },
     {
       "id": "memes",
@@ -38,6 +44,8 @@
       "language": "en",
       "voice": "en-US-EricNeural",
       "format": "portrait",
+      "youtube_category_id": "23",
+      "target_word_count": 150,
       "broll_types": ["funny internet", "gaming neon", "pop culture", "fast montage"]
     }
   ]
