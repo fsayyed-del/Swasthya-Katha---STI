@@ -287,18 +287,15 @@ Respond ONLY with valid JSON.
         "tags": blueprint.get("tags", ["movieexplainedinhindi", "filmykahani", "thriller", "endingexplained"])
     }
 
-def generate_voice_sync(text: str, out_path: str):
-    print(">> Synthesizing Studio Hindi Voiceover (hi-IN-MadhurNeural)...", file=sys.stderr)
+async def _async_synth(text: str, out_path: str):
     import re
     clean_text = re.sub(r'---.*?---', '', text).replace('#', '').strip()
-    txt_file = out_path + ".txt"
-    with open(txt_file, "w", encoding="utf-8") as f:
-        f.write(clean_text)
-    edge_bin = os.path.join(os.path.dirname(sys.executable), "edge-tts")
-    if not os.path.exists(edge_bin):
-        edge_bin = "edge-tts"
-    cmd = [edge_bin, "-f", txt_file, "--voice", "hi-IN-MadhurNeural", "--rate", "+4%", "--write-media", out_path]
-    subprocess.run(cmd, check=True)
+    comm = edge_tts.Communicate(clean_text, voice="hi-IN-MadhurNeural", rate="+4%")
+    await comm.save(out_path)
+
+def generate_voice_sync(text: str, out_path: str):
+    print(">> Synthesizing Studio Hindi Voiceover (hi-IN-MadhurNeural)...", file=sys.stderr)
+    asyncio.run(_async_synth(text, out_path))
     print(f">> Voiceover ready: {out_path} ({os.path.getsize(out_path)/1024:.1f} KB)", file=sys.stderr)
 
 def get_duration(audio_path: str) -> float:
