@@ -44,9 +44,9 @@ PIPELINES = [
         "args": ["--niche", "software_ai"]
     },
     {
-        "name": "🇮🇳 Filmy Kahani (Hindi Movie Recap)",
-        "script": "scripts/multi_channel_engine.py",
-        "args": ["--channel", "movies_hi"]
+        "name": "🇮🇳 Filmy Kahani (Hindi Movie Breakdown - 8 Min)",
+        "script": "scripts/hindi_movie_viral_crawler.py",
+        "args": ["--duration", "8"]
     },
     {
         "name": "🎨 Stickman Motivational Story Short",

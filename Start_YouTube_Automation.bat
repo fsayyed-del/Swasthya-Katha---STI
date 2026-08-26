@@ -92,8 +92,8 @@ exit /b
 
 :opt4
 cls
-echo >> Generating Hindi Movie Recap (Filmy Kahani)...
-python scripts\multi_channel_engine.py --channel movies_hi
+echo >> Scouting Web for Viral Hindi Movie & Generating 8-Minute Breakdown...
+python scripts\hindi_movie_viral_crawler.py --duration 8
 echo.
 echo ===============================================================================
 echo  Video Generation Complete!
