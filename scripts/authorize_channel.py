@@ -94,6 +94,7 @@ def save_token(token: str, channel_key: str):
     print(f">> Saved {var_name} to .env.local!", file=sys.stderr)
 
 def main():
+    global auth_code
     channel_key = sys.argv[1] if len(sys.argv) > 1 else "UCgrgZqI9moQmW9x3OXLf9tg"
     auth_url = generate_auth_url()
     
@@ -114,7 +115,6 @@ def main():
     except Exception:
         pass
 
-    global auth_code
     if not auth_code:
         print(">> Enter the authorization code manually from the redirect URL if server did not capture:")
         auth_code = input("Code: ").strip()

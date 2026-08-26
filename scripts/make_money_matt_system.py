@@ -30,7 +30,14 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
-from scripts.nvidia_ai_engine import call_nvidia_nim
+
+sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+try:
+    from nvidia_ai_engine import call_nvidia_nim
+except ImportError:
+    from scripts.nvidia_ai_engine import call_nvidia_nim
 
 def load_env():
     env_file = os.path.join(os.path.dirname(__file__), "..", ".env.local")
