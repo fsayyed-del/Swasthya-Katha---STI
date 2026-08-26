@@ -51,9 +51,16 @@ from auto_thumbnail_generator import create_high_ctr_thumbnail
 load_env()
 
 PEXELS_API_KEY = os.environ.get("PEXELS_API_KEY", "3TogwWmYgyzfA4miPBy1m2qRjSwMIpYLvT0lUi8K4lQdHnebUjNdv7Ns")
+def resolve_filmy_kahani_token():
+    for k in ["YOUTUBE_REFRESH_TOKEN_FILMY_KAHANI", "YOUTUBE_REFRESH_TOKEN_BRAND2", "YOUTUBE_REFRESH_TOKEN_MOVIES_HI", "YOUTUBE_REFRESH_TOKEN_UCGRGZQI9MOQMW9X3OXLF9TG", "YOUTUBE_REFRESH_TOKEN_UCgrgZqI9moQmW9x3OXLf9tg"]:
+        v = os.environ.get(k)
+        if v:
+            return v
+    return os.environ.get("YOUTUBE_REFRESH_TOKEN")
+
 CLIENT_ID = os.environ.get("YOUTUBE_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("YOUTUBE_CLIENT_SECRET")
-REFRESH_TOKEN = os.environ.get("YOUTUBE_REFRESH_TOKEN_UCGRGZQI9MOQMW9X3OXLF9TG") or os.environ.get("YOUTUBE_REFRESH_TOKEN_BRAND2") or os.environ.get("YOUTUBE_REFRESH_TOKEN")
+REFRESH_TOKEN = resolve_filmy_kahani_token()
 
 TEMP_DIR = "output/channel_crawler_temp"
 HISTORY_FILE = "output/crawled_channel_history.json"
