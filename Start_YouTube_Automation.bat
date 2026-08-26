@@ -76,8 +76,8 @@ exit /b
 
 :opt2
 cls
-echo >> Generating Stickman Motivational Short...
-python scripts\stickman_shorts_engine.py
+echo >> Generating Pro Stick Figure Motivational Short (Paper Texture & 2-Tone Typography)...
+python scripts\stickman_pro_animator.py --lang en
 echo.
 echo ===============================================================================
 echo  Video Generation Complete!
