@@ -25,7 +25,7 @@ load_env()
 
 CLIENT_ID = os.environ.get("YOUTUBE_CLIENT_ID")
 CLIENT_SECRET = os.environ.get("YOUTUBE_CLIENT_SECRET")
-REDIRECT_URI = "http://localhost:8989"
+REDIRECT_URI = "https://developers.google.com/oauthplayground"
 
 auth_code = None
 
