@@ -290,31 +290,42 @@ Respond ONLY with valid JSON.
 async def _async_synth(text: str, out_path: str):
     import re
     clean_text = re.sub(r'---.*?---', '', text).replace('#', '').strip()
+
+    # Try clean single pass first for 100% crystal-clear studio continuity
+    try:
+        comm = edge_tts.Communicate(clean_text, voice="hi-IN-MadhurNeural", rate="+4%")
+        await comm.save(out_path)
+        if os.path.exists(out_path) and os.path.getsize(out_path) > 20000:
+            return
+    except Exception as e:
+        print(f"  -> Single pass synth notice: {e}", file=sys.stderr)
+
+    # High-quality WAV normalized chunking to eliminate any sample rate/bitstream corruption
     words = clean_text.split()
     chunk_size = 250
     chunks = [" ".join(words[i:i+chunk_size]) for i in range(0, len(words), chunk_size)]
 
-    tasks = []
-    chunk_files = []
+    wav_files = []
     for idx, c in enumerate(chunks):
-        cf = os.path.join(TEMP_DIR, f"v_chunk_{idx}.mp3")
-        chunk_files.append(cf)
+        mp3_chunk = os.path.join(TEMP_DIR, f"v_chunk_{idx}.mp3")
+        wav_chunk = os.path.join(TEMP_DIR, f"v_chunk_{idx}.wav")
         comm = edge_tts.Communicate(c, voice="hi-IN-MadhurNeural", rate="+4%")
-        tasks.append(comm.save(cf))
+        await comm.save(mp3_chunk)
 
-    await asyncio.gather(*tasks)
+        subprocess.run(["ffmpeg", "-y", "-i", mp3_chunk, "-ar", "44100", "-ac", "2", wav_chunk],
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        wav_files.append(wav_chunk)
 
-    # Concat all chunks seamlessly in 0.2s
     concat_txt = os.path.join(TEMP_DIR, "voice_concat.txt")
     with open(concat_txt, "w", encoding="utf-8") as f:
-        for cf in chunk_files:
-            f.write(f"file '{os.path.abspath(cf).replace(os.sep, '/')}'\n")
+        for wf in wav_files:
+            f.write(f"file '{os.path.abspath(wf).replace(os.sep, '/')}'\n")
 
-    cmd = ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_txt, "-c:a", "libmp3lame", "-b:a", "192k", out_path]
+    cmd = ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_txt, "-c:a", "libmp3lame", "-b:a", "192k", "-ar", "44100", out_path]
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def generate_voice_sync(text: str, out_path: str):
-    print(">> Synthesizing Studio Hindi Voiceover in High-Speed Parallel Chunks...", file=sys.stderr)
+    print(">> Synthesizing Studio Hindi Voiceover (Crystal-Clear Studio Audio)...", file=sys.stderr)
     asyncio.run(_async_synth(text, out_path))
     print(f">> Voiceover ready: {out_path} ({os.path.getsize(out_path)/1024:.1f} KB)", file=sys.stderr)
 
@@ -331,29 +342,32 @@ def download_cinema_footage(queries: list, target_count=18) -> list:
     for q in queries:
         if len(clips) >= target_count:
             break
+        # Clean non-ASCII characters
+        clean_q = "".join([c for c in q if ord(c) < 128]).strip()
+        if not clean_q:
+            clean_q = "cinematic movie scene mystery"
         try:
-            url = f"https://api.pexels.com/videos/search?query={q}&orientation=landscape&per_page=3"
-            r = requests.get(url, headers=headers, timeout=15)
+            url = f"https://api.pexels.com/videos/search?query={clean_q}&orientation=landscape&per_page=3"
+            r = requests.get(url, headers=headers, timeout=10)
             videos = r.json().get("videos", [])
-            if videos:
-                best_url = None
-                for vf in videos[0].get("video_files", []):
-                    if vf.get("width", 0) >= 1280 or vf.get("quality") == "hd":
-                        best_url = vf.get("link")
-                        break
-                if not best_url:
-                    best_url = videos[0]["video_files"][0]["link"]
+            for v in videos:
+                files = v.get("video_files", [])
+                hd_file = next((f for f in files if f.get("height", 0) >= 720 and f.get("file_type") == "video/mp4"), None)
+                if not hd_file and files:
+                    hd_file = files[0]
 
-                clip_path = os.path.join(TEMP_DIR, f"cin_clip_{len(clips)}.mp4")
-                v_res = requests.get(best_url, stream=True, timeout=30)
-                with open(clip_path, "wb") as f:
-                    for chunk in v_res.iter_content(chunk_size=1024*1024):
-                        if chunk:
-                            f.write(chunk)
-                clips.append(clip_path)
-                print(f"  [✓] Scene Footage Matched: '{q}'", file=sys.stderr)
-        except Exception as e:
-            print(f"  -> Footage notice for '{q}': {e}", file=sys.stderr)
+                if hd_file and hd_file.get("link"):
+                    clip_file = os.path.join(TEMP_DIR, f"cin_clip_{len(clips)}.mp4")
+                    v_res = requests.get(hd_file["link"], stream=True, timeout=20)
+                    with open(clip_file, "wb") as f:
+                        for chunk in v_res.iter_content(chunk_size=1024*1024):
+                            if chunk:
+                                f.write(chunk)
+                    clips.append(clip_file)
+                    print(f"  [✓] Scene Footage Matched: '{clean_q}'", file=sys.stderr)
+                    break
+        except Exception:
+            pass
 
     return clips
 
@@ -380,20 +394,20 @@ def generate_subtitles(full_text: str, total_duration: float, srt_path: str):
             f.write(f"{chunk}\n\n")
 
 def generate_suspense_score(duration: float, out_path: str):
-    """Generates ambient cinematic sub-bass soundtrack."""
+    """Generates soft, distortion-free ambient background music bed."""
     cmd = [
         "ffmpeg", "-y",
-        "-f", "lavfi", "-i", "sine=f=45:r=48000",
-        "-f", "lavfi", "-i", "sine=f=90:r=48000",
-        "-f", "lavfi", "-i", "anoisesrc=c=pink:r=48000:a=0.010,lowpass=f=220",
+        "-f", "lavfi", "-i", "sine=f=220:r=44100",
+        "-f", "lavfi", "-i", "sine=f=277:r=44100",
+        "-f", "lavfi", "-i", "sine=f=330:r=44100",
         "-filter_complex", (
-            "[0:a]volume=0.22[a0];"
-            "[1:a]volume=0.12[a1];"
-            "[2:a]volume=0.20[a2];"
-            "[a0][a1][a2]amix=inputs=3:duration=first,aecho=0.8:0.88:80:0.35[out]"
+            "[0:a]volume=0.03[a0];"
+            "[1:a]volume=0.02[a1];"
+            "[2:a]volume=0.02[a2];"
+            "[a0][a1][a2]amix=inputs=3:duration=first,lowpass=f=450,volume=0.08[out]"
         ),
         "-map", "[out]", "-t", str(duration + 2),
-        "-c:a", "libmp3lame", "-b:a", "192k", out_path
+        "-c:a", "libmp3lame", "-b:a", "192k", "-ar", "44100", out_path
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -438,7 +452,7 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
     # Audio mix: Studio Voiceover + Ducked Ambient Suspense Score + Smooth Cliffhanger Fadeout
     filter_complex = (
         f"[1:a]volume=1.0[voice];"
-        f"[2:a]volume=0.12[bgm];"
+        f"[2:a]volume=0.06[bgm];"
         f"[voice][bgm]amix=inputs=2:duration=first,afade=t=out:st={max(0, safe_duration-3):.1f}:d=3[a_out]"
     )
 
@@ -452,7 +466,7 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
         "-filter_complex", filter_complex,
         "-map", "0:v", "-map", "[a_out]",
         "-c:v", "libx264", "-preset", "ultrafast", "-crf", "20", "-threads", "0", "-pix_fmt", "yuv420p",
-        "-c:a", "aac", "-b:a", "192k",
+        "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
         out_video
     ]
 
@@ -500,28 +514,36 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
     generate_voice_sync(data["script"], voice_audio)
     duration = get_duration(voice_audio)
 
-    # 4. Sourcing Authentic Movie Trailer Clips & Web Stills
+    # 4. Sourcing 100% Authentic Movie Visuals ONLY (Trailer Slices + Web HD Film Stills)
     real_clips = []
+
+    # A. Official Movie Trailer Scene Slicer (Up to 30 authentic film cuts)
     try:
         from movie_trailer_scene_slicer import download_and_slice_movie_trailer
-        real_clips = download_and_slice_movie_trailer(target["title"])
+        trailer_cuts = download_and_slice_movie_trailer(target["title"])
+        real_clips.extend(trailer_cuts)
+        print(f">> Integrated {len(trailer_cuts)} Official Trailer Scene Cuts!", file=sys.stderr)
     except Exception as e:
         print(f"  -> Trailer slicer notice: {e}", file=sys.stderr)
 
-    # Scrape actual movie scene stills from web and animate them with Ken Burns motion
+    # B. Official HD Movie Stills Scraper (14 HD film screenshots with Ken Burns cinematic motion)
     try:
         from movie_scene_web_scraper import scrape_movie_stills_from_web, convert_still_to_cinematic_motion_clip
-        movie_stills = scrape_movie_stills_from_web(target["title"], max_images=8)
+        movie_stills = scrape_movie_stills_from_web(target["title"], max_images=14)
         for s_img in movie_stills:
             m_clip = convert_still_to_cinematic_motion_clip(s_img)
             real_clips.append(m_clip)
-        print(f">> Successfully Integrated {len(movie_stills)} Authentic Web Movie Scene Clips!", file=sys.stderr)
+        print(f">> Integrated {len(movie_stills)} Authentic Web Movie Scene Stills!", file=sys.stderr)
     except Exception as e:
         print(f"  -> Web stills notice: {e}", file=sys.stderr)
 
     if not real_clips:
-        broll_queries = data.get("broll_queries", [])
-        real_clips = download_cinema_footage(broll_queries, target_count=15)
+        print(f">> Warning: No trailer found, scraping deep web stills...", file=sys.stderr)
+        from movie_scene_web_scraper import scrape_movie_stills_from_web, convert_still_to_cinematic_motion_clip
+        movie_stills = scrape_movie_stills_from_web(target["title"], max_images=20)
+        for s_img in movie_stills:
+            m_clip = convert_still_to_cinematic_motion_clip(s_img)
+            real_clips.append(m_clip)
 
     clips = real_clips
 
