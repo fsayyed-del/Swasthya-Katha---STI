@@ -1,0 +1,44 @@
+{
+  "channels": [
+    {
+      "id": "movies_en",
+      "name": "Cinema Breakdown (English)",
+      "niche": "Movie Recap & Film Ending Explained",
+      "search_queries": ["movie explained in english", "sci fi movie recap", "thriller movie ending explained"],
+      "language": "en",
+      "voice": "en-US-ChristopherNeural",
+      "format": "landscape",
+      "broll_types": ["cinematic suspense", "film camera", "dark theater", "action scene"]
+    },
+    {
+      "id": "movies_hi",
+      "name": "Filmy Kahani (Hindi)",
+      "niche": "Movie Explanation in Hindi",
+      "search_queries": ["movie explained in hindi", "hollywood movie in hindi dubbed recap", "korean thriller movie explained in hindi"],
+      "language": "hi",
+      "voice": "hi-IN-MadhurNeural",
+      "format": "landscape",
+      "broll_types": ["cinematic drama", "action chase", "suspense dark room", "mystery detective"]
+    },
+    {
+      "id": "educational",
+      "name": "Curious Mind Documentaries",
+      "niche": "Science, Medical & Unsolved Mysteries",
+      "search_queries": ["medical mystery documentary", "ancient science discovery", "unsolved history mystery"],
+      "language": "en",
+      "voice": "en-US-GuyNeural",
+      "format": "landscape",
+      "broll_types": ["laboratory science", "microscope", "historical archives", "nature universe"]
+    },
+    {
+      "id": "memes",
+      "name": "Viral Daily Memes & Pop Culture",
+      "niche": "Trending Memes & Internet Lore",
+      "search_queries": ["trending memes explained", "viral internet lore", "bizarre internet moments"],
+      "language": "en",
+      "voice": "en-US-EricNeural",
+      "format": "portrait",
+      "broll_types": ["funny internet", "gaming neon", "pop culture", "fast montage"]
+    }
+  ]
+}
