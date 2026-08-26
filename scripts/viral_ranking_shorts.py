@@ -38,7 +38,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 try:
     from nvidia_ai_engine import call_nvidia_nim
 except ImportError:
-    from scripts.nvidia_ai_engine import call_nvidia_nim
+    try:
+        from scripts.nvidia_ai_engine import call_nvidia_nim
+    except ImportError:
+        call_nvidia_nim = None
 
 def load_env():
     env_file = os.path.join(os.path.dirname(__file__), "..", ".env.local")

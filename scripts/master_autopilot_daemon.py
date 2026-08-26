@@ -29,14 +29,14 @@ WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PIPELINES = [
     {
-        "name": "🎨 Stickman Motivational Short",
-        "script": "scripts/stickman_shorts_engine.py",
+        "name": "⚡ Broadcast-Grade High-RPM Flagship Short ($65-$75 CPM)",
+        "script": "scripts/pro_video_generator.py",
         "args": []
     },
     {
-        "name": "🔥 Viral Ranking Short",
-        "script": "scripts/viral_ranking_shorts.py",
-        "args": []
+        "name": "💎 Matt Parr High-RPM Pillar Masterclass ($35-$80 CPM)",
+        "script": "scripts/make_money_matt_system.py",
+        "args": ["--niche", "software_ai"]
     },
     {
         "name": "🇮🇳 Filmy Kahani (Hindi Movie Recap)",
@@ -44,9 +44,14 @@ PIPELINES = [
         "args": ["--channel", "movies_hi"]
     },
     {
-        "name": "💎 Matt Parr High-RPM Pillar",
-        "script": "scripts/make_money_matt_system.py",
-        "args": ["--niche", "software_ai"]
+        "name": "🎨 Stickman Motivational Story Short",
+        "script": "scripts/stickman_shorts_engine.py",
+        "args": []
+    },
+    {
+        "name": "🔥 Viral Top-5 Ranking Countdown Short",
+        "script": "scripts/viral_ranking_shorts.py",
+        "args": []
     }
 ]
 

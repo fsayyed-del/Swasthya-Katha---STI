@@ -37,7 +37,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 try:
     from nvidia_ai_engine import call_nvidia_nim
 except ImportError:
-    from scripts.nvidia_ai_engine import call_nvidia_nim
+    try:
+        from scripts.nvidia_ai_engine import call_nvidia_nim
+    except ImportError:
+        call_nvidia_nim = None
 
 def load_env():
     env_file = os.path.join(os.path.dirname(__file__), "..", ".env.local")
@@ -119,24 +122,42 @@ Respond ONLY with valid JSON.
     ]
 
     print(f">> Generating {target_minutes}-Minute Pillar Script via NVIDIA NIM...", file=sys.stderr)
-    res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=3500)
+    res_text = None
+    if call_nvidia_nim:
+        try:
+            res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=3500)
+        except Exception as e:
+            print(f">> NVIDIA NIM call notice: {e}", file=sys.stderr)
 
-    try:
-        clean = res_text.strip()
-        if "```json" in clean:
-            clean = clean.split("```json")[1].split("```")[0].strip()
-        elif "```" in clean:
-            clean = clean.split("```")[1].split("```")[0].strip()
-        return json.loads(clean, strict=False)
-    except Exception as e:
-        print(f">> Parsing fallback: {e}", file=sys.stderr)
-        return {
-            "title": f"The Ultimate {topic} Masterclass in 2026",
-            "script": res_text,
-            "broll_queries": niche_data["keywords"],
-            "timestamps": "0:00 - Introduction\n1:30 - Core System\n4:00 - Scaling",
-            "tags": ["youtubeautomation", "makemoneyonline", "passiveincome", "business"]
-        }
+    if res_text:
+        try:
+            clean = res_text.strip()
+            if "```json" in clean:
+                clean = clean.split("```json")[1].split("```")[0].strip()
+            elif "```" in clean:
+                clean = clean.split("```")[1].split("```")[0].strip()
+            return json.loads(clean, strict=False)
+        except Exception as e:
+            print(f">> Parsing fallback: {e}", file=sys.stderr)
+
+    return {
+        "title": f"The Ultimate {topic} Masterclass in 2026",
+        "hook_first_30s": f"If you want to build a faceless YouTube empire in 2026, you need to understand the symbiotic flywheel method.",
+        "script": (
+            f"Welcome to the ultimate masterclass on {topic}. "
+            "In 2026, YouTube automation is no longer about pumping out low quality generic content. "
+            "It is about targeting high RPM niches where advertisers pay between thirty and eighty dollars per thousand views. "
+            "By focusing on evergreen topics like artificial intelligence, software tools, and business workflows, "
+            "you create digital assets that generate continuous passive revenue. "
+            "Step one is picking a high CPM niche where buyer intent is high. "
+            "Step two is structuring your videos for maximum session time with open loops and visual pattern interrupts every four to seven seconds. "
+            "Step three is implementing multi-tier monetization so you make money from day one through affiliate recommendations and lead generation. "
+            "Subscribe now and hit the bell for weekly deep dives into scaling your YouTube empire."
+        ),
+        "broll_queries": niche_data["keywords"],
+        "timestamps": "0:00 - Introduction\n1:30 - High CPM Strategy\n3:00 - Retention Optimization\n5:00 - Multi-Tier Monetization",
+        "tags": ["youtubeautomation", "makemoneyonline", "passiveincome", "business", "ai2026"]
+    }
 
 async def synthesize_audio(text: str, voice: str, out_path: str):
     print(f">> Synthesizing Full Pillar Voiceover ({voice})...", file=sys.stderr)
@@ -286,18 +307,42 @@ def run_matt_parr_flywheel(niche="software_ai", topic="How to Build a Faceless Y
 
     # 1. Script
     data = generate_flywheel_script(niche, topic, target_minutes=4)
+    raw_script = data.get("script", "")
+    if isinstance(raw_script, list):
+        script_parts = []
+        for item in raw_script:
+            if isinstance(item, dict):
+                script_parts.append(item.get("narration") or item.get("text") or item.get("content") or str(item))
+            else:
+                script_parts.append(str(item))
+        script_text = "\n\n".join(script_parts)
+    elif isinstance(raw_script, dict):
+        script_parts = [str(v) for v in raw_script.values()]
+        script_text = "\n\n".join(script_parts)
+    else:
+        script_text = str(raw_script or "")
 
     # 2. Voice
     audio_path = os.path.join(TEMP_DIR, "pillar_voice.mp3")
-    asyncio.run(synthesize_audio(data["script"], niche_cfg["voice"], audio_path))
+    asyncio.run(synthesize_audio(script_text, niche_cfg["voice"], audio_path))
     duration = get_duration(audio_path)
 
     # 3. Subtitles
     srt_path = os.path.join(TEMP_DIR, "pillar_subs.srt")
-    generate_subtitles(data["script"], duration, srt_path)
+    generate_subtitles(script_text, duration, srt_path)
 
     # 4. HD B-roll
-    broll_queries = data.get("broll_queries", niche_cfg["keywords"])
+    raw_broll = data.get("broll_queries", niche_cfg["keywords"])
+    broll_queries = []
+    if isinstance(raw_broll, list):
+        for q in raw_broll:
+            if isinstance(q, dict):
+                broll_queries.append(q.get("query") or q.get("prompt") or str(q))
+            else:
+                broll_queries.append(str(q))
+    else:
+        broll_queries = niche_cfg["keywords"]
+
     clips = download_broll_library(broll_queries, target_count=8)
 
     # 5. Render
@@ -305,16 +350,23 @@ def run_matt_parr_flywheel(niche="software_ai", topic="How to Build a Faceless Y
     compile_pillar_video(clips, audio_path, srt_path, out_video)
 
     # 6. Description with High-Converting Affiliate & Timestamps
+    default_ts = "0:00 - Introduction\n1:30 - Core Strategy\n3:00 - Action Plan"
+    timestamps_str = data.get("timestamps") or default_ts
+    tags_list = data.get("tags") or []
+    tags_str = " ".join(["#" + t for t in tags_list])
+    hook_str = data.get("hook_first_30s") or ""
+    video_title = data.get("title", "High-RPM Masterclass")
+
     desc = (
-        f"{data['title']}\n\n"
-        f"{data.get('hook_first_30s', '')}\n\n"
+        f"{video_title}\n\n"
+        f"{hook_str}\n\n"
         f"TIMESTAMPS:\n"
-        f"{data.get('timestamps', '0:00 - Introduction\n1:30 - Core Strategy\n3:00 - Action Plan')}\n\n"
+        f"{timestamps_str}\n\n"
         f"🔗 RESOURCES & MASTERMIND:\n"
         f"• Free Automation Blueprint & Checklist: https://swasthya-katha.vercel.app\n"
         f"• Recommended High-CPM Tools: https://tubeacelerator.com/go\n\n"
         f"🔔 Subscribe for weekly masterclasses on building scalable YouTube automation empires!\n\n"
-        f"{' '.join(['#' + t for t in data.get('tags', [])])}"
+        f"{tags_str}"
     )
 
     result = upload_pillar_video(out_video, data["title"], desc, data.get("tags", []), niche_cfg["category_id"])

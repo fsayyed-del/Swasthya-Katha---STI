@@ -39,7 +39,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 try:
     from nvidia_ai_engine import call_nvidia_nim
 except ImportError:
-    from scripts.nvidia_ai_engine import call_nvidia_nim
+    try:
+        from scripts.nvidia_ai_engine import call_nvidia_nim
+    except ImportError:
+        call_nvidia_nim = None
 
 def load_env():
     env_file = os.path.join(os.path.dirname(__file__), "..", ".env.local")
@@ -109,27 +112,35 @@ Respond in JSON with:
     ]
 
     print(f">> Generating Stickman Script with NVIDIA NIM...", file=sys.stderr)
-    res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=1000)
+    res_text = None
+    if call_nvidia_nim:
+        try:
+            res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=1000)
+        except Exception as e:
+            print(f">> NVIDIA NIM notice: {e}", file=sys.stderr)
 
-    try:
-        clean = res_text.strip()
-        if "```json" in clean:
-            clean = clean.split("```json")[1].split("```")[0].strip()
-        elif "```" in clean:
-            clean = clean.split("```")[1].split("```")[0].strip()
-        return json.loads(clean, strict=False)
-    except Exception:
-        return {
-            "title": f"You Just Need 5 Minutes... ⏳ #Shorts",
-            "script": (
-                "You don't need a perfect plan. You don't need a burst of motivation. "
-                "You just need 5 minutes. 5 minutes to put the phone down. 5 minutes to start. "
-                "Because once you begin, something changes. The work gets easier. "
-                "The focus gets stronger. And suddenly, 5 minutes becomes unstoppable momentum. "
-                "Most people wait for the right time. Winners create it. Start small, and let that small start change your life."
-            ),
-            "tags": ["motivation", "discipline", "mindset", "shorts", "focus", "success"]
-        }
+    if res_text:
+        try:
+            clean = res_text.strip()
+            if "```json" in clean:
+                clean = clean.split("```json")[1].split("```")[0].strip()
+            elif "```" in clean:
+                clean = clean.split("```")[1].split("```")[0].strip()
+            return json.loads(clean, strict=False)
+        except Exception:
+            pass
+
+    return {
+        "title": f"You Just Need 5 Minutes... ⏳ #Shorts",
+        "script": (
+            "You don't need a perfect plan. You don't need a burst of motivation. "
+            "You just need 5 minutes. 5 minutes to put the phone down. 5 minutes to start. "
+            "Because once you begin, something changes. The work gets easier. "
+            "The focus gets stronger. And suddenly, 5 minutes becomes unstoppable momentum. "
+            "Most people wait for the right time. Winners create it. Start small, and let that small start change your life."
+        ),
+        "tags": ["motivation", "discipline", "mindset", "shorts", "focus", "success"]
+    }
 
 def draw_stickman_frame(action_type: str, label_text: str, output_path: str):
     """Draws a minimalist aesthetic 1080x1920 dark-mode vector illustration."""
