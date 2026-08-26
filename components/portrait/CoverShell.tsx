@@ -20,6 +20,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
   className = '',
 }) => {
   const isHindi = locale === 'hi';
+  const isMarathi = locale === 'mr';
   const { isInstallable, isInstalled, isIOS, installPWA } = usePWAInstall();
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
@@ -58,10 +59,16 @@ export const CoverShell: React.FC<CoverShellProps> = ({
       <div className="relative z-10 flex items-center justify-between shrink-0">
         <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-ink-teal/10 border border-ink-teal/25 rounded-full text-[8px] sm:text-[9px] font-mono font-bold text-ink-teal uppercase tracking-wider shadow-xs">
           <ShieldCheck className="w-3 h-3 text-mineral-green" />
-          <span>{isHindi ? 'इंडिया एचआईवी/एड्स एलायंस • NACO 2026' : 'Alliance India • NACO 2026'}</span>
+          <span>
+            {isMarathi
+              ? 'इंडिया एचआयव्ही/एड्स अलायन्स • NACO २०२६'
+              : isHindi
+              ? 'इंडिया एचआईवी/एड्स एलायंस • NACO 2026'
+              : 'Alliance India • NACO 2026'}
+          </span>
         </div>
 
-        <div onClick={(e) => e.stopPropagation()} className="bg-paper/90 backdrop-blur-xs border border-brass/40 rounded-full px-1.5 py-0.5 shadow-sm scale-90 sm:scale-100 origin-right">
+        <div onClick={(e) => e.stopPropagation()} className="relative z-30 scale-95 sm:scale-100 origin-right">
           <LocaleSwitcher currentLocale={locale} onLocaleChange={onLocaleChange} />
         </div>
       </div>
@@ -82,15 +89,19 @@ export const CoverShell: React.FC<CoverShellProps> = ({
         {/* Display Title in Fraunces */}
         <div className="space-y-0.5">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-black font-display tracking-tight text-ink-teal leading-tight">
-            {isHindi ? 'स्वास्थ्य कथा' : 'Swasthya Katha'}
+            {isMarathi ? 'स्वास्थ्य कथा' : isHindi ? 'स्वास्थ्य कथा' : 'Swasthya Katha'}
           </h1>
           <p className="text-[10px] sm:text-[11px] font-display italic font-bold text-brass leading-none">
-            {isHindi
+            {isMarathi
+              ? 'लैंगिक संसर्ग (STI) व सिफिलीस क्लिनिकल मार्गदर्शिका'
+              : isHindi
               ? 'यौन संचारित संक्रमण (STI) एवं सिफलिस फील्ड रेडी रेकनर'
               : 'STI & Syphilis Clinical Handbook & Ready Reckoner'}
           </p>
           <div className="text-[8px] sm:text-[9px] font-mono font-bold text-care-blue-dark tracking-wider uppercase pt-0.5">
-            {isHindi
+            {isMarathi
+              ? 'कारागृह व बंदिस्त संस्था (Prison & OCS) फील्ड टीमसाठी'
+              : isHindi
               ? 'कारागार एवं बंद संस्थान (Prison & OCS) फील्ड टीमों हेतु'
               : 'For Prison & Closed-Setting (OCS) Field Teams'}
           </div>
@@ -98,7 +109,9 @@ export const CoverShell: React.FC<CoverShellProps> = ({
 
         {/* Contextual Narrative */}
         <p className="text-[8.5px] sm:text-[9.5px] text-ink-muted font-body font-medium max-w-sm mx-auto leading-tight line-clamp-2 px-1">
-          {isHindi
+          {isMarathi
+            ? 'कारागृहे व बंदिस्त संस्थांमध्ये पुरुष व महिलांमधील STI/सिफिलीस लक्षणांची त्वरित ओळख, सिंड्रोमिक केस मॅनेजमेंट (SCM), वेळेवर संदर्भ व राष्ट्रीय मार्गदर्शिका.'
+            : isHindi
             ? 'कारागारों एवं बंद संस्थानों में पुरुषों व महिलाओं में STI/सिफलिस लक्षणों की त्वरित पहचान, सिंड्रोमिक केस मैनेजमेंट (SCM), समय पर रेफरल व राष्ट्रीय रिपोर्टिंग गाइड।'
             : 'A practical, field-oriented ready reckoner for Project Coordinators to identify common STI syndromes, facilitate timely testing & referrals, and ensure SCM reporting.'}
         </p>
@@ -107,15 +120,15 @@ export const CoverShell: React.FC<CoverShellProps> = ({
         <div className="grid grid-cols-3 gap-1 max-w-xs mx-auto pt-0.5 text-[7.5px] sm:text-[8px] font-bold">
           <div className="bg-paper border border-brass/40 rounded-lg p-0.5 text-ink-teal flex items-center justify-center gap-1 shadow-xs">
             <Stethoscope className="w-2.5 h-2.5 text-mineral-green shrink-0" />
-            <span>{isHindi ? 'लक्षण पहचान' : 'Case ID'}</span>
+            <span>{isMarathi ? 'लक्षण ओळख' : isHindi ? 'लक्षण पहचान' : 'Case ID'}</span>
           </div>
           <div className="bg-paper border border-brass/40 rounded-lg p-0.5 text-ink-teal flex items-center justify-center gap-1 shadow-xs">
             <Sparkles className="w-2.5 h-2.5 text-amber-500 shrink-0" />
-            <span>{isHindi ? 'NACO किट' : 'NACO SCM'}</span>
+            <span>{isMarathi ? 'NACO किट्स' : isHindi ? 'NACO किट' : 'NACO SCM'}</span>
           </div>
           <div className="bg-paper border border-brass/40 rounded-lg p-0.5 text-ink-teal flex items-center justify-center gap-1 shadow-xs">
             <FileText className="w-2.5 h-2.5 text-coral shrink-0" />
-            <span>{isHindi ? 'रेफरल' : 'Referrals'}</span>
+            <span>{isMarathi ? 'संदर्भ सेवा' : isHindi ? 'रेफरल' : 'Referrals'}</span>
           </div>
         </div>
       </div>
@@ -126,7 +139,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
         <div className="flex items-center justify-center">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-gradient-to-r from-ink-teal via-[#1E4D4F] to-ink-teal hover:from-teal-dark hover:to-ink-teal text-paper font-semibold text-[11px] sm:text-xs rounded-full transition-all shadow-md group-hover:scale-105 border border-amber-300/40">
             <BookOpen className="w-3 h-3 text-amber-300" />
-            <span>{isHindi ? 'पुस्तिका खोलें' : 'Read Handbook'}</span>
+            <span>{isMarathi ? 'पुस्तिका उघडा' : isHindi ? 'पुस्तिका खोलें' : 'Read Handbook'}</span>
             <MoveRight className="w-3 h-3 text-amber-300 animate-pulse" />
           </div>
         </div>
@@ -139,7 +152,13 @@ export const CoverShell: React.FC<CoverShellProps> = ({
             title="Download ebook or printable PDF handbook"
           >
             <Download className="w-3 h-3 text-coral" />
-            <span>{isHindi ? 'ई-बुक / PDF डाउनलोड' : 'Download Ebook / PDF'}</span>
+            <span>
+              {isMarathi
+                ? 'ई-बुक / PDF डाउनलोड'
+                : isHindi
+                ? 'ई-बुक / PDF डाउनलोड'
+                : 'Download Ebook / PDF'}
+            </span>
           </button>
         </div>
       </div>
@@ -154,7 +173,13 @@ export const CoverShell: React.FC<CoverShellProps> = ({
             <div className="flex items-center justify-between border-b border-brass/40 pb-1.5">
               <div className="flex items-center gap-1.5 font-bold text-xs text-ink-teal">
                 <Download className="w-4 h-4 text-coral" />
-                <span>{isHindi ? 'ई-बुक एवं PDF विकल्प' : 'Ebook & PDF Handbook'}</span>
+                <span>
+                  {isMarathi
+                    ? 'ई-बुक आणि PDF पर्याय'
+                    : isHindi
+                    ? 'ई-बुक एवं PDF विकल्प'
+                    : 'Ebook & PDF Handbook'}
+                </span>
               </div>
               <button
                 onClick={() => setShowDownloadModal(false)}
@@ -165,7 +190,9 @@ export const CoverShell: React.FC<CoverShellProps> = ({
             </div>
 
             <p className="text-[11px] text-ink leading-relaxed font-medium">
-              {isHindi
+              {isMarathi
+                ? 'स्वास्थ्य कथा आपल्या डिव्हाइसवर जतन करा किंवा अधिकृत ९-पानी मुद्रणयोग्य PDF उघडा:'
+                : isHindi
                 ? 'स्वास्थ्य कथा को अपने डिवाइस पर सहेजें या आधिकारिक 9-पेज प्रिंट करने योग्य PDF खोलें:'
                 : 'Save Swasthya Katha to your device or open the official 9-page printable PDF handbook:'}
             </p>
@@ -182,10 +209,18 @@ export const CoverShell: React.FC<CoverShellProps> = ({
                   <Printer className="w-4 h-4 text-[#A84833] shrink-0" />
                   <div className="text-left">
                     <span className="text-[11px] font-bold block leading-tight">
-                      {isHindi ? 'आधिकारिक 9-पेज PDF खोलें / प्रिंट करें' : 'Open / Print Official 9-Page PDF'}
+                      {isMarathi
+                        ? 'अधिकृत ९-पानी PDF उघडा / प्रिंट करा'
+                        : isHindi
+                        ? 'आधिकारिक 9-पेज PDF खोलें / प्रिंट करें'
+                        : 'Open / Print Official 9-Page PDF'}
                     </span>
                     <span className="text-[9.5px] text-ink-muted leading-tight block">
-                      {isHindi ? 'A4 साइज, सभी NACO किट एवं क्लिनिकल फोटो सहित' : 'A4 Portrait with authentic NACO kits & clinical photos'}
+                      {isMarathi
+                        ? 'A4 साईज, NACO किट्स व क्लिनिकल फोटोंसह'
+                        : isHindi
+                        ? 'A4 साइज, सभी NACO किट एवं क्लिनिकल फोटो सहित'
+                        : 'A4 Portrait with authentic NACO kits & clinical photos'}
                     </span>
                   </div>
                 </div>
@@ -195,10 +230,12 @@ export const CoverShell: React.FC<CoverShellProps> = ({
               {/* Option 2: Offline PWA App Install */}
               <div className="p-2.5 rounded-xl bg-paper-shadow/80 border border-brass/30 space-y-1.5 text-ink text-[10px]">
                 <span className="font-bold text-ink-teal block">
-                  {isHindi ? '100% ऑफलाइन ऐप (PWA)' : '100% Offline App (PWA)'}
+                  {isMarathi ? '१००% ऑफलाइन ॲप (PWA)' : isHindi ? '100% ऑफलाइन ऐप (PWA)' : '100% Offline App (PWA)'}
                 </span>
                 <p className="text-ink-muted leading-tight text-[9.5px]">
-                  {isHindi
+                  {isMarathi
+                    ? 'कारागृहात इंटरनेटशिवाय 3D फ्लिपबुक वापरण्यासाठी होम स्क्रीनवर जोडा.'
+                    : isHindi
                     ? 'जेलों एवं बंद संस्थानों में बिना इंटरनेट के 3D फ्लिपबुक चलाने हेतु होम स्क्रीन पर जोड़ें।'
                     : 'Save the interactive 3D flipbook for zero-internet field visits in closed facilities.'}
                 </p>
@@ -207,12 +244,18 @@ export const CoverShell: React.FC<CoverShellProps> = ({
                     onClick={handlePWAInstallAction}
                     className="w-full py-1 bg-ink-teal text-paper rounded-lg text-[10px] font-bold shadow hover:bg-teal-dark"
                   >
-                    {isHindi ? 'फोन / कंप्यूटर पर इंस्टॉल करें' : 'Install Offline App'}
+                    {isMarathi ? 'फोन / संगणकावर स्थापित करा' : isHindi ? 'फोन / कंप्यूटर पर इंस्टॉल करें' : 'Install Offline App'}
                   </button>
                 ) : (
                   <div className="flex items-center gap-1.5 text-[9px] text-care-blue-dark font-semibold">
                     <PlusSquare className="w-3 h-3" />
-                    <span>{isHindi ? 'ब्राउज़र मेन्यू से "Add to Home Screen" चुनें' : 'Use Browser Menu → "Add to Home Screen"'}</span>
+                    <span>
+                      {isMarathi
+                        ? 'ब्राउझर मेनूमधून "Add to Home Screen" निवडा'
+                        : isHindi
+                        ? 'ब्राउज़र मेन्यू से "Add to Home Screen" चुनें'
+                        : 'Use Browser Menu → "Add to Home Screen"'}
+                    </span>
                   </div>
                 )}
               </div>
@@ -222,7 +265,7 @@ export const CoverShell: React.FC<CoverShellProps> = ({
               onClick={() => setShowDownloadModal(false)}
               className="w-full py-1.5 bg-ink-teal/20 text-ink-teal hover:bg-ink-teal/30 rounded-xl text-xs font-bold"
             >
-              {isHindi ? 'बंद करें' : 'Close'}
+              {isMarathi ? 'बंद करा' : isHindi ? 'बंद करें' : 'Close'}
             </button>
           </div>
         </div>
