@@ -75,11 +75,21 @@ PIPELINES = [
     }
 ]
 
-def log(msg):
-    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{ts}] {msg}", flush=True)
+import ctypes
+
+def prevent_windows_sleep():
+    """Tells Windows Kernel to keep CPU, network, and execution alive even with laptop lid closed."""
+    ES_CONTINUOUS = 0x80000000
+    ES_SYSTEM_REQUIRED = 0x00000001
+    ES_AWAYMODE_REQUIRED = 0x00000040
+    try:
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED)
+        log("⚡ Windows 24/7 Awake Mode Activated: Laptop will run non-stop even when lid is closed!")
+    except Exception as e:
+        log(f"Notice setting sleep state: {e}")
 
 def run_cycle():
+    prevent_windows_sleep()
     cycle_idx = 0
     log("=================================================================")
     log("🚀 STARTING 24/7 MASTER MULTI-CHANNEL YOUTUBE AUTOPILOT DAEMON")
