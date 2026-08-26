@@ -288,9 +288,25 @@ def run_channel_pipeline(channel_id="movies_hi"):
         f"🔔 Subscribe to {channel['name']} for daily cinematic stories and breakdowns!\n\n"
         f"{' '.join(['#' + t for t in content.get('tags', [])])}"
     )
-    token = os.environ.get(channel.get("token_env_var", "")) if channel.get("token_env_var") else None
-    result = publish_to_channel(out_video, content["title"], desc, content.get("tags", []), category_id, refresh_token=token)
-    return result
+    token = None
+    if channel.get("token_env_var"):
+        token = os.environ.get(channel["token_env_var"])
+    if not token:
+        token = os.environ.get(f"YOUTUBE_REFRESH_TOKEN_{channel_id.upper()}")
+    if not token:
+        token = os.environ.get("YOUTUBE_REFRESH_TOKEN")
+
+    print(f">> Uploading to target channel '{channel['name']}'...", file=sys.stderr)
+    try:
+        result = publish_to_channel(out_video, content["title"], desc, content.get("tags", []), category_id, refresh_token=token)
+        return result
+    except Exception as e:
+        err_str = str(e)
+        if "uploadLimitExceeded" in err_str or "exceeded the number of videos" in err_str:
+            print(f"⚠️ YouTube upload limit reached on channel '{channel['name']}': {e}", file=sys.stderr)
+            print(f"📁 Video rendered and saved at: {out_video}", file=sys.stderr)
+            return {"videoId": None, "videoUrl": None, "localPath": out_video, "status": "limit_saved_locally"}
+        raise e
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Multi-Channel YouTube Bot")
