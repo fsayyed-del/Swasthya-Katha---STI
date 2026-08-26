@@ -34,6 +34,11 @@ PIPELINES = [
         "args": []
     },
     {
+        "name": "💸 MoneyPrinterTurbo AI Video (Audio Ducking & HD Matching)",
+        "script": "scripts/money_printer_turbo_engine.py",
+        "args": []
+    },
+    {
         "name": "💎 Matt Parr High-RPM Pillar Masterclass ($35-$80 CPM)",
         "script": "scripts/make_money_matt_system.py",
         "args": ["--niche", "software_ai"]
