@@ -94,8 +94,8 @@ exit /b
 
 :opt4
 cls
-echo >> Crawling Target Channels & Producing 25-30 Min Cinema Story...
-python scripts\target_channel_movie_crawler.py --duration 25
+echo >> Crawling Target Channels & Producing Cinema Story Breakdown...
+python scripts\target_channel_movie_crawler.py --duration 14
 echo.
 echo ===============================================================================
 echo  Video Generation Complete!

@@ -454,9 +454,9 @@ def upload_to_filmy_kahani(video_path: str, title: str, description: str, tags: 
     print(f">> LIVE on YouTube: {url}", file=sys.stderr)
     return {"videoId": vid_id, "videoUrl": url}
 
-def run_target_channel_crawler_pipeline(duration_minutes=25):
+def run_target_channel_crawler_pipeline(duration_minutes=14):
     print(f"\n=================================================================")
-    print(f"🕵️ TARGET CHANNEL VIRAL MOVIE CRAWLER & PRODUCER (25-30 MIN)")
+    print(f"🕵️ TARGET CHANNEL VIRAL MOVIE CRAWLER & PRODUCER ({duration_minutes} MIN)")
     print(f"📌 Targeting: Movies Insight Hindi, Climax Explained, Cinema Shaukeens...")
     print(f"=================================================================\n")
 
@@ -468,7 +468,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=25):
 
     # 3. Studio Hindi Voiceover (Auto-Dubbed)
     voice_audio = os.path.join(TEMP_DIR, "target_voice.mp3")
-    generate_voice_sync(data["script"], voice_audio)
+    asyncio.run(generate_voice(data["script"], voice_audio))
     duration = get_duration(voice_audio)
 
     # 4. Sourcing Realistic Cinema Footage
@@ -483,7 +483,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=25):
     create_high_ctr_thumbnail(data["title"][:40], is_portrait=False)
 
     # 8. Description with Timestamps & Credits
-    default_ts = "0:00 - रहस्यमय शुरुआत\n3:00 - जांच और सुराग\n6:00 - खौफनाक घटनाएं\n10:00 - बड़ा मोड़\n15:00 - जानलेवा जाल\n20:00 - महामुकाबला\n24:00 - क्लाइमेक्स का खुलासा"
+    default_ts = "0:00 - रहस्यमय शुरुआत\n2:30 - जांच और सुराग\n5:00 - खौफनाक घटनाएं\n8:00 - बड़ा मोड़\n11:00 - क्लाइमेक्स का खुलासा"
     ts_text = data.get("timestamps", default_ts)
     tags_text = " ".join(["#" + t for t in data.get("tags", [])])
 
@@ -503,7 +503,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=25):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Target Channel Movie Crawler")
-    parser.add_argument("--duration", type=int, default=25, help="Duration in minutes (25-30 min)")
+    parser.add_argument("--duration", type=int, default=14, help="Duration in minutes (12-14 min for standard tier)")
     args = parser.parse_args()
 
     res = run_target_channel_crawler_pipeline(duration_minutes=args.duration)
