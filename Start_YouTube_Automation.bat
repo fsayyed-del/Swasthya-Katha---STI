@@ -1,5 +1,4 @@
 @echo off
-setlocal enabledelayedexpansion
 title Antigravity YouTube Automation Command Center
 color 0B
 cls
@@ -30,7 +29,7 @@ echo [✓] YouTube API  : Authenticated (Multiple Channels)
 echo [✓] Pexels HD    : Connected
 echo.
 echo ===============================================================================
-echo  CHOOSE AN AUTOMATION OPTION (Type number and press Enter):
+echo  CHOOSE AN AUTOMATION OPTION:
 echo ===============================================================================
 echo.
 echo   [1] 🤖 START 24/7 AUTOPILOT DAEMON (Cycles all formats every 6 hours)
@@ -43,66 +42,90 @@ echo   [7] 🖥️ Open Graphical Control Center Window (GUI)
 echo   [8] ❌ Exit
 echo.
 echo ===============================================================================
-set /p choice="Enter your choice (1-8): "
 
-if "%choice%"=="1" (
-    cls
-    echo ===============================================================================
-    echo  🚀 RUNNING 24/7 MASTER AUTOPILOT DAEMON
-    echo  (Keep this window open to let it publish continuously)
-    echo ===============================================================================
-    echo.
-    python scripts\master_autopilot_daemon.py
-    pause
-) else if "%choice%"=="2" (
-    cls
-    echo >> Generating Stickman Motivational Short...
-    python scripts\stickman_shorts_engine.py
-    echo.
-    echo ===============================================================================
-    echo  Video Generation Complete!
-    echo ===============================================================================
-    pause
-) else if "%choice%"=="3" (
-    cls
-    echo >> Generating Viral Ranking Short...
-    python scripts\viral_ranking_shorts.py
-    echo.
-    echo ===============================================================================
-    echo  Video Generation Complete!
-    echo ===============================================================================
-    pause
-) else if "%choice%"=="4" (
-    cls
-    echo >> Generating Hindi Movie Recap (Filmy Kahani)...
-    python scripts\multi_channel_engine.py --channel movies_hi
-    echo.
-    echo ===============================================================================
-    echo  Video Generation Complete!
-    echo ===============================================================================
-    pause
-) else if "%choice%"=="5" (
-    cls
-    echo >> Generating 10-20 Min Long-Form Deep Dive...
-    python scripts\longform_deepdive_engine.py --niche movies_hi --duration 10
-    echo.
-    echo ===============================================================================
-    echo  Video Generation Complete!
-    echo ===============================================================================
-    pause
-) else if "%choice%"=="6" (
-    cls
-    echo >> Generating Matt Parr High-RPM Pillar Video...
-    python scripts\make_money_matt_system.py --niche software_ai
-    echo.
-    echo ===============================================================================
-    echo  Video Generation Complete!
-    echo ===============================================================================
-    pause
-) else if "%choice%"=="7" (
-    cls
-    echo >> Launching Graphical Control Center...
-    start "" python scripts\desktop_dashboard.py
-) else (
-    exit /b
-)
+choice /c 12345678 /n /m "Press a number (1-8): "
+set opt=%errorlevel%
+
+if "%opt%"=="1" goto opt1
+if "%opt%"=="2" goto opt2
+if "%opt%"=="3" goto opt3
+if "%opt%"=="4" goto opt4
+if "%opt%"=="5" goto opt5
+if "%opt%"=="6" goto opt6
+if "%opt%"=="7" goto opt7
+if "%opt%"=="8" goto opt8
+
+:opt1
+cls
+echo ===============================================================================
+echo  🚀 RUNNING 24/7 MASTER AUTOPILOT DAEMON
+echo  (Keep this window open to let it publish continuously)
+echo ===============================================================================
+echo.
+python scripts\master_autopilot_daemon.py
+pause
+exit /b
+
+:opt2
+cls
+echo >> Generating Stickman Motivational Short...
+python scripts\stickman_shorts_engine.py
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt3
+cls
+echo >> Generating Viral Ranking Short...
+python scripts\viral_ranking_shorts.py
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt4
+cls
+echo >> Generating Hindi Movie Recap (Filmy Kahani)...
+python scripts\multi_channel_engine.py --channel movies_hi
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt5
+cls
+echo >> Generating 10-20 Min Long-Form Deep Dive...
+python scripts\longform_deepdive_engine.py --niche movies_hi --duration 10
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt6
+cls
+echo >> Generating Matt Parr High-RPM Pillar Video...
+python scripts\make_money_matt_system.py --niche software_ai
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt7
+cls
+echo >> Launching Graphical Control Center...
+start "" python scripts\desktop_dashboard.py
+exit /b
+
+:opt8
+exit /b
