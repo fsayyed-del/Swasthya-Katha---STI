@@ -487,13 +487,17 @@ def run_target_channel_crawler_pipeline(duration_minutes=25):
     create_high_ctr_thumbnail(data["title"][:40], is_portrait=False)
 
     # 8. Description with Timestamps & Credits
+    default_ts = "0:00 - रहस्यमय शुरुआत\n3:00 - जांच और सुराग\n6:00 - खौफनाक घटनाएं\n10:00 - बड़ा मोड़\n15:00 - जानलेवा जाल\n20:00 - महामुकाबला\n24:00 - क्लाइमेक्स का खुलासा"
+    ts_text = data.get("timestamps", default_ts)
+    tags_text = " ".join(["#" + t for t in data.get("tags", [])])
+
     desc = (
         f"{data['title']}\n\n"
         f"{data['script']}\n\n"
         f"TIMESTAMPS:\n"
-        f"{data.get('timestamps', '0:00 - रहस्यमय शुरुआत\n3:00 - जांच और सुराग\n6:00 - खौफनाक घटनाएं\n10:00 - बड़ा मोड़\n15:00 - जानलेवा जाल\n20:00 - महामुकाबला\n24:00 - क्लाइमेक्स का खुलासा')}\n\n"
+        f"{ts_text}\n\n"
         f"🍿 रोजाना सबसे बेहतरीन हॉलीवुड और कोरियन थ्रिलर फिल्मों की कहानियों के लिए 'फिल्मी कहानी' (Filmy Kahani) को अभी सब्सक्राइब करें!\n\n"
-        f"{' '.join(['#' + t for t in data.get('tags', [])])}"
+        f"{tags_text}"
     )
 
     # 9. Upload & Record History
