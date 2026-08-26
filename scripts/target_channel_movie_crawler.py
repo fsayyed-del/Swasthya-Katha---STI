@@ -179,6 +179,20 @@ def extract_competitor_transcript(video_id: str) -> str:
         print(f"  -> Transcript fetch notice: {e}", file=sys.stderr)
         return ""
 
+def sanitize_hindi_narration(text: str) -> str:
+    import re
+    # Strip any AI thinking or prompt leakage
+    patterns = [
+        r'(?i)(\bवी\s+नीड\b|\bwe\s+need\b|नीड टू|नाउ काउंट|लेट्स काउंट|लेट्स ड्राफ्ट|डिस्क्राइबिंग|वर्ड्स इन देवनागरी|काउंट वर्ड्स|आउटपुट जसो|now count).*'
+    ]
+    for p in patterns:
+        text = re.sub(p, '', text, flags=re.DOTALL)
+    # Strip artificial counting sequences (e.g. 1 doctor 2 nathaniel 3 excited...)
+    text = re.sub(r'(?:\b(?:\d+|एक|दो|तीन|चार|पांच|छह|सात|आठ|नौ|दस)\s+[\u0900-\u097F\w]+\s+){2,}', '', text)
+    text = re.sub(r'---.*?---', '', text)
+    text = text.replace('#', '').replace('*', '').strip()
+    return text
+
 def rewrite_with_anti_copyright_intelligence(target_info: dict, target_minutes=25) -> dict:
     """
     Generates a full 25-30 minute deep movie breakdown (~3,200 - 3,600 words in Hindi)
@@ -248,13 +262,19 @@ Respond ONLY with valid JSON.
         act_prompt = f"""
 You are directing Act {act_num}: "{act_title}" for the movie recap of "{blueprint['title']}".
 Scene Focus: {summary}
-Movie Context: {raw_transcript[:2500] if raw_transcript else target_info['description']}
+Movie Plot Context: {raw_transcript[:2500] if raw_transcript else target_info['description']}
 
-Generate a JSON object with:
-1. "narration": Spoken Hindi narration ({words_per_act} words in Devanagari). Describe characters, settings, emotional reactions, and dialogue context in rich detail.
-2. "visual_keywords": Array of 2-3 precise visual search terms in English matching this EXACT scene (e.g. for a mother and son: "mother and teen son car conversation", "lake house vacation exterior", "boy walking alone sunny lake").
+Write pure cinematic Hindi storytelling narration for this scene in Devanagari script ({words_per_act} words).
+CRITICAL RULES:
+- Output ONLY the spoken story narration in natural Hindi.
+- DO NOT output instructions, thinking process, draft notes, or word counting lists.
+- Do NOT write phrases like "we need to output", "let's count", or count numbers.
 
-Respond ONLY with valid JSON.
+JSON format:
+{{
+  "narration": "कहानी का शुद्ध हिंदी वर्णन यहाँ लिखें...",
+  "visual_keywords": ["scene query 1", "scene query 2"]
+}}
 """
         act_res = generate_ai_content(act_prompt, system_prompt="You are India's master cinema storyteller.")
         try:
@@ -264,10 +284,10 @@ Respond ONLY with valid JSON.
             elif "```" in clean_act:
                 clean_act = clean_act.split("```")[1].split("```")[0].strip()
             act_obj = json.loads(clean_act, strict=False)
-            act_text = act_obj.get("narration", "")
+            act_text = sanitize_hindi_narration(act_obj.get("narration", ""))
             act_queries = act_obj.get("visual_keywords", [summary[:30]])
         except Exception:
-            act_text = act_res.replace("```json", "").replace("```", "").strip()
+            act_text = sanitize_hindi_narration(act_res.replace("```json", "").replace("```", "").strip())
             act_queries = [summary[:30] if summary else "cinematic movie scene"]
 
         full_script_acts.append(f"\n\n--- {act_title} ---\n" + act_text)
