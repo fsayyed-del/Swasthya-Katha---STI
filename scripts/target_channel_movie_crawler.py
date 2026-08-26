@@ -229,45 +229,60 @@ Respond ONLY with valid JSON.
             "tags": ["movieexplainedinhindi", "filmykahani", "thriller", "endingexplained"]
         }
 
-    # Step 2: Chained Sequential Chapter Narration (~420 words per chapter = ~3,360 words total)
+    # Step 2: Chained Sequential Chapter Narration & Contextual Visual Extraction
     full_script_acts = []
     timestamps_list = []
+    act_visual_queries = []
     current_min = 0
+    words_per_act = int((target_minutes * 125) / 8) # Dynamically calibrated
 
-    print(f">> Generating 8 Comprehensive Chapters in Native Hindi (~3,500 words)...", file=sys.stderr)
+    print(f">> Generating 8 Comprehensive Chapters & Story-Matched Visual Cues...", file=sys.stderr)
     for ch in blueprint.get("chapters", []):
         act_num = ch.get("act_num", 1)
         act_title = ch.get("act_title", f"Act {act_num}")
         summary = ch.get("scene_summary", "")
 
         timestamps_list.append(f"{current_min:02d}:00 - {act_title}")
-        current_min += 3
+        current_min += max(1, int(target_minutes / 8))
 
         act_prompt = f"""
-You are narrating Act {act_num}: "{act_title}" for the 25-minute Hindi film explanation of "{blueprint['title']}".
+You are directing Act {act_num}: "{act_title}" for the movie recap of "{blueprint['title']}".
 Scene Focus: {summary}
-Movie Context: {raw_transcript[:2000] if raw_transcript else target_info['description']}
+Movie Context: {raw_transcript[:2500] if raw_transcript else target_info['description']}
 
-Write ~400-450 words of immersive, suspenseful, natural spoken Hindi (in Devanagari script).
-Describe what characters do, what they see, their fear, dialogue context, and psychological tension.
-Do NOT summarize quickly. Tell the scene in rich, gripping detail.
-Output ONLY the Hindi spoken text for this chapter.
+Generate a JSON object with:
+1. "narration": Spoken Hindi narration ({words_per_act} words in Devanagari). Describe characters, settings, emotional reactions, and dialogue context in rich detail.
+2. "visual_keywords": Array of 2-3 precise visual search terms in English matching this EXACT scene (e.g. for a mother and son: "mother and teen son car conversation", "lake house vacation exterior", "boy walking alone sunny lake").
+
+Respond ONLY with valid JSON.
 """
-        act_text = generate_ai_content(act_prompt, system_prompt="You are a master Hindi film narrator speaking directly to millions of YouTube viewers.")
-        # Clean any markdown or english prefixes
-        act_clean = act_text.replace("```json", "").replace("```", "").strip()
-        full_script_acts.append(f"\n\n--- {act_title} ---\n" + act_clean)
-        print(f"  -> Act {act_num}/8 Complete ({len(act_clean.split())} words)", file=sys.stderr)
+        act_res = generate_ai_content(act_prompt, system_prompt="You are India's master cinema storyteller.")
+        try:
+            clean_act = act_res.strip()
+            if "```json" in clean_act:
+                clean_act = clean_act.split("```json")[1].split("```")[0].strip()
+            elif "```" in clean_act:
+                clean_act = clean_act.split("```")[1].split("```")[0].strip()
+            act_obj = json.loads(clean_act, strict=False)
+            act_text = act_obj.get("narration", "")
+            act_queries = act_obj.get("visual_keywords", [summary[:30]])
+        except Exception:
+            act_text = act_res.replace("```json", "").replace("```", "").strip()
+            act_queries = [summary[:30] if summary else "cinematic movie scene"]
+
+        full_script_acts.append(f"\n\n--- {act_title} ---\n" + act_text)
+        act_visual_queries.extend(act_queries)
+        print(f"  -> Act {act_num}/8 Complete ({len(act_text.split())} words | Visuals: {act_queries})", file=sys.stderr)
 
     final_script = "\n".join(full_script_acts)
     total_words = len(final_script.split())
     est_duration = total_words / 125
-    print(f">> Full Master Script Assembled: {total_words} words (~{est_duration:.1f} minutes spoken)!", file=sys.stderr)
+    print(f">> Master Script Assembled: {total_words} words (~{est_duration:.1f} minutes spoken) with {len(act_visual_queries)} Scene-Matched Visual Cues!", file=sys.stderr)
 
     return {
         "title": blueprint.get("title", f"{target_info['title']} | Full Movie Breakdown Hindi"),
         "script": final_script,
-        "broll_queries": blueprint.get("broll_queries", ["dark detective rain", "police night car", "abandoned hospital"]),
+        "broll_queries": act_visual_queries,
         "timestamps": "\n".join(timestamps_list),
         "tags": blueprint.get("tags", ["movieexplainedinhindi", "filmykahani", "thriller", "endingexplained"])
     }
@@ -291,19 +306,12 @@ def get_duration(audio_path: str) -> float:
     res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     return float(res.stdout.strip())
 
-def download_cinema_footage(queries: list, target_count=14) -> list:
-    print(f">> Sourcing {target_count} High-Fidelity Cinema Footage Clips...", file=sys.stderr)
+def download_cinema_footage(queries: list, target_count=18) -> list:
+    print(f">> Sourcing up to {target_count} Scene-Matched Cinema Clips...", file=sys.stderr)
     headers = {"Authorization": PEXELS_API_KEY}
     clips = []
 
-    cinematic_fallbacks = [
-        "cinematic dark suspense", "police siren night", "detective night rain",
-        "abandoned building shadow", "foggy forest drone", "crime investigation dark room",
-        "car chase night street", "dramatic close up silhouette", "hospital hallway flicker"
-    ]
-    combined = queries + cinematic_fallbacks
-
-    for q in combined:
+    for q in queries:
         if len(clips) >= target_count:
             break
         try:
@@ -326,6 +334,7 @@ def download_cinema_footage(queries: list, target_count=14) -> list:
                         if chunk:
                             f.write(chunk)
                 clips.append(clip_path)
+                print(f"  [✓] Scene Footage Matched: '{q}'", file=sys.stderr)
         except Exception as e:
             print(f"  -> Footage notice for '{q}': {e}", file=sys.stderr)
 
