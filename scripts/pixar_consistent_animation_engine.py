@@ -428,9 +428,14 @@ def run_pixar_animation_pipeline(concept=None, lang="hi"):
     # 7. High-CTR Thumbnail
     create_high_ctr_thumbnail(story["title"][:35], is_portrait=False)
 
-    # 8. Upload to YouTube
-    tags = story.get("tags", ["3danimation", "pixar", "cartoon", "comedy", "funny"])
-    desc = f"{story['title']}\n\n3D Animated Story.\n\n#3danimation #pixar #cartoon"
+    # 8. Upload to YouTube with High-Search-Volume Hashtags & SEO Tags
+    pixar_hashtags = "#shorts #3danimation #pixar #cartoon #comedy #funny #viral #trending #animation #story #humor #entertainment #relatable #shortsfeed #ytshorts #disney"
+    tags = list(set(story.get("tags", []) + [
+        "shorts", "3danimation", "pixar", "cartoon", "comedy", "funny",
+        "viral", "trending", "animation", "story", "humor", "entertainment",
+        "relatable", "shortsfeed", "ytshorts", "disney"
+    ]))
+    desc = f"{story['title']}\n\n3D Animated Story.\n\n{pixar_hashtags}"
     upload_res = upload_to_youtube(out_video, story["title"], desc, tags)
 
     print(f"\n🎉 3D Pixar Video Ready & Uploaded: {out_video}")

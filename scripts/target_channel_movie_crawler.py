@@ -532,10 +532,18 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
     # 7. Auto Thumbnail
     create_high_ctr_thumbnail(data["title"][:40], is_portrait=False)
 
-    # 8. Description with Timestamps & Credits (Max 4800 Chars for YouTube Compliance)
+    # 8. Description with Timestamps & High-Search Hashtags (Max 4800 Chars for YouTube Compliance)
     default_ts = "0:00 - रहस्यमय शुरुआत\n2:30 - जांच और सुराग\n5:00 - खौफनाक घटनाएं\n8:00 - बड़ा मोड़\n11:00 - क्लाइमेक्स का खुलासा"
     ts_text = data.get("timestamps", default_ts)
-    tags_text = " ".join(["#" + t for t in data.get("tags", [])])
+    
+    cinema_hashtags = "#movieexplainedinhindi #filmykahani #hollywoodmoviesinhindi #southmoviehindi #endingexplained #movieexplained #moviereview #cinema #thrillermovie #storyexplained #hindiaudiodub #bollywood #hollywood #actionmovie #boxoffice #viralmovie #filmrecap #mysteryrecapped #moviesinsighthindi #kahani"
+    
+    all_tags = list(set(data.get("tags", []) + [
+        "movieexplainedinhindi", "filmykahani", "hollywoodmoviesinhindi",
+        "endingexplained", "movieexplained", "moviereview", "cinema",
+        "thrillermovie", "storyexplained", "hindiaudiodub", "filmrecap",
+        "mysteryrecapped", "moviesinsighthindi", "hollywoodrecap", "bollywood", "kahani"
+    ]))
 
     raw_desc = (
         f"{data['title']}\n\n"
@@ -544,12 +552,12 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
         f"SYNOPSIS & STORYLINE:\n"
         f"{data['script'][:3000]}\n\n"
         f"🍿 रोजाना सबसे बेहतरीन हॉलीवुड और कोरियन थ्रिलर फिल्मों की कहानियों के लिए 'फिल्मी कहानी' (Filmy Kahani) को अभी सब्सक्राइब करें!\n\n"
-        f"{tags_text}"
+        f"{cinema_hashtags}"
     )
     desc = raw_desc[:4800]
 
     # 9. Upload & Record History
-    result = upload_to_filmy_kahani(out_video, data["title"], desc, data.get("tags", []))
+    result = upload_to_filmy_kahani(out_video, data["title"], desc, all_tags)
     save_history(target["videoId"], target["title"], target["channel"])
     return result
 

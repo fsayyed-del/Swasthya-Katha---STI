@@ -404,9 +404,14 @@ def run_stickman_pro_pipeline(topic=None, lang="en"):
     # 5. Thumbnail
     create_high_ctr_thumbnail(data["title"][:30], is_portrait=True)
 
-    # 6. Upload to YouTube
-    tags = data.get("tags", ["motivation", "discipline", "selfimprovement", "shorts"])
-    desc = f"{data['title']}\n\n{data['full_script']}\n\n#shorts #motivation #discipline"
+    # 6. Upload to YouTube with High-Search-Volume Hashtags & SEO Tags
+    stickman_hashtags = "#shorts #motivation #discipline #mindset #selfimprovement #success #quotes #stoicism #viral #trending #shortsfeed #ytshorts #inspiration #dailyinspiration #goals #lifeadvice #hardwork #growth"
+    tags = list(set(data.get("tags", []) + [
+        "shorts", "motivation", "discipline", "mindset", "selfimprovement",
+        "success", "quotes", "stoicism", "viral", "trending", "shortsfeed",
+        "ytshorts", "inspiration", "dailyinspiration", "goals", "lifeadvice", "hardwork", "growth"
+    ]))
+    desc = f"{data['title']}\n\n{data['full_script']}\n\n{stickman_hashtags}"
     upload_res = upload_to_youtube(out_video, data["title"], desc, tags)
 
     print(f"\n🎉 Pro Stickman Video Created & Uploaded Successfully: {out_video}")

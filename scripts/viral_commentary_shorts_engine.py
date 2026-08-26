@@ -337,9 +337,14 @@ def run_commentary_shorts_pipeline(topic=None, lang="en"):
     # 6. Portrait Thumbnail
     create_high_ctr_thumbnail(data["title"][:30], is_portrait=True)
 
-    # 7. Upload to YouTube
-    tags = data.get("tags", ["shorts", "viral", "satisfying"])
-    desc = f"{data['title']}\n\n{data['script']}\n\n#shorts #viral"
+    # 7. Upload to YouTube with High-Search-Volume Hashtags & SEO Tags
+    viral_hashtags = "#shorts #viral #trending #shortsfeed #ytshorts #satisfying #lifehacks #mindblowing #diy #facts #story #entertainment #foryou #fyp #trend #viralvideo #viralshorts #explore #crazyhacks"
+    tags = list(set(data.get("tags", []) + [
+        "shorts", "viral", "trending", "shortsfeed", "ytshorts", "satisfying",
+        "lifehacks", "mindblowing", "diy", "facts", "curiosity", "entertainment",
+        "foryou", "fyp", "viralvideo", "viralshorts", "hacks", "story"
+    ]))
+    desc = f"{data['title']}\n\n{data['script']}\n\n{viral_hashtags}"
     upload_res = upload_to_youtube(out_video, data["title"], desc, tags)
 
     print(f"\n🎉 Viral Commentary Short Created & Uploaded Successfully: {out_video}")
