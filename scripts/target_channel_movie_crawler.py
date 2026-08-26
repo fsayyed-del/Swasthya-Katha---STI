@@ -477,9 +477,13 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
     generate_voice_sync(data["script"], voice_audio)
     duration = get_duration(voice_audio)
 
-    # 4. Sourcing Realistic Cinema Footage & Actual Web Movie Stills
-    broll_queries = data.get("broll_queries", [])
-    clips = download_cinema_footage(broll_queries, target_count=10)
+    # 4. Sourcing Authentic Movie Trailer Clips & Web Stills
+    real_clips = []
+    try:
+        from movie_trailer_scene_slicer import download_and_slice_movie_trailer
+        real_clips = download_and_slice_movie_trailer(target["title"])
+    except Exception as e:
+        print(f"  -> Trailer slicer notice: {e}", file=sys.stderr)
 
     # Scrape actual movie scene stills from web and animate them with Ken Burns motion
     try:
@@ -487,10 +491,16 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
         movie_stills = scrape_movie_stills_from_web(target["title"], max_images=8)
         for s_img in movie_stills:
             m_clip = convert_still_to_cinematic_motion_clip(s_img)
-            clips.append(m_clip)
+            real_clips.append(m_clip)
         print(f">> Successfully Integrated {len(movie_stills)} Authentic Web Movie Scene Clips!", file=sys.stderr)
     except Exception as e:
         print(f"  -> Web stills notice: {e}", file=sys.stderr)
+
+    if not real_clips:
+        broll_queries = data.get("broll_queries", [])
+        real_clips = download_cinema_footage(broll_queries, target_count=15)
+
+    clips = real_clips
 
     # 5. Render Master Video (Clean Full-Screen Auto-Dubbed, No Subtitle Boxes)
     out_video = os.path.join("output", f"filmy_kahani_{int(time.time())}.mp4")
@@ -499,19 +509,21 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
     # 7. Auto Thumbnail
     create_high_ctr_thumbnail(data["title"][:40], is_portrait=False)
 
-    # 8. Description with Timestamps & Credits
+    # 8. Description with Timestamps & Credits (Max 4800 Chars for YouTube Compliance)
     default_ts = "0:00 - रहस्यमय शुरुआत\n2:30 - जांच और सुराग\n5:00 - खौफनाक घटनाएं\n8:00 - बड़ा मोड़\n11:00 - क्लाइमेक्स का खुलासा"
     ts_text = data.get("timestamps", default_ts)
     tags_text = " ".join(["#" + t for t in data.get("tags", [])])
 
-    desc = (
+    raw_desc = (
         f"{data['title']}\n\n"
-        f"{data['script']}\n\n"
         f"TIMESTAMPS:\n"
         f"{ts_text}\n\n"
+        f"SYNOPSIS & STORYLINE:\n"
+        f"{data['script'][:3000]}\n\n"
         f"🍿 रोजाना सबसे बेहतरीन हॉलीवुड और कोरियन थ्रिलर फिल्मों की कहानियों के लिए 'फिल्मी कहानी' (Filmy Kahani) को अभी सब्सक्राइब करें!\n\n"
         f"{tags_text}"
     )
+    desc = raw_desc[:4800]
 
     # 9. Upload & Record History
     result = upload_to_filmy_kahani(out_video, data["title"], desc, data.get("tags", []))
