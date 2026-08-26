@@ -44,8 +44,8 @@ PIPELINES = [
         "args": ["--niche", "software_ai"]
     },
     {
-        "name": "🇮🇳 Filmy Kahani (Hindi Movie Breakdown - 8 Min)",
-        "script": "scripts/hindi_movie_viral_crawler.py",
+        "name": "🇮🇳 Filmy Kahani (Target Channel Crawler & 8-Min Story Breakdown)",
+        "script": "scripts/target_channel_movie_crawler.py",
         "args": ["--duration", "8"]
     },
     {

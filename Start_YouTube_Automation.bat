@@ -92,8 +92,8 @@ exit /b
 
 :opt4
 cls
-echo >> Scouting Web for Viral Hindi Movie & Generating 8-Minute Breakdown...
-python scripts\hindi_movie_viral_crawler.py --duration 8
+echo >> Crawling Target Channels (Movies Insight, Climax Explained, Cinema Shaukeens) & Producing 8-Min Story...
+python scripts\target_channel_movie_crawler.py --duration 8
 echo.
 echo ===============================================================================
 echo  Video Generation Complete!
