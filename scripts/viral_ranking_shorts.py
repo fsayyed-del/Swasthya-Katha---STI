@@ -278,19 +278,24 @@ def upload_ranking_short(video_path: str, title: str, description: str, tags: li
         "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
     }
 
-    media = MediaFileUpload(video_path, chunksize=1024*1024*2, resumable=True, mimetype="video/*")
-    req = youtube.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
+    try:
+        media = MediaFileUpload(video_path, chunksize=1024*1024*2, resumable=True, mimetype="video/*")
+        req = youtube.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
 
-    res = None
-    while res is None:
-        status, res = req.next_chunk()
-        if status:
-            print(f"Uploading... {int(status.progress() * 100)}%", file=sys.stderr)
+        res = None
+        while res is None:
+            status, res = req.next_chunk()
+            if status:
+                print(f"Uploading... {int(status.progress() * 100)}%", file=sys.stderr)
 
-    vid_id = res.get("id")
-    url = f"https://youtu.be/{vid_id}"
-    print(f">> LIVE on YouTube Shorts: {url}", file=sys.stderr)
-    return {"videoId": vid_id, "videoUrl": url}
+        vid_id = res.get("id")
+        url = f"https://youtu.be/{vid_id}"
+        print(f">> LIVE on YouTube Shorts: {url}", file=sys.stderr)
+        return {"videoId": vid_id, "videoUrl": url}
+    except Exception as e:
+        print(f">> YouTube Upload Notice: {e}", file=sys.stderr)
+        print(f">> Video saved locally and ready in: {video_path}", file=sys.stderr)
+        return {"status": "saved_locally", "video": video_path, "notice": str(e)}
 
 def run_ranking_short_pipeline():
     item = random.choice(RANKING_NICHES)
