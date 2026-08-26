@@ -77,6 +77,10 @@ PIPELINES = [
 
 import ctypes
 
+def log(msg):
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{ts}] {msg}", flush=True)
+
 def prevent_windows_sleep():
     """Tells Windows Kernel to keep CPU, network, and execution alive even with laptop lid closed."""
     ES_CONTINUOUS = 0x80000000
