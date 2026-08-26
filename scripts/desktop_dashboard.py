@@ -105,7 +105,12 @@ class YouTubeAutomationApp:
         btn5 = tk.Button(grid_frame, text="🎨 Stickman Viral Motivation ($30k/Mo Niche)", font=("Segoe UI", 9, "bold"),
                          bg="#059669", fg="white", bd=0, padx=10, pady=6, cursor="hand2",
                          command=lambda: self.run_script_async("scripts/stickman_shorts_engine.py"))
-        btn5.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
+        btn5.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+
+        btn6 = tk.Button(grid_frame, text="🎬 10-20 Min Long-Form Deep Dive / Recap", font=("Segoe UI", 9, "bold"),
+                         bg="#0D9488", fg="white", bd=0, padx=10, pady=6, cursor="hand2",
+                         command=lambda: self.run_script_async("scripts/longform_deepdive_engine.py", ["--duration", "10"]))
+        btn6.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
 
         grid_frame.grid_columnconfigure(0, weight=1)
         grid_frame.grid_columnconfigure(1, weight=1)
