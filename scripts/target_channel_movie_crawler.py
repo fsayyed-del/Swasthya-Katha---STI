@@ -432,14 +432,14 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
     bgm_path = os.path.join(TEMP_DIR, "cin_bgm.mp3")
     generate_suspense_score(duration, bgm_path)
 
-    # Safe 14.5-minute ceiling to prevent YouTube >15min rejection during 24h ID review
-    safe_duration = min(duration, 870.0)
+    # Strict 12-minute (720s) ceiling to guarantee 100% YouTube compliance during 24h ID review
+    safe_duration = min(duration, 720.0)
 
-    # Audio mix: Studio Voiceover + Ducked Ambient Suspense Score
+    # Audio mix: Studio Voiceover + Ducked Ambient Suspense Score + Smooth Cliffhanger Fadeout
     filter_complex = (
         f"[1:a]volume=1.0[voice];"
         f"[2:a]volume=0.12[bgm];"
-        f"[voice][bgm]amix=inputs=2:duration=first[a_out]"
+        f"[voice][bgm]amix=inputs=2:duration=first,afade=t=out:st={max(0, safe_duration-3):.1f}:d=3[a_out]"
     )
 
     # Single-pass loop render with ultrafast threading (Clean Full-Screen Video, No Caption Boxes)
@@ -563,7 +563,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Target Channel Movie Crawler")
-    parser.add_argument("--duration", type=int, default=14, help="Duration in minutes (12-14 min for standard tier)")
+    parser.add_argument("--duration", type=int, default=12, help="Duration in minutes (10-12 min safe for unverified tier)")
     args = parser.parse_args()
 
     res = run_target_channel_crawler_pipeline(duration_minutes=args.duration)
