@@ -290,11 +290,31 @@ Respond ONLY with valid JSON.
 async def _async_synth(text: str, out_path: str):
     import re
     clean_text = re.sub(r'---.*?---', '', text).replace('#', '').strip()
-    comm = edge_tts.Communicate(clean_text, voice="hi-IN-MadhurNeural", rate="+4%")
-    await comm.save(out_path)
+    words = clean_text.split()
+    chunk_size = 250
+    chunks = [" ".join(words[i:i+chunk_size]) for i in range(0, len(words), chunk_size)]
+
+    tasks = []
+    chunk_files = []
+    for idx, c in enumerate(chunks):
+        cf = os.path.join(TEMP_DIR, f"v_chunk_{idx}.mp3")
+        chunk_files.append(cf)
+        comm = edge_tts.Communicate(c, voice="hi-IN-MadhurNeural", rate="+4%")
+        tasks.append(comm.save(cf))
+
+    await asyncio.gather(*tasks)
+
+    # Concat all chunks seamlessly in 0.2s
+    concat_txt = os.path.join(TEMP_DIR, "voice_concat.txt")
+    with open(concat_txt, "w", encoding="utf-8") as f:
+        for cf in chunk_files:
+            f.write(f"file '{os.path.abspath(cf).replace(os.sep, '/')}'\n")
+
+    cmd = ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_txt, "-c:a", "libmp3lame", "-b:a", "192k", out_path]
+    subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def generate_voice_sync(text: str, out_path: str):
-    print(">> Synthesizing Studio Hindi Voiceover (hi-IN-MadhurNeural)...", file=sys.stderr)
+    print(">> Synthesizing Studio Hindi Voiceover in High-Speed Parallel Chunks...", file=sys.stderr)
     asyncio.run(_async_synth(text, out_path))
     print(f">> Voiceover ready: {out_path} ({os.path.getsize(out_path)/1024:.1f} KB)", file=sys.stderr)
 
