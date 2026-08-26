@@ -234,11 +234,12 @@ def compile_viral_commentary_short(raw_video: str, voice_audio: str, srt_path: s
     subprocess.run(cmd_bgm, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     srt_escaped = os.path.abspath(srt_path).replace("\\", "/").replace(":", "\\:")
-    # High-CTR Glowing Neon Yellow 9:16 Subtitle Overlay (Alex style)
+    # High-CTR Glowing Neon Yellow 9:16 Subtitle Overlay (Alex style - Perfectly Centered in Safe Zone)
     sub_filter = (
         f"subtitles='{srt_escaped}':force_style='"
-        f"FontName=Impact,FontSize=28,PrimaryColour=&H0000FFFF&,BackColour=&H90000000&,"
-        f"BorderStyle=4,Outline=3,Shadow=2,Alignment=2,MarginV=280'"
+        f"PlayResX=1080,PlayResY=1920,"
+        f"FontName=Impact,FontSize=64,PrimaryColour=&H0000FFFF&,OutlineColour=&H00000000&,"
+        f"BorderStyle=1,Outline=6,Shadow=0,Alignment=2,MarginV=550'"
     )
 
     # Visual Filter: 9:16 Crop + Dynamic Punch-Zoom from sec 8 to 16

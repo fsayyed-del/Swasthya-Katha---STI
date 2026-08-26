@@ -432,6 +432,9 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
     bgm_path = os.path.join(TEMP_DIR, "cin_bgm.mp3")
     generate_suspense_score(duration, bgm_path)
 
+    # Safe 14.5-minute ceiling to prevent YouTube >15min rejection during 24h ID review
+    safe_duration = min(duration, 870.0)
+
     # Audio mix: Studio Voiceover + Ducked Ambient Suspense Score
     filter_complex = (
         f"[1:a]volume=1.0[voice];"
@@ -445,7 +448,7 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
         "-stream_loop", "-1", "-f", "concat", "-safe", "0", "-i", concat_file,
         "-i", voice_audio,
         "-i", bgm_path,
-        "-t", str(duration),
+        "-t", str(safe_duration),
         "-filter_complex", filter_complex,
         "-map", "0:v", "-map", "[a_out]",
         "-c:v", "libx264", "-preset", "ultrafast", "-crf", "20", "-threads", "0", "-pix_fmt", "yuv420p",
@@ -453,7 +456,7 @@ def compile_anti_copyright_video(clips: list, voice_audio: str, out_video: str):
         out_video
     ]
 
-    print(f">> Processing single-pass video stream (Total length: {duration:.1f}s)...", file=sys.stderr)
+    print(f">> Processing single-pass video stream (Total length: {safe_duration:.1f}s)...", file=sys.stderr)
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f">> Master Video Render Complete in record time: {out_video}", file=sys.stderr)
 
