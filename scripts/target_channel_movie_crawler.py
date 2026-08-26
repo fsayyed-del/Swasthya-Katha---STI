@@ -104,8 +104,11 @@ def get_youtube_client():
     creds.refresh(Request())
     return build("youtube", "v3", credentials=creds)
 
+FORBIDDEN_KEYWORDS = ["kids", "children", "infobells", "cartoon", "moral story", "kahaniyan", "pari", "chuchu", "nursery", "rhyme", "bacchon", "animation for kids"]
+CINEMA_GENRE_KEYWORDS = ["movie", "film", "hollywood", "korean", "thriller", "suspense", "ending explained", "mystery", "crime", "sci-fi", "horror", "cinema", "recap", "psycho"]
+
 def crawl_top_channel_videos() -> dict:
-    """Crawls target competitor channels to find the highest-performing unproduced video."""
+    """Crawls target competitor channels with strict Hollywood/Korean cinema quality filters."""
     youtube = get_youtube_client()
     processed_ids = [item.get("videoId") for item in load_history()]
     shuffled_channels = TARGET_CHANNELS.copy()
@@ -116,19 +119,30 @@ def crawl_top_channel_videos() -> dict:
         try:
             req = youtube.search().list(
                 part="snippet",
-                q=ch["query"],
+                q=f"{ch['name']} movie ending explained in hindi",
                 order="viewCount",
                 type="video",
                 videoDuration="medium", # 4-20 min sweet spot
-                maxResults=10
+                maxResults=15
             )
             res = req.execute()
             for item in res.get("items", []):
                 vid = item["id"]["videoId"]
                 title = item["snippet"]["title"]
                 desc = item["snippet"]["description"]
+                title_lower = title.lower()
+                desc_lower = desc.lower()
+
+                # Strict Quality Gate 1: Reject any kids/cartoon content
+                if any(bad in title_lower or bad in desc_lower for bad in FORBIDDEN_KEYWORDS):
+                    continue
+
+                # Strict Quality Gate 2: Must be a legitimate movie recap / thriller
+                if not any(good in title_lower or good in desc_lower for good in CINEMA_GENRE_KEYWORDS):
+                    continue
+
                 if vid not in processed_ids:
-                    print(f"🎯 Target Found: '{title}' from {ch['name']} (ID: {vid})", file=sys.stderr)
+                    print(f"🎯 Premium Cinema Winner Found: '{title}' from {ch['name']} (ID: {vid})", file=sys.stderr)
                     return {
                         "videoId": vid,
                         "title": title,
@@ -140,8 +154,8 @@ def crawl_top_channel_videos() -> dict:
 
     return {
         "videoId": f"custom_{int(time.time())}",
-        "title": "Mind-Bending Time Loop Island Mystery Explained",
-        "description": "An intense thriller where an investigator uncovers dark psychological experiments.",
+        "title": "Mind-Bending Psychological Sci-Fi Thriller Ending Explained",
+        "description": "An elite investigator uncovers a secret island where reality and memory are manipulated.",
         "channel": "Movies Insight Hindi"
     }
 
