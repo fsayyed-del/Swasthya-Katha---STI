@@ -62,6 +62,11 @@ PIPELINES = [
         "name": "👶 US/Global Kids & Toddler Learning Video (Cocomelon/Infobells)",
         "script": "scripts/kids_animation_engine.py",
         "args": ["--category", "learning", "--duration", "3"]
+    },
+    {
+        "name": "🎨 3D Disney/Pixar Animated Story & Sitcom (Dual-Voice Dialogue)",
+        "script": "scripts/pixar_consistent_animation_engine.py",
+        "args": ["--lang", "hi"]
     }
 ]
 
