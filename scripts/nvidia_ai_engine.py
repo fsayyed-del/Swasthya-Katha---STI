@@ -6,6 +6,7 @@ Powered by NVIDIA AI Foundation Endpoints (Llama 3.1 70B/405B, Nemotron 70B, Dee
 
 import os
 import sys
+import time
 import json
 import requests
 
@@ -31,8 +32,8 @@ load_env()
 NVIDIA_API_KEY = os.environ.get("NVIDIA_API_KEY", "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")
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 
-def call_nvidia_nim(messages: list, model="meta/llama-3.1-70b-instruct", temperature=0.7, max_tokens=2048) -> str:
-    """Calls NVIDIA Inference Microservice with the specified model."""
+def call_nvidia_nim(messages: list, model="meta/llama-3.1-70b-instruct", temperature=0.7, max_tokens=2048, timeout=180) -> str:
+    """Calls NVIDIA Inference Microservice with the specified model, robust retries, and fallback."""
     headers = {
         "Authorization": f"Bearer {NVIDIA_API_KEY}",
         "Content-Type": "application/json"
@@ -44,12 +45,25 @@ def call_nvidia_nim(messages: list, model="meta/llama-3.1-70b-instruct", tempera
         "max_tokens": max_tokens
     }
 
-    response = requests.post(NVIDIA_BASE_URL, headers=headers, json=payload, timeout=60)
+    # Attempt primary model
+    for attempt in range(2):
+        try:
+            response = requests.post(NVIDIA_BASE_URL, headers=headers, json=payload, timeout=timeout)
+            if response.status_code == 200:
+                data = response.json()
+                return data["choices"][0]["message"]["content"]
+            print(f">> NVIDIA NIM retry ({response.status_code}): {response.text[:100]}", file=sys.stderr)
+        except Exception as e:
+            print(f">> NVIDIA NIM connection warning (Attempt {attempt+1}): {e}", file=sys.stderr)
+            time.sleep(2)
+
+    # Fallback to ultra-fast 8B model if 70B times out
+    print(">> Falling back to fast NVIDIA NIM 8B model...", file=sys.stderr)
+    payload["model"] = "meta/llama-3.1-8b-instruct"
+    response = requests.post(NVIDIA_BASE_URL, headers=headers, json=payload, timeout=120)
     if response.status_code != 200:
         raise RuntimeError(f"NVIDIA NIM Error {response.status_code}: {response.text}")
-
-    data = response.json()
-    return data["choices"][0]["message"]["content"]
+    return response.json()["choices"][0]["message"]["content"]
 
 def generate_premium_script_with_nvidia(raw_transcript: str, channel: dict) -> dict:
     """Uses NVIDIA Llama 3.1 to generate high-retention script, B-roll prompts, and viral title."""

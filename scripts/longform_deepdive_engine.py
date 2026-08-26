@@ -99,11 +99,20 @@ NICHES = {
 def extract_transcript_any_language(video_id: str, languages=['en', 'en-US', 'hi', 'hi-IN']) -> str:
     print(f">> Extracting transcript from competitor video: {video_id}...", file=sys.stderr)
     try:
-        raw = YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
-        full_text = " ".join([item['text'] for item in raw])
+        api = YouTubeTranscriptApi()
+        transcript_list = api.list(video_id)
+        transcript = transcript_list.find_transcript(languages)
+        fetched = transcript.fetch()
+        full_text = " ".join([item.text for item in fetched.snippets] if hasattr(fetched, 'snippets') else [item.get('text', '') for item in fetched])
         print(f">> Successfully extracted transcript ({len(full_text.split())} words).", file=sys.stderr)
         return full_text
     except Exception as e:
+        try:
+            fetched = YouTubeTranscriptApi().fetch(video_id)
+            full_text = " ".join([s.text for s in fetched.snippets])
+            return full_text
+        except Exception:
+            pass
         print(f"  -> Transcript notice: {e}", file=sys.stderr)
         return None
 
@@ -139,7 +148,7 @@ def scout_longform_competitor(query: str) -> dict:
 
 def generate_longform_script(niche_key: str, duration_minutes=10, custom_topic=None) -> dict:
     cfg = NICHES.get(niche_key, NICHES["movies_hi"])
-    target_words = duration_minutes * 135 # 135 words per minute
+    target_words = duration_minutes * 120 # ~120 words per minute for dramatic pacing
 
     competitor_transcript = ""
     if not custom_topic:
@@ -148,7 +157,7 @@ def generate_longform_script(niche_key: str, duration_minutes=10, custom_topic=N
         if comp:
             t = extract_transcript_any_language(comp["videoId"], languages=[cfg["lang"], "en", "hi"])
             if t:
-                competitor_transcript = t[:6000] # Feed up to 6000 chars of inspiration
+                competitor_transcript = t[:4000] # Feed up to 4000 chars of inspiration
             custom_topic = comp["title"]
         else:
             custom_topic = q
@@ -160,13 +169,13 @@ Topic: {custom_topic}
 Target Word Count: ~{target_words} words (approx {duration_minutes} minutes spoken).
 
 Inspiration Context / Competitor Content:
-{competitor_transcript if competitor_transcript else "Original comprehensive deep-dive"}
+{competitor_transcript if competitor_transcript else "Original comprehensive deep-dive storytelling"}
 
 Storytelling Blueprint:
 1. "title": Viral high-CTR title (under 80 characters)
-2. "chapters": Array of 5-8 chapter objects, each with "name", "start_estimate", and "text"
+2. "chapters": Array of 5-8 chapter objects, each with "name" and "text"
 3. "script": Full continuous spoken narration text in {cfg['lang']} language with psychological open loops.
-4. "broll_queries": 15-20 specific Pexels HD stock video queries.
+4. "broll_queries": 12-16 specific Pexels HD stock video queries.
 5. "timestamps": Formatted YouTube chapter breakdown (e.g. 0:00 - Introduction, 2:15 - Chapter 1...).
 6. "tags": 10 viral search tags.
 
@@ -179,7 +188,7 @@ Respond ONLY with valid JSON.
     ]
 
     print(f">> Generating {duration_minutes}-Minute Deep Dive with NVIDIA Llama 3.1 70B...", file=sys.stderr)
-    res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=4000)
+    res_text = call_nvidia_nim(messages, model="meta/llama-3.1-70b-instruct", max_tokens=2800, timeout=180)
 
     try:
         clean = res_text.strip()
