@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Broadcast-Grade Cinematic YouTube Shorts & Pillar Video Engine.
-Engineered for Maximum Session-Time, High-RPM Niches ($40-$80 CPM),
-Dynamic Ken Burns Motion, Cinematic Color Grading, Intelligent Music Ducking & Hormozi-Style Kinetic Captions.
+Broadcast-Grade Cinematic YouTube Shorts & Pillar Video Engine (Pro Edition).
+Engineered for Maximum Retention, High-CPM Niches ($65-$95 CPM),
+Studio Voice EQ, Dynamic Ken Burns Motion, Intelligent Soundtrack Ducking, and Hormozi-Style Kinetic Captions.
 """
 
 import os
@@ -54,17 +54,18 @@ os.makedirs(MUSIC_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # ---------------------------------------------------------------------------
-# High-RPM ($50-$80 CPM) Flagship Content Blueprints
+# 12 Flagship Ultra High-RPM ($65-$95 CPM) Content Blueprints
 # ---------------------------------------------------------------------------
 FLAGSHIP_STORIES = [
     {
-        "niche": "Fintech & Algorithmic Wealth",
-        "cpm_tier": "$65 CPM",
-        "category_id": "28", # Science & Technology
+        "id": "fintech_swift",
+        "niche": "Fintech & Global Banking Rails",
+        "cpm_tier": "$75 CPM",
+        "category_id": "28",
         "title": "The 1 Line of Code That Moves $10 Trillion Daily ⚡ #Shorts",
         "hook_first_5s": "This single line of code moves 10 trillion dollars across the globe every day.",
         "script": (
-            "This single line of code moves 10 trillion dollars across the globe every day. "
+            "This single line of code moves 10 trillion dollars across the globe every single day. "
             "It belongs to the Swift banking network. "
             "If it went down for just four seconds, international financial markets would completely freeze. "
             "Deep beneath the Swiss Alps, fortified server clusters execute these transactions with zero margin for error. "
@@ -82,8 +83,9 @@ FLAGSHIP_STORIES = [
         "tags": ["fintech", "algorithms", "wallstreet", "software", "money", "shorts", "technology", "wealth"]
     },
     {
-        "niche": "AI Monopolies & Semiconductor Power",
-        "cpm_tier": "$75 CPM",
+        "id": "semiconductor_asml",
+        "niche": "AI Monopolies & Semiconductor Warfare",
+        "cpm_tier": "$85 CPM",
         "category_id": "28",
         "title": "How 1 Factory Secretly Controls the Entire AI Revolution 🤖 #Shorts",
         "hook_first_5s": "If this one single factory in the Netherlands stops operating, the entire AI industry collapses overnight.",
@@ -106,32 +108,9 @@ FLAGSHIP_STORIES = [
         "tags": ["nvidia", "asml", "artificialintelligence", "semiconductors", "techmonopoly", "shorts", "future"]
     },
     {
-        "niche": "Dark Science History & Extreme Medicine",
-        "cpm_tier": "$45 CPM",
-        "category_id": "27", # Education
-        "title": "The Accidental Discovery That Eradicated Modern Plagues 🧫 #Shorts",
-        "hook_first_5s": "In 1928, a messy doctor went on vacation and accidentally saved 200 million lives.",
-        "script": (
-            "In 1928, a messy doctor went on vacation and accidentally saved 200 million human lives. "
-            "Alexander Fleming left a stack of dirty petri dishes by an open window at St. Mary's Hospital. "
-            "When he returned, a rare Penicillium mold spore had naturally drifted onto the dish, dissolving lethal bacteria around it. "
-            "That accident created penicillin, transforming fatal infections into minor routine treatments. "
-            "By D-Day in 1944, millions of doses were mass-produced for the frontlines. "
-            "One untidy workstation fundamentally altered human life expectancy forever. "
-            "Subscribe for daily incredible stories behind the greatest medical discoveries."
-        ),
-        "broll_queries": [
-            "microbiology petri dish laboratory microscope",
-            "vintage doctor examining research glass bottles",
-            "glowing cells bacteria microbiology science",
-            "pharmaceutical factory industrial medicine production",
-            "modern hospital patient medical recovery"
-        ],
-        "tags": ["medicalhistory", "sciencefacts", "penicillin", "discovery", "history", "shorts", "education"]
-    },
-    {
-        "niche": "Quantitative Trading & Wall Street Algorithms",
-        "cpm_tier": "$85 CPM",
+        "id": "quant_trading_python",
+        "niche": "Quantitative Finance & Algorithmic Trading",
+        "cpm_tier": "$90 CPM",
         "category_id": "28",
         "title": "The 100-Line Python Script That Makes Wall Street Millions 📈 #Shorts",
         "hook_first_5s": "High-frequency hedge funds pay millions for algorithms that execute trades in four hundred nanoseconds.",
@@ -153,7 +132,8 @@ FLAGSHIP_STORIES = [
         "tags": ["quanttrading", "algorithmictrading", "finance", "python", "wallstreet", "software", "wealth", "shorts"]
     },
     {
-        "niche": "AI Energy Crisis & Nuclear Data Centers",
+        "id": "nuclear_ai_datacenter",
+        "niche": "AI Energy Infrastructure & Nuclear Power",
         "cpm_tier": "$80 CPM",
         "category_id": "28",
         "title": "Why Tech Giants Are Secretly Buying Nuclear Power Plants ⚡ #Shorts",
@@ -176,8 +156,9 @@ FLAGSHIP_STORIES = [
         "tags": ["nuclearai", "bigtech", "microsoft", "energycrisis", "datacenter", "futuretech", "shorts", "business"]
     },
     {
-        "niche": "Enterprise AI Defense & Palantir Monopolies",
-        "cpm_tier": "$75 CPM",
+        "id": "palantir_defense_ai",
+        "niche": "Enterprise AI Defense & Predictive Intelligence",
+        "cpm_tier": "$80 CPM",
         "category_id": "28",
         "title": "The Secret AI Defense Software Tracking Everything in Real Time 🛰️ #Shorts",
         "hook_first_5s": "This single piece of software can predict military movements before generals give the order.",
@@ -197,15 +178,183 @@ FLAGSHIP_STORIES = [
             "global network connections glowing earth"
         ],
         "tags": ["palantir", "defenseai", "intelligence", "geopolitics", "software", "techmonopoly", "shorts", "cyber"]
+    },
+    {
+        "id": "stripe_payments_scale",
+        "niche": "SaaS Architecture & Micro-Payment Empires",
+        "cpm_tier": "$75 CPM",
+        "category_id": "28",
+        "title": "How 2 Irish Brothers Built a $65 Billion Invisible Monopoly 💳 #Shorts",
+        "hook_first_5s": "Every time you buy something on the internet, this 7-line API takes a slice of the transaction.",
+        "script": (
+            "Every time you buy something on the internet, this seven-line API secretly takes a cut. "
+            "When Patrick and John Collison founded Stripe, accepting online credit cards required months of banking paperwork. "
+            "They condensed the entire global financial bureaucracy into seven lines of developer-friendly JavaScript code. "
+            "Today, Stripe processes over one trillion dollars annually for Amazon, Uber, and millions of software startups. "
+            "They turned complex payment rails into pure digital infrastructure, capturing an unstoppable toll on internet commerce. "
+            "Subscribe to learn the business blueprints behind the world's most lucrative tech monopolies."
+        ),
+        "broll_queries": [
+            "credit card payment mobile terminal ecommerce",
+            "software engineer coding laptop modern office",
+            "digital money transfer blockchain financial",
+            "cloud infrastructure data server glowing",
+            "luxury business wealth skyline skyscrapers"
+        ],
+        "tags": ["stripe", "fintech", "startup", "ecommerce", "software", "wealth", "business", "shorts"]
+    },
+    {
+        "id": "cloudflare_internet_backbone",
+        "niche": "Internet Infrastructure & Global Cyber Architecture",
+        "cpm_tier": "$70 CPM",
+        "category_id": "28",
+        "title": "The 1 Company Protecting 20% of the Entire Internet 🌐 #Shorts",
+        "hook_first_5s": "If this single tech company crashes for 10 minutes, one-fifth of the entire global internet goes dark.",
+        "script": (
+            "If this single company crashes for ten minutes, one-fifth of the entire global internet goes completely dark. "
+            "The company is Cloudflare, and its edge network spans over three hundred cities worldwide. "
+            "Every second, they deflect trillions of malicious cyber attacks, DDoS floods, and botnet intrusions aimed at major banks and governments. "
+            "To generate true cryptographically unbreakable randomness, their San Francisco headquarters uses a wall of one hundred lava lamps filmed by a high-resolution camera. "
+            "They are the invisible digital shield holding the modern web together. "
+            "Subscribe to discover the hidden mechanics powering the online world."
+        ),
+        "broll_queries": [
+            "cyber attack defense matrix digital firewall",
+            "fiber optic network globe worldwide internet",
+            "high tech server room glowing green led",
+            "lava lamp glowing abstract fluid motion",
+            "cybersecurity binary code screen hacking"
+        ],
+        "tags": ["cloudflare", "cybersecurity", "internet", "tech", "networking", "software", "shorts"]
+    },
+    {
+        "id": "stuxnet_cyber_weapon",
+        "niche": "Cyber Warfare & Critical Infrastructure",
+        "cpm_tier": "$75 CPM",
+        "category_id": "28",
+        "title": "The 500-Kilobyte Code That Destroyed a Nuclear Facility ☢️ #Shorts",
+        "hook_first_5s": "In 2010, the world's first physical cyber weapon destroyed 1,000 uranium centrifuges without firing a shot.",
+        "script": (
+            "In 2010, the world's first true cyber weapon physically destroyed one thousand uranium centrifuges without firing a single shot. "
+            "It was named Stuxnet, a fifty-kilobyte digital virus engineered by joint intelligence agencies. "
+            "It infiltrated Natanz's air-gapped nuclear facility via an infected USB drive, quietly hijacked Siemens industrial controllers, and spun the centrifuges to catastrophic speeds. "
+            "While the machinery was tearing itself apart, the virus replayed fake normal telemetry to the control room monitors. "
+            "It marked the terrifying moment computer code crossed from cyberspace into physical destruction. "
+            "Subscribe for deep investigations into classified cyber operations."
+        ),
+        "broll_queries": [
+            "nuclear facility centrifuge industrial machinery",
+            "computer hacking code red security alert",
+            "industrial control room monitors engineering",
+            "usb drive plug in laptop close up",
+            "cyber warfare digital grid attack explosion"
+        ],
+        "tags": ["stuxnet", "cyberwarfare", "hacking", "history", "military", "technology", "shorts"]
+    },
+    {
+        "id": "quantum_encryption_threat",
+        "niche": "Quantum Computing & Global Cryptography",
+        "cpm_tier": "$80 CPM",
+        "category_id": "28",
+        "title": "Why Quantum Computers Will Break Every Bank on Earth 🔐 #Shorts",
+        "hook_first_5s": "The moment a 4,000-qubit quantum computer turns on, all modern digital encryption becomes useless.",
+        "script": (
+            "The moment a four-thousand-qubit quantum computer turns on, all modern encryption becomes completely obsolete. "
+            "Every bank transaction, password, and military secret relies on RSA encryption—a mathematical puzzle that takes classical supercomputers ten thousand years to solve. "
+            "Using Shor's quantum algorithm, a fault-tolerant quantum machine can crack that same puzzle in under three seconds. "
+            "Foreign intelligence agencies are already intercepting and hoarding encrypted government data today, waiting for the day quantum processors can unlock it all. "
+            "The race for post-quantum cryptography is the highest-stakes security battle of our lifetime. "
+            "Subscribe to stay ahead of the breakthrough technologies transforming civilization."
+        ),
+        "broll_queries": [
+            "quantum computer gold chandelier cryostat",
+            "digital padlock cyber encryption binary code",
+            "supercomputer data center futuristic science",
+            "mathematical quantum physics glowing particles",
+            "high tech bank vault digital security"
+        ],
+        "tags": ["quantumcomputing", "cryptography", "cybersecurity", "futuretech", "banking", "shorts"]
+    },
+    {
+        "id": "micro_saas_wealth",
+        "niche": "AI Micro-SaaS & Solopreneur Wealth",
+        "cpm_tier": "$85 CPM",
+        "category_id": "28",
+        "title": "How a 1-Person AI Software Makes $80,000 Every Month 💰 #Shorts",
+        "hook_first_5s": "You don't need a 50-person tech startup anymore to build an $80k-per-month software business.",
+        "script": (
+            "You don't need a fifty-person tech startup anymore to build an eighty-thousand-dollar per month software business. "
+            "Solo developers are leveraging AI coding agents to build hyper-focused Micro-SaaS tools in seventy-two hours. "
+            "By solving one specific workflow problem—like automated legal contract auditing or localized video translation—they charge thirty dollars a month to three thousand paying business customers. "
+            "With automated payment processing, cloud hosting, and AI customer support, their operating profit margins exceed ninety percent. "
+            "The future of software wealth belongs to nimble one-person automated empires. "
+            "Subscribe to unlock actionable blueprints for building cashflow-positive AI businesses."
+        ),
+        "broll_queries": [
+            "software developer coffee laptop modern home office",
+            "dashboard analytics revenue graph growing",
+            "artificial intelligence neural network interface",
+            "digital nomad working beach laptop financial freedom",
+            "credit card stripe billing notification income"
+        ],
+        "tags": ["saas", "microsaas", "solopreneur", "business", "ai", "passiveincome", "wealth", "shorts"]
+    },
+    {
+        "id": "crispr_biotech_cures",
+        "niche": "Biotech & Genetic Engineering Revolutions",
+        "cpm_tier": "$70 CPM",
+        "category_id": "27",
+        "title": "The 1 Injection That Cures Genetic Blindness Forever 🧬 #Shorts",
+        "hook_first_5s": "Scientists have officially programmed molecular scissors to edit living human DNA inside the eye.",
+        "script": (
+            "Scientists have officially programmed molecular scissors to edit living human DNA directly inside the eye. "
+            "Using CRISPR Cas-9 genetic therapy, doctors deliver microscopic gene-editing enzymes via a single injection. "
+            "The enzymes locate the single mutated genetic letter causing blindness, snip it out, and repair the sequence with healthy code. "
+            "Within weeks, patients who were legally blind from birth begin recognizing shapes, colors, and the faces of their families. "
+            "We have transitioned from treating chronic illness to rewriting the source code of human biology itself. "
+            "Subscribe for weekly discoveries on the cutting edge of medicine and science."
+        ),
+        "broll_queries": [
+            "dna double helix glowing genetic science",
+            "microbiology laboratory medical research microscope",
+            "doctor performing advanced eye surgery medical",
+            "patient seeing smiling emotional recovery",
+            "futuristic biotechnology molecular medical lab"
+        ],
+        "tags": ["crispr", "biotech", "genetics", "medicalbreakthrough", "science", "medicine", "shorts"]
+    },
+    {
+        "id": "starlink_space_monopoly",
+        "niche": "Space Technology & Satellite Megaconstellations",
+        "cpm_tier": "$75 CPM",
+        "category_id": "28",
+        "title": "How 1 Company Secretly Controls 65% of All Satellites in Orbit 🚀 #Shorts",
+        "hook_first_5s": "Out of 10,000 active satellites orbiting Earth right now, two-thirds belong to a single private company.",
+        "script": (
+            "Out of ten thousand active satellites orbiting Earth right now, two-thirds belong to a single private company: SpaceX. "
+            "Their Starlink megaconstellation beams gigabit internet to warzones, remote oceans, and commercial airliners through laser cross-links in low Earth orbit. "
+            "Because SpaceX possesses reusable Falcon 9 rockets, their launch costs are ninety percent cheaper than any government space agency on Earth. "
+            "They are launching sixty new satellites every few days, building an unassailable orbital communications monopoly. "
+            "Whoever controls low Earth orbit will control the future of global telecommunications. "
+            "Subscribe to explore the commercial space race conquering the final frontier."
+        ),
+        "broll_queries": [
+            "spacex rocket launch night sky flames",
+            "satellites constellation orbit earth low earth orbit",
+            "global satellite internet grid glowing globe",
+            "high tech satellite dish antenna communications",
+            "futuristic space station earth view sunrise"
+        ],
+        "tags": ["spacex", "starlink", "satellites", "space", "elonmusk", "technology", "future", "shorts"]
     }
 ]
 
 # ---------------------------------------------------------------------------
-# High-Fidelity Neural Audio Synthesis + Ambient Soundtrack
+# High-Fidelity Studio Voiceover + Warm Audio EQ Filter
 # ---------------------------------------------------------------------------
 async def synthesize_voiceover(text: str, out_path: str, voice="en-US-ChristopherNeural"):
     print(f">> Synthesizing Studio Voiceover ({voice})...", file=sys.stderr)
-    communicate = edge_tts.Communicate(text, voice=voice, rate="+2%", pitch="+0Hz")
+    communicate = edge_tts.Communicate(text, voice=voice, rate="+3%", pitch="+0Hz")
     await communicate.save(out_path)
 
 def get_audio_duration(audio_path: str) -> float:
@@ -275,30 +424,12 @@ def download_hd_broll_pool(queries: list, target_count=5) -> list:
         except Exception as e:
             print(f"  -> Notice for '{q}': {e}", file=sys.stderr)
 
-    # Fallback to high tech landscape if needed
-    if len(clips) < 2:
-        try:
-            fallback_url = "https://api.pexels.com/videos/search?query=technology+matrix+data&orientation=portrait&per_page=3"
-            r = requests.get(fallback_url, headers=headers, timeout=15)
-            for v in r.json().get("videos", []):
-                link = v["video_files"][0]["link"]
-                clip_path = os.path.join(TEMP_DIR, f"hd_clip_{len(clips)}.mp4")
-                v_res = requests.get(link, stream=True, timeout=30)
-                with open(clip_path, "wb") as f:
-                    for chunk in v_res.iter_content(chunk_size=1024*1024):
-                        if chunk:
-                            f.write(chunk)
-                clips.append(clip_path)
-        except Exception:
-            pass
-
     return clips
 
 # ---------------------------------------------------------------------------
-# Kinetic Subtitle Engine (.ass / .srt with Highlighted Impact Words)
+# Kinetic Subtitle Engine (Rapid 2-3 Word Bursts with High-Impact Highlight Badges)
 # ---------------------------------------------------------------------------
 def generate_kinetic_subtitles(script_text: str, total_duration: float, srt_path: str):
-    """Generates punchy 3-4 word kinetic caption chunks with bold impact phrasing."""
     words = script_text.split()
     chunk_size = 3
     chunks = [" ".join(words[i:i+chunk_size]) for i in range(0, len(words), chunk_size)]
@@ -337,7 +468,6 @@ def render_broadcast_video(clips: list, voice_path: str, music_path: str, srt_pa
     norm_clips = []
     for i, clip in enumerate(clips):
         norm = os.path.join(TEMP_DIR, f"broadcast_norm_{i}.mp4")
-        # Cinematic filter: scale to 1080x1920, slow motion zoom-pan, punchy contrast/saturation, subtle vignette
         vf = (
             "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30,"
             "eq=contrast=1.12:brightness=0.01:saturation=1.18,"
@@ -360,10 +490,9 @@ def render_broadcast_video(clips: list, voice_path: str, music_path: str, srt_pa
     subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_file, "-c", "copy", raw_video],
                    check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    # 3. Master Composition: Merge Video + Kinetic Captions + Studio Voiceover + Ducked Background Music
+    # 3. Master Composition: Video + Kinetic Captions + Studio Voiceover EQ + Ducked Background Music
     srt_escaped = os.path.abspath(srt_path).replace("\\", "/").replace(":", "\\:")
     
-    # Hormozi/Beast style captions: RobotoCondensed-Bold, Glowing Yellow (#00D4FF / #00F59E), Dark Badge Outline & Shadow
     subtitle_filter = (
         f"subtitles='{srt_escaped}':force_style='"
         f"FontName=RobotoCondensed-Bold,FontSize=22,PrimaryColour=&H0000F5FF&,SecondaryColour=&H00FFFFFF&,"
@@ -371,11 +500,12 @@ def render_broadcast_video(clips: list, voice_path: str, music_path: str, srt_pa
         f"Alignment=2,MarginV=140'"
     )
 
-    # Audio Filter Complex: Duck background music to -20dB and mix cleanly with speech
+    # Voice EQ Filter (Studio Warmth + Presence) & Ducked Music Loop
     filter_complex = (
         f"[0:v]{subtitle_filter}[v_out];"
+        f"[1:a]equalizer=f=120:width_type=h:width=100:g=3.5,volume=1.0[voice_eq];"
         f"[2:a]volume=0.12,aloop=loop=-1:size=2e+09[bgm];"
-        f"[1:a][bgm]amix=inputs=2:duration=first:dropout_transition=2[a_out]"
+        f"[voice_eq][bgm]amix=inputs=2:duration=first:dropout_transition=2[a_out]"
     )
 
     print(">> Master Encoding (High Bitrate 1080p Master)...", file=sys.stderr)
@@ -455,7 +585,7 @@ def publish_to_youtube(video_path: str, title: str, description: str, tags: list
 def produce_flagship_video(story_index=0, privacy="public"):
     story = FLAGSHIP_STORIES[story_index % len(FLAGSHIP_STORIES)]
     print("\n=======================================================")
-    print(f"🚀 LAUNCHING BROADCAST-GRADE PRODUCTION")
+    print(f"🚀 LAUNCHING BROADCAST-GRADE PRODUCTION (#{story_index + 1}/{len(FLAGSHIP_STORIES)})")
     print(f"📌 Niche: {story['niche']} | Tier: {story['cpm_tier']}")
     print(f"📌 Title: {story['title']}")
     print("=======================================================\n")
@@ -466,7 +596,7 @@ def produce_flagship_video(story_index=0, privacy="public"):
     music_path = os.path.join(MUSIC_DIR, "cinematic_ambient_score.mp3")
     master_video = os.path.join(OUTPUT_DIR, f"flagship_1080p_{timestamp}.mp4")
 
-    # 1. Voiceover
+    # 1. Studio Voiceover
     asyncio.run(synthesize_voiceover(story["script"], voice_path))
     duration = get_audio_duration(voice_path)
 
