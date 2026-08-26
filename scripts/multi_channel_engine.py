@@ -60,10 +60,11 @@ REFRESH_TOKEN = os.environ.get("YOUTUBE_REFRESH_TOKEN")
 TEMP_DIR = "output/multi_channel_temp"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
-def get_youtube_service():
+def get_youtube_service(custom_refresh_token=None):
+    token = custom_refresh_token or REFRESH_TOKEN
     creds = Credentials(
         None,
-        refresh_token=REFRESH_TOKEN,
+        refresh_token=token,
         token_uri="https://oauth2.googleapis.com/token",
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
@@ -216,9 +217,9 @@ def compile_channel_video(clips: list, audio_path: str, srt_path: str, is_portra
     ], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f">> Finished Synced Video ({duration:.1f}s): {out_video}", file=sys.stderr)
 
-def publish_to_channel(video_path: str, title: str, description: str, tags: list, category_id: str):
+def publish_to_channel(video_path: str, title: str, description: str, tags: list, category_id: str, refresh_token: str = None):
     print(f">> Uploading to YouTube [Category: {category_id}]...", file=sys.stderr)
-    youtube = get_youtube_service()
+    youtube = get_youtube_service(custom_refresh_token=refresh_token)
     body = {
         "snippet": {"title": title[:100], "description": description[:5000], "tags": tags, "categoryId": category_id},
         "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
@@ -287,7 +288,8 @@ def run_channel_pipeline(channel_id="movies_hi"):
         f"🔔 Subscribe to {channel['name']} for daily cinematic stories and breakdowns!\n\n"
         f"{' '.join(['#' + t for t in content.get('tags', [])])}"
     )
-    result = publish_to_channel(out_video, content["title"], desc, content.get("tags", []), category_id)
+    token = os.environ.get(channel.get("token_env_var", "")) if channel.get("token_env_var") else None
+    result = publish_to_channel(out_video, content["title"], desc, content.get("tags", []), category_id, refresh_token=token)
     return result
 
 if __name__ == "__main__":

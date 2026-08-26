@@ -15,6 +15,8 @@
     {
       "id": "movies_hi",
       "name": "Filmy Kahani (Hindi)",
+      "channel_id": "UCgrgZqI9moQmW9x3OXLf9tg",
+      "token_env_var": "YOUTUBE_REFRESH_TOKEN_UCgrgZqI9moQmW9x3OXLf9tg",
       "niche": "Movie Explanation in Hindi",
       "search_queries": ["movie explained in hindi", "hollywood movie in hindi dubbed recap", "korean thriller movie explained in hindi"],
       "language": "hi",
