@@ -35,7 +35,7 @@ echo.
 echo   [1] 🤖 START 24/7 AUTOPILOT DAEMON (Cycles all formats every 6 hours)
 echo   [2] 🎨 Generate Stickman Motivational Short (Aesthetic Dark Animation)
 echo   [3] 🔥 Generate Viral Ranking Short ($20k/Mo Top 5 Countdown)
-echo   [4] 🇮🇳 Generate Hindi Movie Recap (Filmy Kahani / 100%% Synced)
+echo   [4] 🇮🇳 Generate Hindi Movie Recap (25-30 Min Full Story Breakdown)
 echo   [5] 🎬 Generate 10-20 Min Long-Form Deep Dive / Documentary
 echo   [6] 💎 Generate Matt Parr High-RPM Pillar ($35-$80 CPM)
 echo   [7] 💸 MoneyPrinterTurbo Video (Google AI Studio + Audio Ducking)

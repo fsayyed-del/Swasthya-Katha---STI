@@ -158,71 +158,98 @@ def extract_competitor_transcript(video_id: str) -> str:
         print(f"  -> Transcript fetch notice: {e}", file=sys.stderr)
         return ""
 
-def rewrite_with_anti_copyright_intelligence(target_info: dict, target_minutes=8) -> dict:
-    """Uses Unified AI to completely transform the plot into an original high-retention 6-act script."""
+def rewrite_with_anti_copyright_intelligence(target_info: dict, target_minutes=25) -> dict:
+    """
+    Generates a full 25-30 minute deep movie breakdown (~3,200 - 3,600 words in Hindi)
+    using an 8-Act Chained Narrative Engine.
+    """
     raw_transcript = extract_competitor_transcript(target_info["videoId"])
-    target_words = target_minutes * 125
+    print(f">> Planning 25-30 Minute Deep Story Architecture for '{target_info['title']}'...", file=sys.stderr)
 
-    prompt = f"""
-You are the head creative writer and director for 'Filmy Kahani Hindi'.
-We are analyzing a competitor viral movie video from {target_info['channel']}:
-Title: {target_info['title']}
-Source Context / Transcript:
-{raw_transcript[:4500] if raw_transcript else target_info['description']}
+    # Step 1: Master Blueprint & 8 Chapter Outline
+    blueprint_prompt = f"""
+You are the master film director of 'Filmy Kahani Hindi'.
+Plan a massive, full-length 25-30 minute deep movie recap for:
+Movie: {target_info['title']} (from {target_info['channel']})
+Transcript / Plot Context:
+{raw_transcript[:4000] if raw_transcript else target_info['description']}
 
-YOUR MISSION:
-Completely transform this story into a 100% ORIGINAL, highly dramatic, and suspenseful Hindi movie recap.
-Do NOT copy phrases word-for-word. Re-narrate the entire movie plot from scratch with psychological open loops.
-
-Target Duration: ~{target_minutes} minutes ({target_words} words spoken in Hindi).
-
-Narrative Arc:
-1. **Act 1: सस्पेंस हुक और रहस्यमय शुरुआत** (Opening hook, protagonist's dilemma).
-2. **Act 2: खौफनाक जांच और पहला सुराग** (Discovery of dark anomalies).
-3. **Act 3: अप्रत्याशित मोड़ और जानलेवा खतरा** (Betrayal, trap, rising stakes).
-4. **Act 4: दिल दहला देने वाला संघर्ष** (Race against death).
-5. **Act 5: दिमाग हिला देने वाला क्लाइमेक्स और अंत का खुलासा** (Climax reveal & full explanation).
-6. **Act 6: सोचने पर मजबूर करने वाला सवाल** (Closing engagement question).
-
-JSON Requirements:
-1. "title": Viral click-worthy Hindi title with curiosity gap (under 75 chars, e.g. "इस फिल्म का सस्पेंस देखकर रोंगटे खड़े हो जाएंगे! 😱 (Ending Explained)").
-2. "script": Full continuous spoken narration text entirely in Devanagari Hindi (हिंदी).
-3. "broll_queries": 15-20 specific realistic cinema stock video search terms (e.g. "dark detective rain night", "police siren city night", "abandoned mental asylum hallway", "shadowy figure footsteps", "intense car chase night").
-4. "timestamps": Chapter breakdown for YouTube description.
-5. "tags": 10 viral Hindi movie recap tags.
+Create an 8-Act Master Blueprint in JSON:
+1. "title": High-CTR curiosity-gap Hindi title (e.g. "इस रहस्यमयी फिल्म की कहानी आपके होश उड़ा देगी! (Full Story Explained)").
+2. "chapters": Array of 8 chapter outline objects, each with "act_num" (1-8), "act_title" (Hindi), and "scene_summary" (key events to cover).
+3. "broll_queries": 20 specific cinema search terms for Pexels.
+4. "tags": 10 viral search tags.
 
 Respond ONLY with valid JSON.
 """
 
-    print(f">> Transforming script with Unified AI (Llama 3.1 70B / Gemini Pro)...", file=sys.stderr)
-    res_text = generate_ai_content(prompt, system_prompt="You are India's #1 Hindi movie storyteller.")
-
+    res_text = generate_ai_content(blueprint_prompt, system_prompt="You are India's master cinema storyteller.")
     try:
         clean = res_text.strip()
         if "```json" in clean:
             clean = clean.split("```json")[1].split("```")[0].strip()
         elif "```" in clean:
             clean = clean.split("```")[1].split("```")[0].strip()
-        return json.loads(clean, strict=False)
-    except Exception as e:
-        print(f">> Fallback parsing: {e}", file=sys.stderr)
-        return {
-            "title": f"{target_info['title']} | फिल्म की पूरी कहानी हिंदी में (Ending Explained)",
-            "script": (
-                "नमस्ते दोस्तों! आज हम जिस फिल्म की बात करने जा रहे हैं, उसकी कहानी शुरू से लेकर अंत तक आपको अपनी सीट से हिलने नहीं देगी। "
-                "कहानी की शुरुआत होती है एक अंधेरी रात से जहां मुख्य किरदार को एक ऐसा केस मिलता है जो दिखने में जितना सीधा लगता है, अंदर से उतना ही उलझा हुआ है। "
-                "जैसे-जैसे वह सच्चाई के करीब पहुंचता है, उसे एहसास होता है कि खतरा बाहर नहीं बल्कि उसके अपने सबसे करीबी लोगों के बीच छिपा है। "
-                "फिल्म का क्लाइमेक्स इतना जबरदस्त है कि अंत देखकर आपके रोंगटे खड़े हो जाएंगे। "
-                "आपको इस फिल्म का कौन सा ट्विस्ट सबसे खतरनाक लगा? कमेंट करके जरूर बताएं और ऐसी ही बेहतरीन कहानियों के लिए चैनल को सब्सक्राइब करें!"
-            ),
-            "broll_queries": [
-                "dark detective walking rain", "mysterious shadow corridor", "police car night city",
-                "abandoned dark house", "suspense crime scene", "foggy forest road mystery",
-                "interrogation room light", "action car speed", "old archives detective papers"
+        blueprint = json.loads(clean, strict=False)
+    except Exception:
+        blueprint = {
+            "title": f"{target_info['title']} | पूरी कहानी हिंदी में (Full Movie Explained)",
+            "chapters": [
+                {"act_num": 1, "act_title": "रहस्यमय शुरुआत और मुख्य किरदार", "scene_summary": "Introduction, opening murder or strange anomaly"},
+                {"act_num": 2, "act_title": "खतरनाक जांच और पहला सबूत", "scene_summary": "Detective arrives, dark clues uncovered"},
+                {"act_num": 3, "act_title": "अजीब घटनाएं और बढ़ता खौफ", "scene_summary": "Supernatural or psychological horror signs"},
+                {"act_num": 4, "act_title": "विश्वासघात और छुपा हुआ सच", "scene_summary": "Major betrayal, ally turns out to be suspicious"},
+                {"act_num": 5, "act_title": "जानलेवा जाल और संघर्ष", "scene_summary": "Protagonist trapped, fight for survival"},
+                {"act_num": 6, "act_title": "असली साजिश का पर्दाफाश", "scene_summary": "Conspiracy unraveled, shocking laboratory or secret room"},
+                {"act_num": 7, "act_title": "अंतिम महामुकाबला", "scene_summary": "Climactic battle against the antagonist"},
+                {"act_num": 8, "act_title": "दिमाग हिला देने वाला अंत और क्लाइमेक्स", "scene_summary": "Final twist breakdown and mind-bending ending"}
             ],
-            "timestamps": "0:00 - रहस्यमय शुरुआत\n2:00 - जांच और सुराग\n4:30 - बड़ा मोड़\n7:00 - क्लाइमेक्स का खुलासा",
-            "tags": ["movieexplainedinhindi", "hollywoodmoviehindi", "filmykahani", "thrillermovie", "endingexplained"]
+            "broll_queries": ["dark detective rain", "police night car", "abandoned hospital corridor", "crime investigation", "foggy forest mystery"],
+            "tags": ["movieexplainedinhindi", "filmykahani", "thriller", "endingexplained"]
         }
+
+    # Step 2: Chained Sequential Chapter Narration (~420 words per chapter = ~3,360 words total)
+    full_script_acts = []
+    timestamps_list = []
+    current_min = 0
+
+    print(f">> Generating 8 Comprehensive Chapters in Native Hindi (~3,500 words)...", file=sys.stderr)
+    for ch in blueprint.get("chapters", []):
+        act_num = ch.get("act_num", 1)
+        act_title = ch.get("act_title", f"Act {act_num}")
+        summary = ch.get("scene_summary", "")
+
+        timestamps_list.append(f"{current_min:02d}:00 - {act_title}")
+        current_min += 3
+
+        act_prompt = f"""
+You are narrating Act {act_num}: "{act_title}" for the 25-minute Hindi film explanation of "{blueprint['title']}".
+Scene Focus: {summary}
+Movie Context: {raw_transcript[:2000] if raw_transcript else target_info['description']}
+
+Write ~400-450 words of immersive, suspenseful, natural spoken Hindi (in Devanagari script).
+Describe what characters do, what they see, their fear, dialogue context, and psychological tension.
+Do NOT summarize quickly. Tell the scene in rich, gripping detail.
+Output ONLY the Hindi spoken text for this chapter.
+"""
+        act_text = generate_ai_content(act_prompt, system_prompt="You are a master Hindi film narrator speaking directly to millions of YouTube viewers.")
+        # Clean any markdown or english prefixes
+        act_clean = act_text.replace("```json", "").replace("```", "").strip()
+        full_script_acts.append(f"\n\n--- {act_title} ---\n" + act_clean)
+        print(f"  -> Act {act_num}/8 Complete ({len(act_clean.split())} words)", file=sys.stderr)
+
+    final_script = "\n".join(full_script_acts)
+    total_words = len(final_script.split())
+    est_duration = total_words / 125
+    print(f">> Full Master Script Assembled: {total_words} words (~{est_duration:.1f} minutes spoken)!", file=sys.stderr)
+
+    return {
+        "title": blueprint.get("title", f"{target_info['title']} | Full Movie Breakdown Hindi"),
+        "script": final_script,
+        "broll_queries": blueprint.get("broll_queries", ["dark detective rain", "police night car", "abandoned hospital"]),
+        "timestamps": "\n".join(timestamps_list),
+        "tags": blueprint.get("tags", ["movieexplainedinhindi", "filmykahani", "thriller", "endingexplained"])
+    }
 
 async def generate_voice(text: str, out_path: str):
     print(">> Synthesizing Studio Hindi Voiceover (hi-IN-MadhurNeural)...", file=sys.stderr)
@@ -399,9 +426,9 @@ def upload_to_filmy_kahani(video_path: str, title: str, description: str, tags: 
     print(f">> LIVE on YouTube: {url}", file=sys.stderr)
     return {"videoId": vid_id, "videoUrl": url}
 
-def run_target_channel_crawler_pipeline(duration_minutes=8):
+def run_target_channel_crawler_pipeline(duration_minutes=25):
     print(f"\n=================================================================")
-    print(f"🕵️ TARGET CHANNEL VIRAL MOVIE CRAWLER & PRODUCER")
+    print(f"🕵️ TARGET CHANNEL VIRAL MOVIE CRAWLER & PRODUCER (25-30 MIN)")
     print(f"📌 Targeting: Movies Insight Hindi, Climax Explained, Cinema Shaukeens...")
     print(f"=================================================================\n")
 
@@ -422,7 +449,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=8):
 
     # 5. Sourcing Realistic Cinema Footage
     broll_queries = data.get("broll_queries", [])
-    clips = download_cinema_footage(broll_queries, target_count=14)
+    clips = download_cinema_footage(broll_queries, target_count=18)
 
     # 6. Render Master Video with Anti-Copyright Transformations
     out_video = os.path.join("output", f"filmy_kahani_{int(time.time())}.mp4")
@@ -436,7 +463,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=8):
         f"{data['title']}\n\n"
         f"{data['script']}\n\n"
         f"TIMESTAMPS:\n"
-        f"{data.get('timestamps', '0:00 - रहस्यमय शुरुआत\n2:15 - जांच और सुराग\n4:45 - बड़ा मोड़\n7:00 - क्लाइमेक्स का खुलासा')}\n\n"
+        f"{data.get('timestamps', '0:00 - रहस्यमय शुरुआत\n3:00 - जांच और सुराग\n6:00 - खौफनाक घटनाएं\n10:00 - बड़ा मोड़\n15:00 - जानलेवा जाल\n20:00 - महामुकाबला\n24:00 - क्लाइमेक्स का खुलासा')}\n\n"
         f"🍿 रोजाना सबसे बेहतरीन हॉलीवुड और कोरियन थ्रिलर फिल्मों की कहानियों के लिए 'फिल्मी कहानी' (Filmy Kahani) को अभी सब्सक्राइब करें!\n\n"
         f"{' '.join(['#' + t for t in data.get('tags', [])])}"
     )
@@ -448,7 +475,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=8):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Target Channel Movie Crawler")
-    parser.add_argument("--duration", type=int, default=8, help="Duration in minutes (8-12 min)")
+    parser.add_argument("--duration", type=int, default=25, help="Duration in minutes (25-30 min)")
     args = parser.parse_args()
 
     res = run_target_channel_crawler_pipeline(duration_minutes=args.duration)
