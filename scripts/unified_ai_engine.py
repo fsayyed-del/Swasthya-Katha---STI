@@ -3,7 +3,8 @@
 Unified AI Director Engine.
 Seamlessly routes across:
 1. 🌟 Google AI Studio (Gemini 1.5 Pro, Gemini 2.0 Flash) — using your Google AI Pro tokens.
-2. 🚀 NVIDIA NIM (Llama 3.1 70B/8B, Nemotron 70B) — high-throughput fallback.
+2. 🚀 NVIDIA NIM (Active Models: DiffusionGemma 26B, Nemotron 30B, Llama 3.1 70B).
+3. 🎬 Built-in High-Tension Hindi Cinema Narrative Generator (Zero-Failure Fallback).
 """
 
 import os
@@ -34,6 +35,13 @@ load_env()
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY") or os.environ.get("GOOGLE_GENERATIVE_AI_API_KEY")
 NVIDIA_API_KEY = os.environ.get("NVIDIA_API_KEY", "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")
 
+ACTIVE_NVIDIA_MODELS = [
+    "google/diffusiongemma-26b-a4b-it",
+    "nvidia/nemotron-3-nano-30b-a3b",
+    "meta/llama-3.1-70b-instruct",
+    "meta/llama-3.3-70b-instruct"
+]
+
 def call_google_ai_studio(prompt: str, system_prompt: str = None, model="gemini-1.5-pro", temperature=0.7) -> str:
     """Calls Google AI Studio / Gemini API directly via high-speed REST endpoint."""
     if not GEMINI_API_KEY:
@@ -59,44 +67,6 @@ def call_google_ai_studio(prompt: str, system_prompt: str = None, model="gemini-
     data = res.json()
     return data["candidates"][0]["content"]["parts"][0]["text"]
 
-def call_nvidia_nim(messages: list, model="meta/llama-3.1-70b-instruct", max_tokens=2048, timeout=120) -> str:
-    """Calls NVIDIA Inference Microservice."""
-    url = "https://integrate.api.nvidia.com/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {NVIDIA_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": model,
-        "messages": messages,
-        "temperature": 0.7,
-        "max_tokens": max_tokens
-    }
-
-    try:
-        res = requests.post(url, headers=headers, json=payload, timeout=timeout)
-        if res.status_code == 200:
-            data = res.json()
-            if "choices" in data and len(data["choices"]) > 0:
-                return data["choices"][0]["message"]["content"]
-    except Exception:
-        pass
-
-    # Secondary Llama 3.3 / Nemotron fallback
-    for fallback_model in ["meta/llama-3.3-70b-instruct", "nvidia/llama-3.1-nemotron-70b-instruct", "mistralai/mistral-large-2-instruct"]:
-        try:
-            payload["model"] = fallback_model
-            res = requests.post(url, headers=headers, json=payload, timeout=30)
-            if res.status_code == 200:
-                data = res.json()
-                if "choices" in data and len(data["choices"]) > 0:
-                    return data["choices"][0]["message"]["content"]
-        except Exception:
-            pass
-
-    # Built-in High-Tension Hindi Cinema Narrative Generator (Guaranteed Zero-Fail)
-    return generate_fallback_cinema_narrative(messages[-1]["content"])
-
 def generate_fallback_cinema_narrative(prompt: str) -> str:
     """Generates rich, suspenseful cinematic Hindi narration when cloud APIs are unavailable."""
     if "Act 1" in prompt or "रहस्यमय शुरुआत" in prompt or "act_num" in prompt:
@@ -111,64 +81,88 @@ def generate_fallback_cinema_narrative(prompt: str) -> str:
         return (
             "तहखाने में कदम रखते ही सड़े हुए मांस की बदबू पूरे कमरे में फैल जाती है। "
             "वहां एक पुरानी लकड़ी की मेज पर एक डायरी मिलती है, जिसके पन्नों पर अजीबोगरीब सांकेतिक भाषा में कुछ लिखा हुआ था। "
-            "डायरी की आखिरी तारीख आज की ही थी, और उसमें साफ लिखा था कि आज रात इस हवेली में आने वाला इंसान कभी जिंदा बाहर नहीं जा पाएगा। "
-            "तभी अचानक पीछे से दरवाजा जोर से बंद हो जाता है और ताला लगने की आवाज आती है। "
-            "अब बाहर निकलने का हर रास्ता बंद हो चुका था, और अंधेरे में किसी के कदमों की आहट और करीब आ रही थी।"
+            "डायरी के आखिरी पन्ने पर एक तस्वीर चिपकी थी, जिसे देखते ही जासूस के पैरों तले जमीन खिसक गई। "
+            "वह तस्वीर उसी की थी, जो बीस साल पहले ली गई थी, लेकिन उसे इस जगह के बारे में कुछ भी याद नहीं था।"
         )
     elif "Act 3" in prompt or "अजीब घटनाएं" in prompt:
         return (
-            "दीवारों पर लगे पुराने शीशों में उसे अपनी ही नहीं, बल्कि कई भयानक चेहरों की परछाइयां दिखने लगती हैं। "
-            "फोन में कोई नेटवर्क नहीं था, और घड़ी की सुइयां उल्टी दिशा में घूमने लगी थीं। "
-            "किरदार को समझ आता है कि यह कोई साधारण अपराध नहीं, बल्कि दशकों पुरानी एक खौफनाक वैज्ञानिक और मनोवैज्ञानिक साजिश है। "
-            "यहां लोगों को लाकर उन पर एक ऐसा प्रयोग किया जाता था जो इंसानी दिमाग को पूरी तरह पागल कर दे।"
+            "अचानक कमरे की बत्तियां फड़कने लगती हैं और भारी लोहे का दरवाजा जोर से बंद हो जाता है। "
+            "दीवारों से खरोंचने की आवाजें आने लगती हैं, और हवा में तापमान शून्य से नीचे गिर जाता है। "
+            "जासूस अपनी बंदूक निकालता है, लेकिन जैसे ही वह मुड़ता है, उसे आईने में अपने पीछे एक विकृत साया खड़ा दिखाई देता है। "
+            "यह साया कोई इंसान नहीं, बल्कि इस हवेली में दशकों से कैद एक शैतानी आत्मा थी।"
         )
     elif "Act 4" in prompt or "विश्वासघात" in prompt:
         return (
-            "तभी अंधेरे कोने से उसका पुराना साथी बाहर निकलता है, जिस पर वह सबसे ज्यादा भरोसा करता था। "
-            "लेकिन साथी की आंखों में कोई हमदर्दी नहीं, बल्कि एक ठंडी और बेरहम मुस्कान थी। "
-            "वह खुलासा करता है कि उसी ने उसे यहां फंसाने के लिए यह पूरा जाल बुना था। "
-            "सालों पहले हुए उस रहस्यमयी हादसे का असली मास्टरमाइंड कोई और नहीं, बल्कि उसका अपना दोस्त ही था।"
+            "तभी उसका साथी पुलिस अधिकारी वहां पहुंचता है, लेकिन उसकी आंखों में मदद का नहीं बल्कि मौत का खौफनाक इरादा था। "
+            "वह खुलासा करता है कि यह पूरा जाल उसी ने बिछाया था ताकि पुराने जुर्म का गवाह हमेशा के लिए मिट जाए। "
+            "दोनों के बीच जानलेवा हाथापाई शुरू होती है, और हवेली में गोलियों की गूंज से पुरानी छत गिरने लगती है।"
         )
     elif "Act 5" in prompt or "जानलेवा जाल" in prompt:
         return (
-            "दोनों के बीच एक खूनी और जानलेवा संघर्ष शुरू हो जाता है। "
-            "किरदार किसी तरह वहां रखी एक लोहे की रॉड से हमला करके साथी को पीछे धकेलता है। "
-            "कमरे में आग लग जाती है और जहरीला धुआं तेजी से फैलने लगता है। "
-            "सांस लेना दूभर हो जाता है, लेकिन जिंदा बचने का जुनून उसे आगे बढ़ने की ताकत देता है।"
+            "गिरते मलबे और आग की लपटों के बीच दोनों अपनी जान बचाने के लिए एक गुप्त सुरंग की ओर भागते हैं। "
+            "सुरंग के अंदर प्राचीन कंकाल और खतरनाक फंदे लगे हुए थे। हर एक कदम मौत को दावत दे रहा था। "
+            "जासूस अपनी चतुराई से आगे निकलता है, लेकिन उसे समझ आ जाता है कि असली खतरा अभी बाकी है।"
         )
     elif "Act 6" in prompt or "असली साजिश" in prompt:
         return (
-            "हवेली के सबसे भीतरी कमरे में उसे एक सीक्रेट अंडरग्राउंड लैब मिलती है, जहां कई लोगों की फाइलें और तस्वीरें रखी थीं। "
-            "उन तस्वीरों में सबसे ऊपर खुद उसी की तस्वीर लगी हुई थी। "
-            "उसे यह जानकर गहरा सदमा लगता है कि उसकी पूरी याददाश्त ही नकली थी, और वह खुद इस प्रोजेक्ट का सबसे खतरनाक सब्जेक्ट रहा है।"
+            "सुरंग एक गुप्त भूमिगत प्रयोगशाला में जाकर खुलती है, जहां मानव मस्तिष्क पर अवैध प्रयोग किए जा रहे थे। "
+            "वहां के दस्तावेजों से साबित होता है कि शहर के सबसे प्रतिष्ठित लोग इस खूनी खेल में शामिल थे। "
+            "जासूस उन सभी सबूतों को अपने कैमरे में रिकॉर्ड कर लेता है ताकि दुनिया के सामने सच आ सके।"
         )
     elif "Act 7" in prompt or "अंतिम महामुकाबला" in prompt:
         return (
-            "हवेली की छत पर तूफानी बारिश के बीच असली विलेन सामने आता है। "
-            "बिजली की चमक में दोनों के बीच अंतिम आर-पार की लड़ाई होती है। "
-            "विलेन दावा करता है कि सच जानकर भी वह दुनिया को कभी कुछ नहीं बता पाएगा। "
-            "लेकिन किरदार अपनी जान की बाजी लगाकर विलेन को छत से नीचे खाई में धकेल देता है।"
+            "प्रयोगशाला के मुख्य हॉल में मास्टरमाइंड से आमना-सामना होता है। "
+            "विस्फोटकों का टाइमर शुरू हो चुका था, और केवल दो मिनट बाकी थे। "
+            "एक भीषण द्वंद्वयुद्ध के बाद जासूस विलेन को काबू करता है और आग के शोलों के बीच से छलांग लगाकर बाहर निकल जाता है।"
         )
-    elif "Act 8" in prompt or "क्लाइमेक्स" in prompt or "अंत" in prompt:
+    elif "Act 8" in prompt or "दिमाग हिला देने वाला अंत" in prompt or "क्लाइमेक्स" in prompt:
         return (
-            "सुबह की पहली किरण के साथ पुलिस की गाड़ियां हवेली के बाहर पहुंचती हैं। "
-            "लेकिन जब वे तहखाने में प्रवेश करते हैं, तो वहां किसी की लाश नहीं होती, बल्कि सिर्फ वही डायरी मेज पर रखी मिलती है। "
-            "और डायरी के आखिरी पन्ने पर एक नया नाम लिखा था—पुलिस कमिश्नर का! "
-            "यह अंत यह साबित करता है कि यह साजिश कभी खत्म नहीं हुई थी, बल्कि अब और बड़े पैमाने पर शुरू होने वाली है। "
-            "अगर आपको यह दिमाग हिला देने वाली कहानी पसंद आई, तो 'फिल्मी कहानी' को अभी सब्सक्राइब करें!"
+            "फिल्म का क्लाइमेक्स आपके होश उड़ा देगा! जब जासूस शहर के पुलिस स्टेशन पहुंचता है, तो टीवी पर उसकी खुद की तस्वीर दिखाई जाती है। "
+            "उसे बताया जाता है कि वह मानसिक अस्पताल से भागा हुआ एक मरीज है और यह पूरी हवेली केवल उसके दिमाग का एक वहम थी। "
+            "लेकिन उसकी जेब में वह असली डायरी अब भी मौजूद थी, जो साबित करती है कि सच कुछ और ही है! "
+            "कमेंट करके जरूर बताएं कि क्या यह जासूस का वहम था या कोई गहरी साजिश? चैनल को सब्सक्राइब जरूर करें!"
+        )
+    else:
+        return (
+            "यह कहानी केवल एक फिल्म का प्लॉट नहीं है, बल्कि इंसानी दिमाग के सबसे अंधेरे कोनों की एक खौफनाक यात्रा है। "
+            "शुरू से लेकर अंत तक हर मोड़ पर आपको नए रहस्य और चौंकाने वाले सच देखने को मिलेंगे।"
         )
 
-    return (
-        "इस रहस्यमयी कहानी की शुरुआत एक ऐसे खौफनाक मोड़ से होती है जिसकी किसी ने कल्पना भी नहीं की थी। "
-        "हर मोड़ पर छुपा हुआ सच और बढ़ते सस्पेंस ने दर्शकों को कुर्सी से बांधे रखा। "
-        "अंत में जो खुलासा हुआ, उसने साबित कर दिया कि इंसानी दिमाग की चालें किसी भी हथियार से ज्यादा खतरनाक होती हैं।"
-    )
+def call_nvidia_nim(messages: list, model="google/diffusiongemma-26b-a4b-it", max_tokens=2048, timeout=120) -> str:
+    """Calls NVIDIA Inference Microservice with active model fallback and zero-fail local generator."""
+    url = "https://integrate.api.nvidia.com/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {NVIDIA_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    models_to_try = [model] + [m for m in ACTIVE_NVIDIA_MODELS if m != model]
+
+    for m in models_to_try:
+        payload = {
+            "model": m,
+            "messages": messages,
+            "temperature": 0.7,
+            "max_tokens": max_tokens
+        }
+        try:
+            res = requests.post(url, headers=headers, json=payload, timeout=timeout)
+            if res.status_code == 200:
+                data = res.json()
+                choices = data.get("choices", [])
+                if choices and len(choices) > 0 and "message" in choices[0] and "content" in choices[0]["message"]:
+                    return choices[0]["message"]["content"]
+        except Exception:
+            continue
+
+    # Zero-Fail Fallback
+    return generate_fallback_cinema_narrative(messages[-1]["content"])
 
 def generate_ai_content(prompt: str, system_prompt="You are an expert YouTube content director.", model_preference="auto") -> str:
     """
     Intelligently routes request:
     - If Google AI Pro token is available: Uses Gemini 1.5 Pro / Gemini 2.0 Flash
-    - If Google AI fails or is unset: Uses NVIDIA NIM Llama 3.1
+    - If Google AI fails or is unset: Uses NVIDIA NIM (DiffusionGemma / Nemotron) with Zero-Fail Fallback
     """
     if (GEMINI_API_KEY and model_preference in ["auto", "gemini", "google"]) or model_preference == "gemini":
         try:
@@ -177,7 +171,7 @@ def generate_ai_content(prompt: str, system_prompt="You are an expert YouTube co
         except Exception as e:
             print(f">> Google AI Studio notice ({e}), routing to NVIDIA NIM...", file=sys.stderr)
 
-    print(f">> Calling NVIDIA NIM AI Engine (Llama 3.1)...", file=sys.stderr)
+    print(f">> Calling NVIDIA NIM AI Engine...", file=sys.stderr)
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": prompt}
@@ -186,5 +180,5 @@ def generate_ai_content(prompt: str, system_prompt="You are an expert YouTube co
 
 if __name__ == "__main__":
     print("Testing Unified AI Director...")
-    out = generate_ai_content("Give me a 1-sentence viral hook for an AI documentary.")
-    print("AI Response:", out)
+    out = generate_ai_content("Give me Act 1 of a psychological thriller in Hindi.")
+    print("AI Response:\n", out)
