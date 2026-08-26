@@ -477,7 +477,7 @@ def run_target_channel_crawler_pipeline(duration_minutes=14):
 
     # 3. Studio Hindi Voiceover (Auto-Dubbed)
     voice_audio = os.path.join(TEMP_DIR, "target_voice.mp3")
-    asyncio.run(generate_voice(data["script"], voice_audio))
+    generate_voice_sync(data["script"], voice_audio)
     duration = get_duration(voice_audio)
 
     # 4. Sourcing Realistic Cinema Footage
