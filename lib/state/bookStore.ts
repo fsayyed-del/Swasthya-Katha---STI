@@ -12,6 +12,7 @@ interface BookStoreState {
   locale: Locale;
   isAudioPopoverOpen: boolean;
   isAudioPlaying: boolean;
+  activeAudioPage: number | null;
   activeAudioSentenceIndex: number;
   audioProgress: number;
   facilitatorUnlocked: boolean;
@@ -25,6 +26,7 @@ interface BookStoreState {
   setLocale: (locale: Locale) => void;
   setAudioPopoverOpen: (open: boolean) => void;
   setAudioPlaying: (playing: boolean) => void;
+  setActiveAudioPage: (page: number | null) => void;
   setActiveAudioSentenceIndex: (index: number) => void;
   setAudioProgress: (progress: number) => void;
   unlockFacilitator: (passcode: string) => boolean;
@@ -42,6 +44,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
   locale: 'en',
   isAudioPopoverOpen: false,
   isAudioPlaying: false,
+  activeAudioPage: null,
   activeAudioSentenceIndex: 0,
   audioProgress: 0,
   facilitatorUnlocked: false,
@@ -52,7 +55,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
     if (clamped !== get().currentLeafIndex) {
       playPageTurnSound();
     }
-    set({ currentLeafIndex: clamped, isAudioPlaying: false, activeAudioSentenceIndex: 0 });
+    set({ currentLeafIndex: clamped, isAudioPlaying: false, activeAudioPage: null, activeAudioSentenceIndex: 0 });
   },
 
   nextLeaf: () => {
@@ -64,7 +67,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
       lastTurnTimestamp = now;
       playPageTurnSound();
       const nextIdx = get().currentLeafIndex + 1;
-      set({ currentLeafIndex: nextIdx, turnDirection: 'forward', isAudioPlaying: false, activeAudioSentenceIndex: 0 });
+      set({ currentLeafIndex: nextIdx, turnDirection: 'forward', isAudioPlaying: false, activeAudioPage: null, activeAudioSentenceIndex: 0 });
     }
   },
 
@@ -77,7 +80,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
       lastTurnTimestamp = now;
       playPageTurnSound();
       const prevIdx = get().currentLeafIndex - 1;
-      set({ currentLeafIndex: prevIdx, turnDirection: 'backward', isAudioPlaying: false, activeAudioSentenceIndex: 0 });
+      set({ currentLeafIndex: prevIdx, turnDirection: 'backward', isAudioPlaying: false, activeAudioPage: null, activeAudioSentenceIndex: 0 });
     }
   },
 
@@ -85,6 +88,7 @@ export const useBookStore = create<BookStoreState>((set, get) => ({
   setLocale: (locale: Locale) => set({ locale }),
   setAudioPopoverOpen: (isAudioPopoverOpen: boolean) => set({ isAudioPopoverOpen }),
   setAudioPlaying: (isAudioPlaying: boolean) => set({ isAudioPlaying }),
+  setActiveAudioPage: (activeAudioPage: number | null) => set({ activeAudioPage }),
   setActiveAudioSentenceIndex: (activeAudioSentenceIndex: number) => set({ activeAudioSentenceIndex }),
   setAudioProgress: (audioProgress: number) => set({ audioProgress }),
 

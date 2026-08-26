@@ -10,7 +10,6 @@ import { ReadingSettingsModal, ReadingSettings } from '../ui/ReadingSettingsModa
 import { CameraStatusIndicator } from '../camera/CameraStatusIndicator';
 import { GestureTutorialOverlay } from '../camera/GestureTutorialOverlay';
 import { TouchFreeFocusController } from '../camera/TouchFreeFocusController';
-import { MediumAudioPlayerBar } from '../audio/MediumAudioPlayerBar';
 import { useCameraGesture } from '@/hooks/useCameraGesture';
 import { useBookStore } from '@/lib/state/bookStore';
 import { CameraGestureCommand } from '@/lib/gestures/gestureTypes';
@@ -150,9 +149,6 @@ export const ReaderShell: React.FC<ReaderShellProps> = ({
 
       {/* Touch-Free Full Focus (Shift+Tab) Controller Overlay */}
       <TouchFreeFocusController locale={locale} />
-
-      {/* Medium-Style Live Karaoke Audio Player Bar */}
-      <MediumAudioPlayerBar locale={locale} />
 
       {/* Hand Gesture Swipe & Tilt Animated Tutorial Overlay (only shown when user clicks camera) */}
       <GestureTutorialOverlay

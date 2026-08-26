@@ -51,21 +51,33 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
   const partnerProtocol = data.partnerProtocol ? (data.partnerProtocol[locale] || data.partnerProtocol.en) : null;
   const closedSettingPearl = data.closedSettingPearl ? (data.closedSettingPearl[locale] || data.closedSettingPearl.en) : null;
 
-  // Live Audio Highlighting State
+  // Live Audio Highlighting State from Zustand
   const isAudioPlaying = useBookStore((s) => s.isAudioPlaying);
+  const activeAudioPage = useBookStore((s) => s.activeAudioPage);
   const activeAudioSentenceIndex = useBookStore((s) => s.activeAudioSentenceIndex);
-  const currentLeafIndex = useBookStore((s) => s.currentLeafIndex);
 
-  // Active page matching logic
-  const isThisPageNarrating =
-    isAudioPlaying &&
-    pageNumber !== undefined &&
-    (pageNumber === 2 * currentLeafIndex || pageNumber === 2 * currentLeafIndex - 1);
-
-  const audioScriptText = `${title}. ${overview} ${isHindi ? 'पुरुषों में लक्षण:' : 'Male Findings:'} ${maleDetails} ${isHindi ? 'महिलाओं में लक्षण:' : 'Female Findings:'} ${femaleDetails} ${regimen ? `${isHindi ? 'उपचार किट:' : 'Treatment:'} ${regimen}` : ''}`;
+  // Active page matching logic: strictly when audio is actively playing on THIS page
+  const isThisPageNarrating = isAudioPlaying && activeAudioPage === pageNumber;
 
   const malePhoto = data.photos.find((p) => p.gender === 'male') || data.photos[0];
   const femalePhoto = data.photos.find((p) => p.gender === 'female') || data.photos[1] || data.photos[0];
+
+  const maleCaption = malePhoto ? (malePhoto.caption[locale] || malePhoto.caption.en) : '';
+  const femaleCaption = femalePhoto ? (femalePhoto.caption[locale] || femalePhoto.caption.en) : '';
+
+  // Comprehensive 5-Section Spoken Audio Narrative for this Page
+  const sectionsToSpeak: string[] = [
+    // Section 0: Title & Classification
+    `${title}. ${tag}.`,
+    // Section 1: Clinical Overview Description
+    `${overview}`,
+    // Section 2: Male Presentation & Findings
+    `${isHindi ? 'पुरुष लक्षण विवरण:' : 'Male Clinical Presentation:'} ${maleCaption ? `${maleCaption}. ` : ''}${maleDetails}`,
+    // Section 3: Female Presentation & Findings
+    `${isHindi ? 'महिला लक्षण विवरण:' : 'Female Clinical Presentation:'} ${femaleCaption ? `${femaleCaption}. ` : ''}${femaleDetails}`,
+    // Section 4: Prescribed NACO SCM Regimen & Field Guidance
+    `${regimen ? `${isHindi ? 'नाको सिंड्रोमिक उपचार:' : 'NACO Syndromic SCM Regimen:'} ${regimen}. ` : ''}${partnerProtocol ? `${isHindi ? 'पार्टनर प्रबंधन:' : 'Partner Protocol:'} ${partnerProtocol}. ` : ''}${closedSettingPearl ? `${isHindi ? 'फील्ड टिप:' : 'Field Pearl:'} ${closedSettingPearl}` : ''}`,
+  ].filter((s) => s.trim().length > 0);
 
   return (
     <div className="w-full h-full p-2.5 sm:p-3.5 md:p-4 flex flex-col justify-between select-none overflow-hidden text-ink bg-paper">
@@ -88,7 +100,7 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
         <h2
           className={`text-sm sm:text-base md:text-lg font-black font-display text-ink-teal leading-tight tracking-tight transition-all duration-300 ${
             isThisPageNarrating && activeAudioSentenceIndex === 0
-              ? 'bg-amber-200/90 text-ink-black px-2 py-0.5 rounded-md ring-2 ring-amber-400 shadow-xs scale-[1.01]'
+              ? 'bg-amber-200/95 text-ink-black px-2 py-0.5 rounded-lg ring-2 ring-amber-500 shadow-md scale-[1.01]'
               : ''
           }`}
         >
@@ -98,35 +110,41 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
 
       {/* Main Scrollable Body with Real-Time Content Highlighting */}
       <div className="flex-1 overflow-y-auto pr-0.5 space-y-2 py-0.5">
-        {/* Overview Paragraph with Live Audio Highlight */}
+        {/* Section 1: Overview Paragraph with Live Audio Highlight */}
         <div
           className={`border-l-3 border-brass px-2.5 py-1.5 rounded-r-xl border-y border-r border-brass/25 text-[9.5px] sm:text-[10.5px] text-ink leading-relaxed font-medium shadow-xs transition-all duration-300 ${
             isThisPageNarrating && activeAudioSentenceIndex === 1
-              ? 'bg-amber-100/95 ring-2 ring-amber-400 shadow-md scale-[1.01]'
+              ? 'bg-amber-100/95 ring-2 ring-amber-500 shadow-md scale-[1.01] border-l-4 border-amber-600'
               : 'bg-paper-shadow/70'
           }`}
         >
           <p>{overview}</p>
         </div>
 
-        {/* Vertical Stack on Mobile (Up & Down), Side-by-Side on Desktop */}
+        {/* Section 2 & 3: Vertical Stack on Mobile (Up & Down), Side-by-Side on Desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {/* MALE PRESENTATION */}
+          {/* MALE PRESENTATION CARD */}
           {malePhoto && (
             <div
               className={`bg-paper rounded-xl border overflow-hidden shadow-xs flex flex-col space-y-1.5 p-1.5 ring-1 transition-all duration-300 ${
                 isThisPageNarrating && activeAudioSentenceIndex === 2
-                  ? 'border-amber-400 ring-2 ring-amber-400 bg-amber-50/60 shadow-md scale-[1.01]'
+                  ? 'border-amber-500 ring-2 ring-amber-500 bg-amber-50/90 shadow-lg scale-[1.02]'
                   : 'border-brass/40 ring-black/5'
               }`}
             >
-              <div className="relative w-full aspect-[16/10] bg-black/10 rounded-lg overflow-hidden border border-brass/20">
-                <div className="absolute top-1 left-1 z-10 bg-ink-teal/95 text-paper px-2 py-0.5 text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider rounded-md shadow-xs flex items-center gap-1">
+              <div
+                className={`relative w-full aspect-[16/10] bg-black/10 rounded-lg overflow-hidden border transition-all ${
+                  isThisPageNarrating && activeAudioSentenceIndex === 2 ? 'ring-2 ring-amber-400 border-amber-400' : 'border-brass/20'
+                }`}
+              >
+                <div className={`absolute top-1 left-1 z-10 text-paper px-2 py-0.5 text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider rounded-md shadow-xs flex items-center gap-1 ${
+                  isThisPageNarrating && activeAudioSentenceIndex === 2 ? 'bg-amber-600 animate-pulse' : 'bg-ink-teal/95'
+                }`}>
                   <span>{isHindi ? '♂ पुरुष लक्षण (Male)' : '♂ Male Presentation'}</span>
                 </div>
                 <Image
                   src={malePhoto.imageSrc}
-                  alt={malePhoto.caption[locale] || malePhoto.caption.en}
+                  alt={maleCaption}
                   fill
                   sizes="(max-width: 768px) 100vw, 300px"
                   className="object-cover"
@@ -134,35 +152,47 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
                 />
               </div>
 
-              <div className="text-[8.5px] sm:text-[9px] text-ink font-bold leading-tight">
-                {malePhoto.caption[locale] || malePhoto.caption.en}
+              <div className={`text-[8.5px] sm:text-[9px] font-bold leading-tight ${
+                isThisPageNarrating && activeAudioSentenceIndex === 2 ? 'text-amber-950 font-extrabold' : 'text-ink'
+              }`}>
+                {maleCaption}
               </div>
 
-              <div className="bg-gradient-to-br from-paper-deep/60 to-paper-shadow/80 p-2 rounded-lg border border-brass/30 text-[9px] sm:text-[10px]">
+              <div className={`p-2 rounded-lg border text-[9px] sm:text-[10px] transition-all ${
+                isThisPageNarrating && activeAudioSentenceIndex === 2
+                  ? 'bg-amber-100/90 border-amber-400 text-ink-black ring-1 ring-amber-400'
+                  : 'bg-gradient-to-br from-paper-deep/60 to-paper-shadow/80 border-brass/30 text-ink'
+              }`}>
                 <span className="font-bold text-ink-teal text-[8.5px] sm:text-[9px] uppercase tracking-wider block mb-0.5">
                   {isHindi ? 'पुरुषों में मुख्य लक्षण:' : 'Male Clinical Findings:'}
                 </span>
-                <p className="text-ink leading-relaxed font-medium">{maleDetails}</p>
+                <p className="leading-relaxed font-medium">{maleDetails}</p>
               </div>
             </div>
           )}
 
-          {/* FEMALE PRESENTATION */}
+          {/* FEMALE PRESENTATION CARD */}
           {femalePhoto && (
             <div
               className={`bg-paper rounded-xl border overflow-hidden shadow-xs flex flex-col space-y-1.5 p-1.5 ring-1 transition-all duration-300 ${
                 isThisPageNarrating && activeAudioSentenceIndex === 3
-                  ? 'border-amber-400 ring-2 ring-amber-400 bg-amber-50/60 shadow-md scale-[1.01]'
+                  ? 'border-amber-500 ring-2 ring-amber-500 bg-amber-50/90 shadow-lg scale-[1.02]'
                   : 'border-brass/40 ring-black/5'
               }`}
             >
-              <div className="relative w-full aspect-[16/10] bg-black/10 rounded-lg overflow-hidden border border-brass/20">
-                <div className="absolute top-1 left-1 z-10 bg-coral/95 text-paper px-2 py-0.5 text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider rounded-md shadow-xs flex items-center gap-1">
+              <div
+                className={`relative w-full aspect-[16/10] bg-black/10 rounded-lg overflow-hidden border transition-all ${
+                  isThisPageNarrating && activeAudioSentenceIndex === 3 ? 'ring-2 ring-amber-400 border-amber-400' : 'border-brass/20'
+                }`}
+              >
+                <div className={`absolute top-1 left-1 z-10 text-paper px-2 py-0.5 text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider rounded-md shadow-xs flex items-center gap-1 ${
+                  isThisPageNarrating && activeAudioSentenceIndex === 3 ? 'bg-coral animate-pulse' : 'bg-coral/95'
+                }`}>
                   <span>{isHindi ? '♀ महिला लक्षण (Female)' : '♀ Female Presentation'}</span>
                 </div>
                 <Image
                   src={femalePhoto.imageSrc}
-                  alt={femalePhoto.caption[locale] || femalePhoto.caption.en}
+                  alt={femaleCaption}
                   fill
                   sizes="(max-width: 768px) 100vw, 300px"
                   className="object-cover"
@@ -170,29 +200,41 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
                 />
               </div>
 
-              <div className="text-[8.5px] sm:text-[9px] text-ink font-bold leading-tight">
-                {femalePhoto.caption[locale] || femalePhoto.caption.en}
+              <div className={`text-[8.5px] sm:text-[9px] font-bold leading-tight ${
+                isThisPageNarrating && activeAudioSentenceIndex === 3 ? 'text-amber-950 font-extrabold' : 'text-ink'
+              }`}>
+                {femaleCaption}
               </div>
 
-              <div className="bg-gradient-to-br from-paper-deep/60 to-paper-shadow/80 p-2 rounded-lg border border-brass/30 text-[9px] sm:text-[10px]">
+              <div className={`p-2 rounded-lg border text-[9px] sm:text-[10px] transition-all ${
+                isThisPageNarrating && activeAudioSentenceIndex === 3
+                  ? 'bg-amber-100/90 border-amber-400 text-ink-black ring-1 ring-amber-400'
+                  : 'bg-gradient-to-br from-paper-deep/60 to-paper-shadow/80 border-brass/30 text-ink'
+              }`}>
                 <span className="font-bold text-coral-dark text-[8.5px] sm:text-[9px] uppercase tracking-wider block mb-0.5">
                   {isHindi ? 'महिलाओं में मुख्य लक्षण:' : 'Female Clinical Findings:'}
                 </span>
-                <p className="text-ink leading-relaxed font-medium">{femaleDetails}</p>
+                <p className="leading-relaxed font-medium">{femaleDetails}</p>
               </div>
             </div>
           )}
         </div>
 
-        {/* High-Yield Field Coordinator Action Section (NACO SCM Protocol & Partner Guidelines) */}
+        {/* Section 4: High-Yield Field Coordinator Action Section (NACO SCM Protocol & Partner Guidelines) */}
         {(regimen || partnerProtocol || closedSettingPearl) && (
-          <div className="space-y-1.5 pt-1">
-            {/* Prescribed Regimen Pill with Live Audio Highlight */}
+          <div
+            className={`space-y-1.5 pt-1 rounded-xl transition-all duration-300 ${
+              isThisPageNarrating && activeAudioSentenceIndex === 4
+                ? 'p-1.5 bg-amber-100/95 ring-2 ring-amber-500 shadow-md scale-[1.01]'
+                : ''
+            }`}
+          >
+            {/* Prescribed Regimen Pill */}
             {regimen && (
               <div
-                className={`border rounded-xl p-2 text-[8.5px] sm:text-[9.5px] text-emerald-950 flex items-start gap-2 shadow-xs transition-all duration-300 ${
-                  isThisPageNarrating && activeAudioSentenceIndex >= 4
-                    ? 'bg-amber-100 border-amber-400 ring-2 ring-amber-400 shadow-md scale-[1.01]'
+                className={`border rounded-xl p-2 text-[8.5px] sm:text-[9.5px] text-emerald-950 flex items-start gap-2 shadow-xs transition-all ${
+                  isThisPageNarrating && activeAudioSentenceIndex === 4
+                    ? 'bg-emerald-100/90 border-emerald-500 font-bold ring-1 ring-emerald-400'
                     : 'bg-emerald-50/90 border-emerald-300'
                 }`}
               >
@@ -243,7 +285,11 @@ export const EditorialDiseasePage: React.FC<EditorialDiseasePageProps> = ({
           <span className="font-semibold">NACO SCM Protocol</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <SoundButton textToSpeak={audioScriptText} locale={locale} pageNumber={pageNumber} />
+          <SoundButton
+            sectionsToSpeak={sectionsToSpeak}
+            locale={locale}
+            pageNumber={pageNumber}
+          />
           <span className="font-bold text-brass font-display">{pageNumber ? `Page 0${pageNumber}` : ''}</span>
         </div>
       </div>
