@@ -518,7 +518,7 @@ def render_broadcast_video(clips: list, voice_path: str, music_path: str, srt_pa
         "-filter_complex", filter_complex,
         "-map", "[v_out]",
         "-map", "[a_out]",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "16", "-pix_fmt", "yuv420p",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "18", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "256k",
         "-movflags", "+faststart",
         out_video
