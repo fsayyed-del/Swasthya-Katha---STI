@@ -26,7 +26,7 @@ if %errorlevel% neq 0 (
 echo [✓] Project Root : %CD%
 echo [✓] AI Engines   : Google AI Studio (Gemini Pro) + NVIDIA NIM (Active)
 echo [✓] YouTube API  : Authenticated (Multiple Channels)
-echo [✓] Web Scraper  : Active (HD Movie Stills + Pexels HD)
+echo [✓] Real Footage : Active (yt-dlp Trailer Slicer + HD Web Stills)
 echo.
 echo ===============================================================================
 echo  CHOOSE AN AUTOMATION OPTION:
@@ -35,18 +35,19 @@ echo.
 echo   [1] 🤖 START 24/7 AUTOPILOT DAEMON (Cycles all formats continuously)
 echo   [2] 🎨 Generate Stickman Motivational Short (Aesthetic Dark Animation)
 echo   [3] 🔥 Generate Viral Ranking Short ($20k/Mo Top 5 Countdown)
-echo   [4] 🇮🇳 Generate Hindi Movie Recap (12-14 Min with Web Movie Stills)
+echo   [4] 🇮🇳 Generate Hindi Movie Recap (12-14 Min with Real Movie Footage)
 echo   [5] 🎬 Generate 10-20 Min Long-Form Deep Dive / Documentary
 echo   [6] 💎 Generate Matt Parr High-RPM Pillar ($35-$80 CPM)
 echo   [7] 💸 MoneyPrinterTurbo Video (Google AI Studio + Audio Ducking)
 echo   [8] 👶 US/Global Kids & Toddler Learning Video (Cocomelon / Infobells)
 echo   [9] ✨ 3D Pixar Animated Story / Sitcom (Dual-Voice Dialogue & Lipsync)
+echo   [C] ⚡ Viral Commentary / Community Short ($7,000/Mo Alex Voice Blueprint)
 echo   [G] 🖥️ Open Graphical Control Center Window (GUI)
 echo   [0] ❌ Exit
 echo.
 echo ===============================================================================
 
-choice /c 123456789G0 /n /m "Select an option (1-9, G, 0): "
+choice /c 123456789CG0 /n /m "Select an option (1-9, C, G, 0): "
 set opt=%errorlevel%
 
 if "%opt%"=="1" goto opt1
@@ -58,8 +59,9 @@ if "%opt%"=="6" goto opt6
 if "%opt%"=="7" goto opt7
 if "%opt%"=="8" goto opt8
 if "%opt%"=="9" goto opt9
-if "%opt%"=="10" goto optG
-if "%opt%"=="11" goto opt0
+if "%opt%"=="10" goto optC
+if "%opt%"=="11" goto optG
+if "%opt%"=="12" goto opt0
 
 :opt1
 cls
@@ -96,7 +98,7 @@ exit /b
 
 :opt4
 cls
-echo >> Crawling Target Channels & Producing Cinema Story Breakdown with Web Stills...
+echo >> Crawling Target Channels & Producing Cinema Story with Real Movie Footage...
 python scripts\target_channel_movie_crawler.py --duration 14
 echo.
 echo ===============================================================================
@@ -153,6 +155,17 @@ exit /b
 cls
 echo >> Generating 3D Pixar Animated Story with Dual-Voice Dialogue...
 python scripts\pixar_consistent_animation_engine.py --lang hi
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:optC
+cls
+echo >> Generating Viral Commentary Community Short (Alex Voice & Kinetic Captions)...
+python scripts\viral_commentary_shorts_engine.py --lang en
 echo.
 echo ===============================================================================
 echo  Video Generation Complete!

@@ -67,6 +67,11 @@ PIPELINES = [
         "name": "🎨 3D Disney/Pixar Animated Story & Sitcom (Dual-Voice Dialogue)",
         "script": "scripts/pixar_consistent_animation_engine.py",
         "args": ["--lang", "hi"]
+    },
+    {
+        "name": "⚡ Viral Commentary / Community Short ($7k/Mo Alex Voice)",
+        "script": "scripts/viral_commentary_shorts_engine.py",
+        "args": ["--lang", "en"]
     }
 ]
 
