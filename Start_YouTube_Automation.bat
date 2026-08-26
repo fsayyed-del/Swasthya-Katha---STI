@@ -24,7 +24,7 @@ if %errorlevel% neq 0 (
 )
 
 echo [✓] Project Root : %CD%
-echo [✓] NVIDIA NIM   : meta/llama-3.1-70b-instruct (Active)
+echo [✓] AI Engines   : Google AI Studio (Gemini Pro) + NVIDIA NIM (Active)
 echo [✓] YouTube API  : Authenticated (Multiple Channels)
 echo [✓] Pexels HD    : Connected
 echo.
@@ -38,12 +38,13 @@ echo   [3] 🔥 Generate Viral Ranking Short ($20k/Mo Top 5 Countdown)
 echo   [4] 🇮🇳 Generate Hindi Movie Recap (Filmy Kahani / 100%% Synced)
 echo   [5] 🎬 Generate 10-20 Min Long-Form Deep Dive / Documentary
 echo   [6] 💎 Generate Matt Parr High-RPM Pillar ($35-$80 CPM)
-echo   [7] 🖥️ Open Graphical Control Center Window (GUI)
-echo   [8] ❌ Exit
+echo   [7] 💸 MoneyPrinterTurbo Video (Google AI Studio + Audio Ducking)
+echo   [8] 🖥️ Open Graphical Control Center Window (GUI)
+echo   [9] ❌ Exit
 echo.
 echo ===============================================================================
 
-choice /c 12345678 /n /m "Press a number (1-8): "
+choice /c 123456789 /n /m "Press a number (1-9): "
 set opt=%errorlevel%
 
 if "%opt%"=="1" goto opt1
@@ -54,6 +55,7 @@ if "%opt%"=="5" goto opt5
 if "%opt%"=="6" goto opt6
 if "%opt%"=="7" goto opt7
 if "%opt%"=="8" goto opt8
+if "%opt%"=="9" goto opt9
 
 :opt1
 cls
@@ -123,9 +125,20 @@ exit /b
 
 :opt7
 cls
+echo >> Generating MoneyPrinterTurbo AI Video (with Audio Ducking)...
+python scripts\money_printer_turbo_engine.py --topic "How AI Agents Will Run Global Businesses in 2026"
+echo.
+echo ===============================================================================
+echo  Video Generation Complete!
+echo ===============================================================================
+pause
+exit /b
+
+:opt8
+cls
 echo >> Launching Graphical Control Center...
 start "" python scripts\desktop_dashboard.py
 exit /b
 
-:opt8
+:opt9
 exit /b
