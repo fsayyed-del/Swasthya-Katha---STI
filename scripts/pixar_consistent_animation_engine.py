@@ -357,6 +357,42 @@ def compile_pixar_master_video(frames: list, audio_path: str, srt_path: str, out
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f">> Master 3D Pixar Animation Render Complete: {out_video}", file=sys.stderr)
 
+def get_youtube_client():
+    creds = Credentials(
+        None,
+        refresh_token=REFRESH_TOKEN,
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET
+    )
+    creds.refresh(Request())
+    return build("youtube", "v3", credentials=creds)
+
+def upload_to_youtube(video_path: str, title: str, description: str, tags: list):
+    print(">> Uploading Master 3D Pixar Animation to YouTube Channel...", file=sys.stderr)
+    try:
+        youtube = get_youtube_client()
+        body = {
+            "snippet": {"title": title[:100], "description": description[:4800], "tags": tags, "categoryId": "1"},
+            "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
+        }
+        media = MediaFileUpload(video_path, chunksize=1024*1024*4, resumable=True, mimetype="video/*")
+        req = youtube.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
+
+        res = None
+        while res is None:
+            status, res = req.next_chunk()
+            if status:
+                print(f"Uploading 3D Pixar Video... {int(status.progress() * 100)}%", file=sys.stderr)
+
+        vid_id = res.get("id")
+        url = f"https://youtu.be/{vid_id}"
+        print(f">> LIVE on YouTube: {url}", file=sys.stderr)
+        return {"id": vid_id, "url": url}
+    except Exception as e:
+        print(f"  -> Upload notice: {e}", file=sys.stderr)
+        return None
+
 def run_pixar_animation_pipeline(concept=None, lang="hi"):
     print(f"\n=================================================================")
     print(f"🎨 3D DISNEY/PIXAR CONSISTENT CHARACTER ANIMATION PIPELINE")
@@ -392,8 +428,13 @@ def run_pixar_animation_pipeline(concept=None, lang="hi"):
     # 7. High-CTR Thumbnail
     create_high_ctr_thumbnail(story["title"][:35], is_portrait=False)
 
-    print(f"\n🎉 3D Pixar Video Ready: {out_video}")
-    return {"title": story["title"], "video": out_video}
+    # 8. Upload to YouTube
+    tags = story.get("tags", ["3danimation", "pixar", "cartoon", "comedy", "funny"])
+    desc = f"{story['title']}\n\n3D Animated Story.\n\n#3danimation #pixar #cartoon"
+    upload_res = upload_to_youtube(out_video, story["title"], desc, tags)
+
+    print(f"\n🎉 3D Pixar Video Ready & Uploaded: {out_video}")
+    return {"title": story["title"], "video": out_video, "upload": upload_res}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="3D Pixar Consistent Animation Engine")

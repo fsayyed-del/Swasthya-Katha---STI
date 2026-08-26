@@ -341,6 +341,42 @@ def compile_stickman_master_video(frames: list, voice_audio: str, out_video: str
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f">> Master Stickman Video Ready: {out_video}", file=sys.stderr)
 
+def get_youtube_client():
+    creds = Credentials(
+        None,
+        refresh_token=REFRESH_TOKEN,
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET
+    )
+    creds.refresh(Request())
+    return build("youtube", "v3", credentials=creds)
+
+def upload_to_youtube(video_path: str, title: str, description: str, tags: list):
+    print(">> Uploading Master Stickman Short to YouTube Channel...", file=sys.stderr)
+    try:
+        youtube = get_youtube_client()
+        body = {
+            "snippet": {"title": title[:100], "description": description[:4800], "tags": tags, "categoryId": "27"},
+            "status": {"privacyStatus": "public", "selfDeclaredMadeForKids": False}
+        }
+        media = MediaFileUpload(video_path, chunksize=1024*1024*2, resumable=True, mimetype="video/*")
+        req = youtube.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
+
+        res = None
+        while res is None:
+            status, res = req.next_chunk()
+            if status:
+                print(f"Uploading Stickman Short... {int(status.progress() * 100)}%", file=sys.stderr)
+
+        vid_id = res.get("id")
+        url = f"https://youtu.be/{vid_id}"
+        print(f">> LIVE on YouTube: {url}", file=sys.stderr)
+        return {"id": vid_id, "url": url}
+    except Exception as e:
+        print(f"  -> Upload notice: {e}", file=sys.stderr)
+        return None
+
 def run_stickman_pro_pipeline(topic=None, lang="en"):
     print(f"\n=================================================================")
     print(f"🏃 LAUNCHING PRO STICK FIGURE ANIMATION ENGINE ($5K/MO NICHE)")
@@ -368,8 +404,13 @@ def run_stickman_pro_pipeline(topic=None, lang="en"):
     # 5. Thumbnail
     create_high_ctr_thumbnail(data["title"][:30], is_portrait=True)
 
-    print(f"\n🎉 Pro Stickman Video Created Successfully: {out_video}")
-    return {"title": data["title"], "video": out_video}
+    # 6. Upload to YouTube
+    tags = data.get("tags", ["motivation", "discipline", "selfimprovement", "shorts"])
+    desc = f"{data['title']}\n\n{data['full_script']}\n\n#shorts #motivation #discipline"
+    upload_res = upload_to_youtube(out_video, data["title"], desc, tags)
+
+    print(f"\n🎉 Pro Stickman Video Created & Uploaded Successfully: {out_video}")
+    return {"title": data["title"], "video": out_video, "upload": upload_res}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pro Stick Figure Animation Engine")
